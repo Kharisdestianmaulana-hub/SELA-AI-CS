@@ -1,4 +1,4 @@
-# SELA - AI Voice Receptionist Kiosk
+# SELA - AI Voice
 
 SELA (Smart Electronic Receptionist Assistant) adalah sebuah sistem kiosk AI berbasis suara yang dirancang khusus untuk Universitas Catur Insan Cendekia (UCIC). Sistem ini menyediakan layanan informasi otomatis dengan kemampuan pengenalan wajah, pemrosesan bahasa alami, dan respons audio.
 
@@ -10,7 +10,6 @@ SELA (Smart Electronic Receptionist Assistant) adalah sebuah sistem kiosk AI ber
 - **RAG System**: Retrieval Augmented Generation menggunakan Fuse.js untuk pencarian informasi kampus
 - **AI-Powered Responses**: Menggunakan Groq SDK dengan model llama-3.3-70b-versatile
 - **Smart Intent Detection**: Klasifikasi pertanyaan ke kategori (small_talk, campus, general, unclear)
-- **Escalation System**: Routing pertanyaan kompleks ke staf yang tepat (PMB, BAK, BAA)
 
 ## 🏗️ Tech Stack
 
