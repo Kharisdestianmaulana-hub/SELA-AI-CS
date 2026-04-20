@@ -155,7 +155,15 @@ Jika pertanyaan butuh info yang SELA tidak punya (dokumen resmi, kasus personal,
 - Akademik & nilai        : BAA (Biro Administrasi Akademik)
 - Keuangan & beasiswa     : BAK (Biro Administrasi Keuangan)
 - Kemahasiswaan           : Bagian Kemahasiswaan
-- Website resmi           : ucic.ac.id`;
+- Website resmi           : ucic.ac.id
+
+[PERTANYAAN LANJUTAN]:
+Setelah menjawab pertanyaan user, SELALU tambahkan 2-3 pertanyaan lanjutan yang relevan di AKHIR jawaban.
+Format: [Pertanyaan 1?] | [Pertanyaan 2?] | [Pertanyaan 3?]
+Contoh:
+User: "Kapan pendaftaran dibuka?"
+Jawab: "Pendaftaran dibuka bulan Maret. [Bagaimana cara daftar online?] | [Apa saja persyaratan pendaftaran?] | [Berapa biaya pendaftaran?]"
+Pastikan pertanyaan lanjutan RELEVAN dengan topik yang baru dijawab.`;
 
   const systemPromptEN = `You are SELA (Smart Educational Learning Assistant), a fun, cheerful, and helpful virtual assistant for Universitas Catur Insan Cendekia (UCIC).
 Today is ${todayEN}. Use this when answering questions related to time or dates.
@@ -190,7 +198,15 @@ If a question needs info SELA doesn't have (official documents, personal data, d
 - Academic & grades    : BAA (Academic Administration Bureau)
 - Finance & scholarships : BAK (Finance Administration Bureau)
 - Student affairs      : Student Affairs department
-- Official website     : ucic.ac.id`;
+- Official website     : ucic.ac.id
+
+[FOLLOW-UP QUESTIONS]:
+After answering the user's question, ALWAYS add 2-3 relevant follow-up questions at the END of your answer.
+Format: [Question 1?] | [Question 2?] | [Question 3?]
+Example:
+User: "When does registration open?"
+Answer: "Registration opens in March. [How do I register online?] | [What are the registration requirements?] | [What is the registration fee?]"
+Make sure the follow-up questions are RELEVANT to the topic you just answered.`;
 
   const messages = [
     { role: 'system', content: effectiveLang === 'en' ? systemPromptEN : systemPromptID },
@@ -210,8 +226,13 @@ If a question needs info SELA doesn't have (official documents, personal data, d
 
   if (!res.ok) throw new Error('Maaf, otak SELA lagi loading nih. Coba tanya lagi ya.');
   const { text } = await res.json();
+
+  // Parse follow-up suggestions from response
+  const { text: cleanText, suggestions } = parseSuggestions(text || '');
+
   return {
-    text: text || 'Maaf, SELA agak bingung. Bisa diulang?',
+    text: cleanText || 'Maaf, SELA agak bingung. Bisa diulang?',
+    suggestions,
     detectedLang: effectiveLang,
   };
 }
@@ -269,4 +290,63 @@ export function speakText(text, onStart, onEnd, lang = 'id') {
   } else {
     window.speechSynthesis.onvoiceschanged = () => setTimeout(doSpeak, 100);
   }
+}
+
+// ── Time-based Greeting ──────────────────────────────────────────────────────
+
+/**
+ * Get greeting based on current time of day
+ * @param {string} lang - 'id' | 'en'
+ * @returns {string} - Time-appropriate greeting
+ */
+export function getTimeBasedGreeting(lang = 'id') {
+  const hour = new Date().getHours();
+  let period;
+
+  if (hour >= 5 && hour < 11) period = 'morning';
+  else if (hour >= 11 && hour < 15) period = 'afternoon';
+  else if (hour >= 15 && hour < 19) period = 'evening';
+  else period = 'night';
+
+  const greetings = {
+    id: {
+      morning: 'Pagi, apa yang bisa SELA bantu? 🌅',
+      afternoon: 'Siang, ada yang bisa SELA bantu? ☀️',
+      evening: 'Sore, apa pertanyaannya? 🌤️',
+      night: 'Malam, SELA siap membantu 🌙',
+    },
+    en: {
+      morning: 'Good morning, how can SELA help? 🌅',
+      afternoon: 'Good afternoon, what can I help with? ☀️',
+      evening: 'Good evening, any questions? 🌤️',
+      night: 'Good night, SELA is here to help 🌙',
+    },
+  };
+
+  return greetings[lang]?.[period] || greetings[lang].afternoon;
+}
+
+// ── Follow-up Suggestion Parser ──────────────────────────────────────────────
+
+/**
+ * Parse follow-up suggestions from LLM response
+ * Format: "Some response text [Question1?] | [Question2?] | [Question3?]"
+ * Returns: { text (without suggestions), suggestions (array of strings) }
+ * @param {string} text - Response text from LLM
+ * @returns {object} - { text: string, suggestions: Array<string> }
+ */
+export function parseSuggestions(text) {
+  if (!text) return { text: '', suggestions: [] };
+
+  // Extract all [Question?] patterns
+  const matches = text.match(/\[(.*?)\]/g);
+
+  if (matches && matches.length > 0) {
+    const suggestions = matches.map(s => s.slice(1, -1).trim()).filter(s => s.length > 0);
+    // Remove suggestion markers from display text, including separator pipes
+    const cleanText = text.replace(/\s*\[.*?\]\s*\|?\s*/g, '').trim();
+    return { text: cleanText, suggestions };
+  }
+
+  return { text, suggestions: [] };
 }

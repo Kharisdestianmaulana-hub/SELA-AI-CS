@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
 import ChatBubble from './ChatBubble'
 import AvatarPlaceholder from './AvatarPlaceholder'
-import { transcribeAudio, getChatCompletion, speakText } from '../lib/ai'
+import SuggestionButtons from './SuggestionButtons'
+import { transcribeAudio, getChatCompletion, speakText, getTimeBasedGreeting } from '../lib/ai'
 
 // ── SVG Icons ────────────────────────────────────────────────────
 const IconMic = ({ size = 'md' }) => {
@@ -47,7 +48,21 @@ const IconChevronDown = () => (
 
 import { t } from '../lib/translations'
 
-// VAD constants
+// Quick reply button definitions
+const quickReplies = {
+  id: [
+    { label: '📝 Cara Daftar?', text: 'Bagaimana cara mendaftar sebagai mahasiswa baru di UCIC?' },
+    { label: '🎓 Info Beasiswa', text: 'Apa saja program beasiswa yang tersedia di UCIC?' },
+    { label: '📞 Kontak BAA', text: 'Bagaimana cara menghubungi Biro Administrasi Akademik?' },
+  ],
+  en: [
+    { label: '📝 How to Register?', text: 'How do I register as a new student at UCIC?' },
+    { label: '🎓 Scholarship Info', text: 'What scholarship programs are available at UCIC?' },
+    { label: '📞 Contact BAA', text: 'How can I contact the Academic Administration Bureau?' },
+  ],
+}
+
+// ─────────────────────────────────────────────────────────────────
 const SILENCE_DURATION  = 1500 // ms diam setelah ada suara → auto-stop
 const MIN_SPEECH_MS     = 800  // ms minimum bicara — cegah noise pendek masuk Whisper
 const MIN_BLOB_SIZE     = 30000 // bytes minimum audio — audio terlalu kecil = pasti noise
@@ -458,15 +473,15 @@ export default function VoiceUI({ currentChat, onSend, onReceive, onNewChat, onR
 
       const history = (currentChat?.messages || []).map(m => ({ role: m.role, content: m.text }))
       history.push({ role: 'user', content: text })
-      const { text: aiResponse, detectedLang } = await getChatCompletion(history, lang)
+      const response = await getChatCompletion(history, lang)
       setIsWaitingAI(false)
-      if (onReceive) onReceive(aiResponse)
+      if (onReceive) onReceive(response)
 
       setAvatarState('speaking')
 
       // Fallback: kalau TTS onEnd tidak pernah terpanggil (bug Chrome),
       // paksa restart listen setelah estimasi durasi + buffer
-      const estDuration = Math.max(3000, aiResponse.length * 80)
+      const estDuration = Math.max(3000, response.text.length * 80)
       const ttsFallback = setTimeout(() => {
         if (isProcessingRef.current) {
           console.warn('[SELA] TTS onEnd timeout — force restart listen')
@@ -478,7 +493,7 @@ export default function VoiceUI({ currentChat, onSend, onReceive, onNewChat, onR
       }, estDuration + 2000)
 
       speakText(
-        aiResponse,
+        response.text,
         () => setAvatarState('speaking'),
         () => {
           clearTimeout(ttsFallback)
@@ -487,7 +502,7 @@ export default function VoiceUI({ currentChat, onSend, onReceive, onNewChat, onR
           // Delay 800ms — beri waktu speaker selesai bergema sebelum mic aktif lagi
           setTimeout(() => startListeningRef.current?.(), 800)
         },
-        detectedLang || lang
+        response.detectedLang || lang
       )
     } catch (error) {
       console.error(error)
@@ -554,6 +569,13 @@ export default function VoiceUI({ currentChat, onSend, onReceive, onNewChat, onR
 
   // ── Type mode ─────────────────────────────────────────────────
   const handleSubmit = async (e) => {
+    // Handle both form event and direct string call (from quick replies/suggestions)
+    if (typeof e === 'string') {
+      // Direct call with text
+      setValue(e)
+      e = { preventDefault: () => {} }
+    }
+
     e.preventDefault()
     if (!value.trim()) return
     const userText = value.trim()
@@ -587,11 +609,11 @@ export default function VoiceUI({ currentChat, onSend, onReceive, onNewChat, onR
     try {
       const history = (currentChat?.messages || []).map(m => ({ role: m.role, content: m.text }))
       history.push({ role: 'user', content: userText })
-      const { text: aiResponse, detectedLang } = await getChatCompletion(history, lang)
+      const response = await getChatCompletion(history, lang)
       setIsWaitingAI(false)
-      if (onReceive) onReceive(aiResponse)
+      if (onReceive) onReceive(response)
       setAvatarState('speaking')
-      speakText(aiResponse, null, () => setAvatarState('idle'), detectedLang || lang)
+      speakText(response.text, null, () => setAvatarState('idle'), response.detectedLang || lang)
     } catch {
       setIsWaitingAI(false)
       if (onReceive) onReceive(t[lang].error_network)
@@ -607,9 +629,11 @@ export default function VoiceUI({ currentChat, onSend, onReceive, onNewChat, onR
     window.speechSynthesis?.cancel()
     isProcessingRef.current = false
     const langLabel = chosen === 'id' ? '🇮🇩 Bahasa Indonesia' : '🇬🇧 English'
-    const confirm = chosen === 'id'
-      ? 'Oke! Kita ngobrol dalam Bahasa Indonesia ya. Ada yang bisa SELA bantu?'
-      : "Great! Let's chat in English. How can I help you?"
+
+    // Use time-based greeting instead of static message
+    const timeBasedGreeting = getTimeBasedGreeting(chosen)
+    const confirm = timeBasedGreeting
+
     if (mode === 'type') {
       onSend(langLabel)
       if (onReceive) onReceive(confirm)
@@ -875,11 +899,33 @@ export default function VoiceUI({ currentChat, onSend, onReceive, onNewChat, onR
     <main className="flex-1 relative flex flex-col overflow-hidden px-4 pt-4 pb-8 transition-colors">
       <div className="flex-1 flex flex-col max-w-2xl w-full mx-auto overflow-hidden">
         {messages.length === 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center text-center gap-3 pb-8">
+          <div className="flex-1 flex flex-col items-center justify-center text-center gap-6 pb-8">
             <IconSparkle />
             <div>
               <h2 className="text-4xl font-light text-gray-600 dark:text-gray-200 tracking-tighter italic">SELA</h2>
               <p className="text-sm text-gray-400 dark:text-gray-500 mt-2 font-medium">{t[lang].type_message}</p>
+            </div>
+
+            {/* Quick reply buttons */}
+            <div className="w-full px-2">
+              <p className="text-xs text-gray-400 dark:text-gray-500 mb-3 font-semibold uppercase tracking-widest">{lang === 'id' ? 'Pertanyaan Populer' : 'Popular Questions'}</p>
+              <div className="flex flex-wrap gap-2 justify-center">
+                {quickReplies[lang]?.map((qr, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => handleSubmit(qr.text)}
+                    className="px-4 py-2.5 rounded-full bg-gradient-to-r from-blue-500 to-blue-600
+                               hover:from-blue-600 hover:to-blue-700
+                               dark:from-blue-600 dark:to-blue-700
+                               dark:hover:from-blue-700 dark:hover:to-blue-800
+                               text-white text-xs font-semibold
+                               active:scale-95 shadow-md
+                               transition-all duration-150"
+                  >
+                    {qr.label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         ) : (
@@ -888,14 +934,22 @@ export default function VoiceUI({ currentChat, onSend, onReceive, onNewChat, onR
             onScroll={handleChatScroll}
             className="flex-1 overflow-y-auto py-4 flex flex-col gap-1"
           >
-            {messages.map((msg) => (
-              <ChatBubble
-                key={msg.id}
-                role={msg.role}
-                text={msg.text}
-                lang={lang}
-                isNew={msg.role === 'assistant' && msg.id === latestSelaId}
-              />
+            {messages.map((msg, idx) => (
+              <div key={msg.id}>
+                <ChatBubble
+                  role={msg.role}
+                  text={msg.text}
+                  lang={lang}
+                  isNew={msg.role === 'assistant' && msg.id === latestSelaId}
+                />
+                {msg.role === 'assistant' && msg.suggestions && msg.suggestions.length > 0 && (
+                  <SuggestionButtons
+                    suggestions={msg.suggestions}
+                    onClick={(suggestion) => handleSubmit(suggestion)}
+                    isVisible
+                  />
+                )}
+              </div>
             ))}
             {isWaitingAI && <ChatBubble role="assistant" text="" lang={lang} isLoading />}
             <div ref={messagesEndRef} />

@@ -96,16 +96,25 @@ export default function App() {
     }))
   }
 
-  const handleReceiveMessage = (text) => {
+  const handleReceiveMessage = (data) => {
     const targetId = currentChatIdRef.current;
-    if (!text.trim() || !targetId) return
-    
+
+    // Handle both string (legacy) and object with text + suggestions (new)
+    const text = typeof data === 'string' ? data : data?.text
+    const suggestions = typeof data === 'object' ? data?.suggestions : undefined
+
+    if (!text?.trim() || !targetId) return
+
     const msgId = generateId()
     setChats(prev => prev.map(c => {
       if (c.id !== targetId) return c
+      const msgObj = { id: msgId, role: 'assistant', text: text.trim(), ts: new Date() }
+      if (suggestions && suggestions.length > 0) {
+        msgObj.suggestions = suggestions
+      }
       return {
         ...c,
-        messages: [...c.messages, { id: msgId, role: 'assistant', text, ts: new Date() }]
+        messages: [...c.messages, msgObj]
       }
     }))
   }
