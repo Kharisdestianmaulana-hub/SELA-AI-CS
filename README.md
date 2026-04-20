@@ -28,9 +28,6 @@ SELA (Smart Electronic Receptionist Assistant) adalah sebuah sistem kiosk AI ber
 - **Environment Variables** (.env.local)
 
 ### Data & Tools
-
-- **CSV-to-JSON Pipeline** untuk dataset management
-- **Web Scraper** (Cheerio) untuk update informasi kampus
 - **Local RAG Dataset** (ucic_dataset.json)
 
 ## 📋 Struktur Project
