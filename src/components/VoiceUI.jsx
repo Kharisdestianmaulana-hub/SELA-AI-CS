@@ -802,7 +802,7 @@ export default function VoiceUI({ currentChat, onSend, onReceive, onNewChat, onR
             <div
               ref={chatScrollRef}
               onScroll={handleChatScroll}
-              className="flex flex-col gap-1 overflow-y-auto"
+              className="flex flex-col gap-1 overflow-y-auto hide-scrollbar"
             >
               {messages.map((msg) => (
                 <ChatBubble
@@ -932,7 +932,7 @@ export default function VoiceUI({ currentChat, onSend, onReceive, onNewChat, onR
           <div
             ref={chatScrollRef}
             onScroll={handleChatScroll}
-            className="flex-1 overflow-y-auto py-4 flex flex-col gap-1"
+            className="flex-1 overflow-y-auto py-4 flex flex-col gap-1 hide-scrollbar"
           >
             {messages.map((msg, idx) => (
               <div key={msg.id}>

@@ -102,6 +102,15 @@ body,
   background: #cbd5e1;
 }
 
+/* Hide scrollbar while keeping scroll functionality */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari */
+}
+
 /* Remove default button/input styles */
 button { cursor: pointer; }
 select { cursor: pointer; appearance: none; }
