@@ -169,9 +169,7 @@ const client = new Groq({
 
 - ✨ System prompt constraints untuk topic boundaries
 - ✨ Auto-scroll chat ke bottom
-- ✨ Web scraper untuk update dataset otomatis
 - ✨ CSV-to-JSON pipeline untuk data processing
-- ✨ Dataset merger dengan filter untuk outdated data
 - 📊 93 entries dalam RAG dataset
 
 ## 🤝 Contributing
