@@ -86,23 +86,6 @@ npm run build
 npm run lint
 ```
 
-## 📊 Dataset Management
-
-### Updating Campus Data
-
-```bash
-cd scraper
-
-# 1. Scrape latest data from cic.ac.id
-npm run scrape
-
-# 2. Convert CSV to JSON format
-npm run convert
-
-# 3. Merge with existing dataset, filtering outdated entries
-node merge.js
-```
-
 **Filter Rules:**
 
 - ❌ Excludes: Student achievements, announcements/news dari 2024-2025
