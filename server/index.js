@@ -269,6 +269,20 @@ const TIME_KEYWORDS = [
   'now', 'latest', 'today', 'current', 'news', 'announcement',
 ];
 
+function shouldSearchWebForIntent(intent, searchQuery, ragScore) {
+  const queryLower = searchQuery.toLowerCase();
+  const hasTimeKeyword = TIME_KEYWORDS.some(kw => queryLower.includes(kw));
+  const poorRagMatch = ragScore > 0.45;
+
+  if (intent === 'small_talk') return false;
+  if (searchQuery.length <= 3) return false;
+
+  // UCIC/campus questions are dataset-first. Only allow web for explicitly time-sensitive asks.
+  if (intent === 'campus') return hasTimeKeyword;
+
+  return hasTimeKeyword || poorRagMatch;
+}
+
 // ── Helper: inject web results ke system message ──────────────────────────────
 function injectWebResults(messages, webResults, lang) {
   return messages.map((msg, i) => {
@@ -337,12 +351,7 @@ app.post('/api/chat', async (req, res) => {
     //    - small_talk  : tidak perlu
     //    - campus      : hanya kalau ada time keyword (jadwal, terbaru, dll) — info statis dari RAG
     //    - general     : kalau RAG jelek (> 0.45) ATAU ada time keyword
-    const queryLower = searchQuery.toLowerCase();
-    const hasTimeKeyword = TIME_KEYWORDS.some(kw => queryLower.includes(kw));
-    const poorRagMatch  = ragScore > 0.45;
-    const needsWebSearch = intent !== 'small_talk'
-      && searchQuery.length > 3
-      && (intent === 'campus' ? hasTimeKeyword : (hasTimeKeyword || poorRagMatch));
+    const needsWebSearch = shouldSearchWebForIntent(intent, searchQuery, ragScore);
 
     let finalMessages = messages;
 
@@ -369,7 +378,12 @@ app.post('/api/chat', async (req, res) => {
     let responseText = completion.choices[0]?.message?.content || '';
 
     // 6. Confidence fallback — kalau LLM bilang "tidak tahu" dan belum web search
-    if (isUncertainResponse(responseText) && !needsWebSearch && searchQuery.length > 3) {
+    if (
+      isUncertainResponse(responseText)
+      && !needsWebSearch
+      && searchQuery.length > 3
+      && intent !== 'campus'
+    ) {
       console.log('[SELA Fallback] LLM tidak yakin, coba web search...');
       // Coba UCIC context dulu, kalau kosong coba general
       const fallbackResults = await searchWeb(searchQuery, true)

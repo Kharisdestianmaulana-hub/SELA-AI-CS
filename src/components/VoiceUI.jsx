@@ -52,13 +52,13 @@ import { t } from '../lib/translations'
 const quickReplies = {
   id: [
     { label: '📝 Cara Daftar?', text: 'Bagaimana cara mendaftar sebagai mahasiswa baru di UCIC?' },
-    { label: '🎓 Info Beasiswa', text: 'Apa saja program beasiswa yang tersedia di UCIC?' },
-    { label: '📞 Kontak BAA', text: 'Bagaimana cara menghubungi Biro Administrasi Akademik?' },
+    // { label: '🎓 Info Beasiswa', text: 'Apa saja program beasiswa yang tersedia di UCIC?' }, // DISABLED - Awaiting complete scholarship data
+    // { label: '📞 Kontak BAA', text: 'Bagaimana cara menghubungi Biro Administrasi Akademik?' }, // DISABLED - Awaiting complete contact data
   ],
   en: [
     { label: '📝 How to Register?', text: 'How do I register as a new student at UCIC?' },
-    { label: '🎓 Scholarship Info', text: 'What scholarship programs are available at UCIC?' },
-    { label: '📞 Contact BAA', text: 'How can I contact the Academic Administration Bureau?' },
+    // { label: '🎓 Scholarship Info', text: 'What scholarship programs are available at UCIC?' }, // DISABLED - Awaiting complete scholarship data
+    // { label: '📞 Contact BAA', text: 'How can I contact the Academic Administration Bureau?' }, // DISABLED - Awaiting complete contact data
   ],
 }
 
