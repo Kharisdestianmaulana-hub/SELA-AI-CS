@@ -1324,5 +1324,413 @@
     ],
     "title": "Kegiatan Seputar Universitas CIC",
     "content": "FTI UCIC Lakukan Benchmarking Kurikulum ke FSI UNJANI: Sinergi Menuju Kurikulum Adaptif dan Kolaboratif Bandung, 25 Juni 2025 – Dalam rangka meningkatkan kualitas pembelajaran dan kesesuaian kurikulum dengan kebutuhan dunia industri dan perkembangan teknologi, Fakultas Teknologi dan Informatika Universitas ..... UCIC Gelar Soft Opening Campus Hub: Semarak 3 Hari untuk Sambut Inovasi dan Kolaborasi Cirebon, 27–29 Mei 2025 – Universitas Catur Insan Cendekia (UCIC) bersiap menyambut babak baru dalam pengembangan fasilitas kampus melalui agenda Soft Opening UCIC Campus Hub, ..... UCIC Laksanakan Asesmen Lapangan LAMEMBA untuk Program Studi D3 Manajemen Bisnis Cirebon, 4 Maret 2025 – Universitas Catur Insan Cendekia (UCIC) menjalani proses penting dalam peningkatan mutu pendidikan melalui asesmen lapangan akreditasi LAMEMBA untuk Program Studi ..... Program Studi Sistem Informasi UCIC Jalani Asesmen Lapangan untuk Akreditasi Cirebon, 14 Maret 2025 – Universitas Catur Insan Cendekia (UCIC) sukses melaksanakan asesmen lapangan dalam rangka akreditasi Program Studi Sistem Informasi pada Jumat (14/3). Kegiatan ..... Pendampingan Ilustrasi AI: Mahasiswa UCIC Dibekali Keterampilan Desain Berbasis Teknologi Cirebon, 14 Maret 2025 – Universitas Catur Insan Cendekia (UCIC) terus berinovasi dalam mengembangkan keterampilan mahasiswa di bidang teknologi kreatif. Salah satu upayanya diwujudkan melalui ....."
+  },
+  {
+    "id": "jurusan_ucic",
+    "category": "jurusan",
+    "keywords": [
+      "jurusan ucic",
+      "fakultas ucic",
+      "program studi ucic",
+      "prodi ucic",
+      "3 fakultas",
+      "semua jurusan",
+      "semua prodi",
+      "jurusan apa saja",
+      "fakultas apa saja",
+      "universitas catur insan cendekia",
+      "cic",
+      "ucic"
+    ],
+    "title": "Fakultas dan Program Studi UCIC",
+    "content": "UCIC memiliki 3 fakultas:\n- Fakultas Teknologi Informasi (FTI): S1 Teknik Informatika, S1 Sistem Informasi, S1 Desain Komunikasi Visual, D3 Manajemen Informatika.\n- Fakultas Ekonomi dan Bisnis (FEB): S1 Akuntansi, S1 Manajemen, S1 Bisnis Digital, D3 Manajemen Bisnis.\n- Fakultas Pendidikan dan Sains (FPS): S1 Pendidikan Kepelatihan Olahraga."
+  },
+  {
+    "id": "prodi_ti",
+    "category": "jurusan",
+    "keywords": [
+      "teknik informatika",
+      "ti",
+      "programming",
+      "software",
+      "ai",
+      "karir",
+      "prospek kerja",
+      "lulusan",
+      "computer science",
+      "career"
+    ],
+    "title": "Detail S1 Teknik Informatika",
+    "content": "Fokus pada pemrograman, pengembangan software, AI, cybersecurity, dan database."
+  },
+  {
+    "id": "prodi_si",
+    "category": "jurusan",
+    "keywords": [
+      "sistem informasi",
+      "si",
+      "karir",
+      "prospek kerja",
+      "bisnis",
+      "data",
+      "information system",
+      "career"
+    ],
+    "title": "Detail S1 Sistem Informasi",
+    "content": "Menggabungkan teknologi dan bisnis untuk pengelolaan data dan sistem perusahaan."
+  },
+  {
+    "id": "prodi_dkv",
+    "category": "jurusan",
+    "keywords": [
+      "dkv",
+      "desain komunikasi visual",
+      "desain",
+      "grafis",
+      "animasi",
+      "ui ux",
+      "karir",
+      "design",
+      "graphic",
+      "visual"
+    ],
+    "title": "Detail S1 DKV",
+    "content": "Mencakup desain grafis, animasi, UI/UX, branding, dan multimedia."
+  },
+  {
+    "id": "prodi_akuntansi",
+    "category": "jurusan",
+    "keywords": [
+      "akuntansi",
+      "keuangan",
+      "audit",
+      "pajak",
+      "karir",
+      "accounting",
+      "finance",
+      "tax"
+    ],
+    "title": "Detail S1 Akuntansi",
+    "content": "Mencakup pengelolaan keuangan, audit, perpajakan, dan pelaporan keuangan."
+  },
+  {
+    "id": "prodi_manajemen",
+    "category": "jurusan",
+    "keywords": [
+      "manajemen",
+      "bisnis",
+      "pemasaran",
+      "sdm",
+      "karir",
+      "organisasi",
+      "management",
+      "business",
+      "marketing",
+      "career"
+    ],
+    "title": "Detail S1 Manajemen",
+    "content": "Mencakup manajemen bisnis, pemasaran, dan sumber daya manusia."
+  },
+  {
+    "id": "prodi_bisdi",
+    "category": "jurusan",
+    "keywords": [
+      "bisnis digital",
+      "bisdig",
+      "bisdi",
+      "e commerce",
+      "startup",
+      "digital marketing",
+      "karir",
+      "online",
+      "digital business"
+    ],
+    "title": "Detail S1 Bisnis Digital",
+    "content": "Mencakup e-commerce, startup, financial technology, digital marketing, dan strategi bisnis digital."
+  },
+  {
+    "id": "prodi_pkor",
+    "category": "jurusan",
+    "keywords": [
+      "pkor",
+      "pikor",
+      "olahraga",
+      "kepelatihan",
+      "atlet",
+      "pelatih",
+      "fisiologi",
+      "karir",
+      "sports",
+      "coaching",
+      "athlete"
+    ],
+    "title": "Detail S1 PKOR",
+    "content": "Mencakup ilmu kepelatihan olahraga, fisiologi, biomekanika, psikologi olahraga, dan manajemen olahraga."
+  },
+  {
+    "id": "prodi_d3mi",
+    "category": "jurusan",
+    "keywords": [
+      "d3",
+      "manajemen informatika",
+      "diploma",
+      "media digital",
+      "konten digital",
+      "d3 mi"
+    ],
+    "title": "Detail D3 Manajemen Informatika",
+    "content": "Fokus pada desain digital, konten digital, dan media sosial. Kurikulum meliputi komputer grafis, videografi, copywriting, UI/UX, e-commerce, dan monetisasi konten."
+  },
+  {
+    "id": "prodi_d3mb",
+    "category": "jurusan",
+    "keywords": [
+      "d3 manajemen bisnis",
+      "d3 mb",
+      "manajemen bisnis",
+      "diploma bisnis",
+      "ritel",
+      "pemasaran",
+      "supply chain",
+      "e commerce"
+    ],
+    "title": "Detail D3 Manajemen Bisnis",
+    "content": "Fokus pada bisnis ritel, pemasaran, layanan pelanggan, pengelolaan keuangan bisnis, supply chain, dan technopreneurship."
+  },
+  {
+    "id": "kurikulum_ti",
+    "category": "kurikulum",
+    "keywords": [
+      "kurikulum",
+      "teknik informatika",
+      "ti",
+      "semester",
+      "mata kuliah",
+      "curriculum"
+    ],
+    "title": "Ringkasan Kurikulum S1 Teknik Informatika",
+    "content": "Kurikulum S1 Teknik Informatika tersedia semester 1-8. Fokus awal pada dasar komputer, algoritma, basis data, jaringan, dan sistem operasi; semester tengah pada OOP, UI/UX, AI, data mining, mobile, dan keamanan; semester akhir pada IoT, machine learning, proyek, MBKM, magang, dan skripsi."
+  },
+  {
+    "id": "kurikulum_si",
+    "category": "kurikulum",
+    "keywords": [
+      "kurikulum",
+      "sistem informasi",
+      "si",
+      "semester",
+      "mata kuliah",
+      "curriculum"
+    ],
+    "title": "Ringkasan Kurikulum S1 Sistem Informasi",
+    "content": "Kurikulum S1 Sistem Informasi tersedia semester 1-8. Fokus awal pada sistem dan bisnis; semester tengah pada basis data, UI/UX, agile, ERP, dan pengembangan aplikasi; semester akhir pada proyek sistem informasi, technopreneurship, magang, KKN, dan skripsi."
+  },
+  {
+    "id": "kurikulum_dkv",
+    "category": "kurikulum",
+    "keywords": [
+      "kurikulum",
+      "dkv",
+      "desain komunikasi visual",
+      "semester",
+      "mata kuliah",
+      "curriculum"
+    ],
+    "title": "Ringkasan Kurikulum S1 DKV",
+    "content": "Kurikulum S1 DKV tersedia semester 1-8. Materi meliputi dasar desain, tipografi, fotografi, advertising, packaging, animasi 3D, media interaktif, konten digital, proyek DKV, MBKM, dan skripsi."
+  },
+  {
+    "id": "kurikulum_d3mi",
+    "category": "kurikulum",
+    "keywords": [
+      "kurikulum",
+      "d3 manajemen informatika",
+      "manajemen informatika",
+      "mi",
+      "semester",
+      "mata kuliah",
+      "curriculum"
+    ],
+    "title": "Ringkasan Kurikulum D3 Manajemen Informatika",
+    "content": "Kurikulum D3 Manajemen Informatika tersedia semester 1-6. Fokus pada media digital, komputer grafis, fotografi, videografi, branding, konten digital, startup digital, UI/UX, e-commerce, sertifikasi, dan tugas akhir."
+  },
+  {
+    "id": "kurikulum_manajemen",
+    "category": "kurikulum",
+    "keywords": [
+      "kurikulum",
+      "manajemen",
+      "semester",
+      "mata kuliah",
+      "curriculum"
+    ],
+    "title": "Ringkasan Kurikulum S1 Manajemen",
+    "content": "Kurikulum S1 Manajemen tersedia semester 1-8. Fokus pada ekonomi, pemasaran, SDM, keuangan, operasi, technopreneurship, digital transformation, kepemimpinan, magang, dan skripsi."
+  },
+  {
+    "id": "kurikulum_bisnisdigital",
+    "category": "kurikulum",
+    "keywords": [
+      "kurikulum",
+      "bisnis digital",
+      "bisdig",
+      "bisdi",
+      "semester",
+      "mata kuliah",
+      "curriculum"
+    ],
+    "title": "Ringkasan Kurikulum S1 Bisnis Digital",
+    "content": "Kurikulum S1 Bisnis Digital tersedia semester 1-8. Fokus pada konsep bisnis digital, SEO, digital marketing, fintech, startup, IMC, business intelligence, digital business development, MBKM, dan skripsi."
+  },
+  {
+    "id": "kurikulum_akuntansi",
+    "category": "kurikulum",
+    "keywords": [
+      "kurikulum",
+      "akuntansi",
+      "semester",
+      "mata kuliah",
+      "curriculum"
+    ],
+    "title": "Ringkasan Kurikulum S1 Akuntansi",
+    "content": "Kurikulum S1 Akuntansi tersedia semester 1-8. Fokus pada akuntansi keuangan, audit, perpajakan, sistem informasi akuntansi, metodologi penelitian, etika profesi, magang, dan skripsi."
+  },
+  {
+    "id": "kurikulum_pkor",
+    "category": "kurikulum",
+    "keywords": [
+      "kurikulum",
+      "pkor",
+      "pikor",
+      "pendidikan kepelatihan olahraga",
+      "semester",
+      "mata kuliah",
+      "curriculum"
+    ],
+    "title": "Ringkasan Kurikulum S1 Pendidikan Kepelatihan Olahraga",
+    "content": "Kurikulum S1 PKOR tersedia semester 1-8. Fokus pada anatomi, fisiologi, kepelatihan cabang olahraga, biomekanika, psikologi olahraga, metodologi penelitian, MBKM, praktik lapangan, dan skripsi."
+  },
+  {
+    "id": "kurikulum_d3mb",
+    "category": "kurikulum",
+    "keywords": [
+      "kurikulum",
+      "d3 manajemen bisnis",
+      "manajemen bisnis",
+      "d3 mb",
+      "semester",
+      "mata kuliah",
+      "curriculum"
+    ],
+    "title": "Ringkasan Kurikulum D3 Manajemen Bisnis",
+    "content": "Kurikulum D3 Manajemen Bisnis tersedia semester 1-6. Fokus pada bisnis dasar, ritel, perpajakan, akuntansi bisnis, SDM, supply chain, pemasaran ritel, kepemimpinan, seminar bisnis, dan tugas akhir."
+  },
+  {
+    "id": "biaya_pmb_opsi1",
+    "category": "biaya",
+    "keywords": [
+      "biaya",
+      "ukt",
+      "spp",
+      "kuliah",
+      "bayar",
+      "cicilan",
+      "pmb",
+      "2026",
+      "opsi 1",
+      "3 bulan",
+      "tahap 1"
+    ],
+    "title": "Biaya PMB 2026 - Opsi 1 (3 Bulan)",
+    "content": "Rincian biaya pembayaran Tahap 1 (1/2 Semester: 3 Bulan) PMB Gelombang 1 Februari UCIC 2026:\n- S1 Teknik Informatika: Tahap-1 Rp2.150.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.900.000.\n- S1 Teknik Informatika (Sore): Tahap-1 Rp2.220.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.970.000.\n- S1 Sistem Informasi: Tahap-1 Rp2.150.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.900.000.\n- S1 Sistem Informasi (Sore): Tahap-1 Rp2.220.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.970.000.\n- S1 Desain Komunikasi Visual: Tahap-1 Rp2.150.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.900.000.\n- S1 DKV (Sore): Tahap-1 Rp2.220.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.970.000.\n- S1 Manajemen: Tahap-1 Rp1.850.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.600.000.\n- S1 Manajemen (Sore): Tahap-1 Rp1.935.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.685.000.\n- S1 Manajemen (Kelas RPI): Tahap-1 Rp2.100.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.850.000.\n- S1 Akuntansi: Tahap-1 Rp1.850.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.600.000.\n- S1 Akuntansi (Sore): Tahap-1 Rp1.935.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.685.000.\n- S1 Pendidikan Kepelatihan Olahraga: Tahap-1 Rp1.290.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.040.000.\n- S1 Bisnis Digital: Tahap-1 Rp1.340.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.090.000.\n- S1 Bisnis Digital (Sore): Tahap-1 Rp1.440.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.190.000.\n- D3 Manajemen Bisnis: Tahap-1 Rp1.095.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp1.845.000.\n- D3 Manajemen Informatika: Tahap-1 Rp1.095.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp1.845.000.\n- D3 Manajemen Informatika (Sore): Tahap-1 Rp1.245.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp1.955.000."
+  },
+  {
+    "id": "biaya_pmb_opsi2",
+    "category": "biaya",
+    "keywords": [
+      "biaya",
+      "ukt",
+      "spp",
+      "kuliah",
+      "bayar",
+      "cicilan",
+      "pmb",
+      "2026",
+      "opsi 2",
+      "6 bulan",
+      "1 semester"
+    ],
+    "title": "Biaya PMB 2026 - Opsi 2 (1 Semester)",
+    "content": "Rincian biaya pembayaran Tahap 1 & 2 (1 Semester: 6 Bulan) PMB Gelombang 1 Februari UCIC 2026:\n- S1 Teknik Informatika: Tahap-1 Rp4.130.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp4.880.000.\n- S1 Teknik Informatika (Sore): Tahap-1 Rp4.270.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp5.020.000.\n- S1 Sistem Informasi: Tahap-1 Rp4.130.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp4.880.000.\n- S1 Sistem Informasi (Sore): Tahap-1 Rp4.270.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp5.020.000.\n- S1 Desain Komunikasi Visual: Tahap-1 Rp4.130.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp4.880.000.\n- S1 DKV (Sore): Tahap-1 Rp4.270.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp5.020.000.\n- S1 Manajemen: Tahap-1 Rp3.530.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp4.280.000.\n- S1 Manajemen (Sore): Tahap-1 Rp3.700.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp4.450.000.\n- S1 Manajemen (Kelas RPI): Tahap-1 Rp4.030.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp4.780.000.\n- S1 Akuntansi: Tahap-1 Rp3.530.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp4.280.000.\n- S1 Akuntansi (Sore): Tahap-1 Rp3.700.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp4.450.000.\n- S1 Pendidikan Kepelatihan Olahraga: Tahap-1 Rp2.410.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp3.160.000.\n- S1 Bisnis Digital: Tahap-1 Rp2.510.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp3.260.000.\n- S1 Bisnis Digital (Sore): Tahap-1 Rp2.710.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp3.460.000.\n- D3 Manajemen Bisnis: Tahap-1 Rp2.020.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.770.000.\n- D3 Manajemen Informatika: Tahap-1 Rp2.020.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.770.000.\n- D3 Manajemen Informatika (Sore): Tahap-1 Rp2.320.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp3.070.000."
+  },
+  {
+    "id": "biaya_pmb_opsi3",
+    "category": "biaya",
+    "keywords": [
+      "biaya",
+      "ukt",
+      "spp",
+      "kuliah",
+      "bayar",
+      "cicilan",
+      "pmb",
+      "2026",
+      "opsi 3",
+      "1 tahun",
+      "2 semester"
+    ],
+    "title": "Biaya PMB 2026 - Opsi 3 (1 Tahun)",
+    "content": "Rincian biaya pembayaran Tahap 1, 2, 3, 4 (2 Semester: 1 Tahun) PMB Gelombang 1 Februari UCIC 2026:\n- S1 Teknik Informatika: Tahap-1 Rp8.260.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp9.010.000.\n- S1 Teknik Informatika (Sore): Tahap-1 Rp8.540.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp9.290.000.\n- S1 Sistem Informasi: Tahap-1 Rp8.260.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp9.010.000.\n- S1 Sistem Informasi (Sore): Tahap-1 Rp8.540.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp9.290.000.\n- S1 Manajemen: Tahap-1 Rp7.060.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp7.810.000.\n- S1 Manajemen (Sore): Tahap-1 Rp7.400.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp8.150.000.\n- S1 Manajemen (Kelas RPI): Tahap-1 Rp8.060.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp8.810.000."
+  },
+  {
+    "id": "magang",
+    "category": "jurusan",
+    "keywords": [
+      "magang",
+      "internship",
+      "kerja",
+      "praktik",
+      "industri",
+      "pengalaman",
+      "intern",
+      "job training"
+    ],
+    "title": "Program Magang UCIC",
+    "content": "Mahasiswa dapat magang di semester akhir untuk mendapat pengalaman kerja nyata, membangun jaringan profesional, dan memperkuat portofolio sebagai bekal karir."
+  },
+  {
+    "id": "dosen_mku",
+    "category": "dosen",
+    "keywords": [
+      "dosen mku",
+      "dosen umum",
+      "dosen pancasila",
+      "dosen bahasa",
+      "dosen english",
+      "lecturer general",
+      "pengajar umum"
+    ],
+    "title": "Dosen Mata Kuliah Umum (MKU) UCIC",
+    "content": "Chiang Yulius Darmawan, Mohammad Umar Fakhrudin, Sudadi Pranata, Dr. Taufan Hunneman, Viar Dwi Kartika, Yuni Awalaturrohmah Solihah."
+  },
+  {
+    "id": "data_lengkap",
+    "category": "profil",
+    "keywords": [
+      "ucic",
+      "lengkap",
+      "data",
+      "semua",
+      "informasi",
+      "universitas",
+      "kampus",
+      "complete",
+      "all",
+      "summary",
+      "ringkasan",
+      "jurusan apa saja"
+    ],
+    "title": "Data Ringkas UCIC",
+    "content": "Universitas Catur Insan Cendekia (UCIC), Cirebon. Rektor: Assoc. Prof. Dr. Chandra Lukita, S.E., M.M., M.TI., Kampus 1: Jl. Kesambi No. 202 | Kampus 2: Jl. Kesambi No. 58A. WA: +62 895-1231-4188 | Email: info@ucic.ac.id.\nFakultas: FTI (S1 TI, SI, DKV; D3 MI), FEB (S1 Akuntansi, Manajemen, Bisnis Digital; D3 Manajemen Bisnis), FPS (S1 PKOR).\nBeasiswa: prestasi akademik, non-akademik, KIP Kuliah, internal, olahraga."
   }
 ]

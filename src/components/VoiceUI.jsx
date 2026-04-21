@@ -760,9 +760,9 @@ export default function VoiceUI({ currentChat, onSend, onReceive, onNewChat, onR
           </div>
         )}
 
-        {/* Avatar centered */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center pb-20 pointer-events-none">
-          <div className="pointer-events-auto">
+        {/* Avatar full screen */}
+        <div className="absolute inset-0 pointer-events-none z-0">
+          <div className="pointer-events-auto w-full h-full">
             <AvatarPlaceholder state={avatarState} />
           </div>
         </div>
