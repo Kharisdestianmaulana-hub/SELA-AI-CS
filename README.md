@@ -1,173 +1,177 @@
-# SELA - AI Voice
+# SELA
 
-SELA (Smart Electronic Receptionist Assistant) adalah sebuah sistem kiosk AI berbasis suara yang dirancang khusus untuk Universitas Catur Insan Cendekia (UCIC). Sistem ini menyediakan layanan informasi otomatis dengan kemampuan pengenalan wajah, pemrosesan bahasa alami, dan respons audio.
+SELA adalah nama AI receptionist sekaligus customer service kampus berbasis suara untuk Universitas Catur Insan Cendekia (UCIC). Project ini dirancang untuk membantu pengunjung, calon mahasiswa, orang tua, dan mahasiswa mendapatkan informasi kampus secara cepat, singkat, dan terarah.
 
-## 🎯 Fitur Utama
+SELA berfokus pada informasi UCIC seperti PMB, biaya, jurusan, fasilitas, kontak kampus, dan FAQ layanan umum. Jawaban diambil dari knowledge base lokal `ucic_dataset.json` agar lebih terkontrol dan sesuai dengan kebutuhan kampus.
 
-- **Voice-First Interface**: Interaksi berbasis suara menggunakan Web Speech API
-- **Face Detection**: Salam otomatis ketika pengguna mendekat (MediaPipe)
-- **Multilingual Support**: Dukungan bahasa Indonesia dan Inggris dengan deteksi otomatis
-- **RAG System**: Retrieval Augmented Generation menggunakan Fuse.js untuk pencarian informasi kampus
-- **AI-Powered Responses**: Menggunakan Groq SDK dengan model llama-3.3-70b-versatile
-- **Smart Intent Detection**: Klasifikasi pertanyaan ke kategori (small_talk, campus, general, unclear)
+## Tujuan Project
 
-## 🏗️ Tech Stack
+- Menjadi front desk digital untuk layanan informasi kampus UCIC
+- Membantu menjawab pertanyaan umum yang sering berulang
+- Memberikan pengalaman interaksi berbasis suara yang lebih natural
+- Menjaga jawaban tetap fokus pada scope customer service kampus
+
+## Fitur Utama
+
+- Voice-first interaction dengan Web Speech API
+- Face detection untuk aktivasi interaksi saat pengguna mendekat
+- Dukungan Bahasa Indonesia dan English
+- Local RAG berbasis `ucic_dataset.json`
+- Jawaban singkat bergaya customer service kampus
+- Follow-up question suggestions
+- Filter scope agar SELA tetap fokus pada informasi UCIC
+
+## Scope SELA
+
+### In Scope
+
+- PMB dan pendaftaran mahasiswa baru
+- Biaya kuliah dan opsi pembayaran
+- Jurusan, fakultas, dan program studi
+- Fasilitas kampus
+- Lokasi dan kontak kampus
+- Beasiswa umum
+- FAQ informasi kampus
+
+### Out of Scope
+
+- Politik, hiburan umum, dan topik non-UCIC
+- Jawaban umum di luar konteks kampus
+- Data pribadi mahasiswa
+- Keputusan administratif resmi yang harus ditangani unit kampus
+
+Jika informasi tidak tersedia di dataset, SELA diarahkan untuk menjawab secara jujur tanpa mengarang.
+
+## Arsitektur Singkat
 
 ### Frontend
 
-- **React 18** + Vite
-- **Tailwind CSS** untuk styling
-- **MediaPipe** untuk face detection
-- **Web Speech API** untuk voice I/O
-- **Fuse.js** untuk RAG/search
+- React 18
+- Vite
+- Tailwind CSS
+- Web Speech API
+- MediaPipe Face Detection
 
 ### Backend
 
-- **Node.js** + Express
-- **Groq SDK** untuk AI inference
-- **Environment Variables** (.env.local)
+- Node.js
+- Express
+- Groq SDK
 
-### Data & Tools
-- **Local RAG Dataset** (ucic_dataset.json)
+### Knowledge Base
 
-## 📋 Struktur Project
+- `src/data/ucic_dataset.json` sebagai sumber data utama
+- `Fuse.js` untuk retrieval lokal
+- Dataset difokuskan ke kebutuhan customer service kampus
 
-```
+## Struktur Project
+
+```text
 selaui/
 ├── src/
 │   ├── components/
-│   │   ├── VoiceUI.jsx              # Main voice interface
-│   │   ├── ChatMessage.jsx          # Chat display component
-│   │   └── ...
-│   ├── lib/
-│   │   ├── ai.js                    # AI system prompts & inference
-│   │   ├── intent.js                # Intent detection
+│   │   ├── VoiceUI.jsx
+│   │   ├── ChatBubble.jsx
+│   │   ├── SuggestionButtons.jsx
 │   │   └── ...
 │   ├── data/
-│   │   └── ucic_dataset.json        # Campus information RAG dataset
+│   │   └── ucic_dataset.json
+│   ├── lib/
+│   │   ├── ai.js
+│   │   └── translations.js
 │   └── App.jsx
 ├── server/
-│   └── index.js                     # Express backend
-├── scraper/
-│   ├── scrape.js                    # Web scraper untuk cic.ac.id
-│   ├── convert.js                   # CSV to JSON converter
-│   ├── merge.js                     # Dataset merger
-│   └── ucic_raw.csv                 # Raw scraped data
-├── .env.local                       # API keys (not committed)
-└── ...
+│   └── index.js
+├── launch.sh
+├── package.json
+└── README.md
 ```
 
-## 🚀 Quick Start
+## Cara Menjalankan
 
-### Prerequisites
+### Prasyarat
 
-- Node.js v18+
-- npm atau yarn
-- API Keys: GROQ_API_KEY, SERPER_API_KEY
+- Node.js 18+
+- npm
+- `GROQ_API_KEY`
 
 ### Setup
 
 ```bash
-# Install dependencies
 npm install
+```
 
-# Setup environment variables
+Buat file `.env.local`:
+
+```bash
 echo "GROQ_API_KEY=your_key_here" > .env.local
-echo "SERPER_API_KEY=your_key_here" >> .env.local
+```
 
-# Development
-npm run dev          # Frontend Vite dev server
-npm run server       # Backend Express server (in separate terminal)
+Jalankan frontend dan backend:
 
-# Production build
+```bash
+npm run dev
+npm run server
+```
+
+Build production:
+
+```bash
 npm run build
+```
 
-# Linting
+Lint:
+
+```bash
 npm run lint
 ```
 
-**Filter Rules:**
+## Voice Interaction Flow
 
-- ❌ Excludes: Student achievements, announcements/news dari 2024-2025
-- ✅ Includes: Program studi, visi/misi, sejarah, informasi terkini
-
-## 🎤 Voice Interaction Flow
-
-```
-1. User approaches → Face detected → Auto-greeting
-2. User speaks → Speech recorded → Intent detected
-3. Question classified: small_talk | campus | general | unclear
-4. RAG search on ucic_dataset.json
-5. Generate response using Groq AI
-6. Text-to-Speech output
+```text
+1. User mendekat ke kiosk
+2. Wajah terdeteksi
+3. SELA aktif dan menawarkan pilihan bahasa
+4. User berbicara atau mengetik
+5. Query dicocokkan ke ucic_dataset.json
+6. AI menyusun jawaban singkat berbasis konteks dataset
+7. Jawaban dibacakan kembali dengan TTS
 ```
 
-## 🔒 System Boundaries
+## Knowledge Base Saat Ini
 
-SELA dirancang dengan batasan topik ketat:
+`ucic_dataset.json` saat ini terutama berisi:
 
-- **Fokus**: Informasi kampus, program studi, akademik, kegiatan
-- **Out of Scope**: Politik, SARA, konten dewasa, entertainment umum
-- **Escalation**: Pertanyaan di luar scope → rujukan ke staff (BAA/BAK/PMB)
+- Profil kampus
+- PMB
+- Biaya
+- Jurusan dan fakultas
+- Fasilitas
+- Beasiswa
+- Kontak dan lokasi
+- FAQ umum kampus
 
-## 📝 API Configuration
+Sebagian data yang kurang relevan untuk customer service, seperti berita, artikel, data campuran, dan beberapa data akademik yang terlalu panjang, mulai dibersihkan atau dibatasi dari proses retrieval.
 
-### Groq API
+## Progress Saat Ini
 
-```javascript
-// src/lib/ai.js
-const client = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
-```
+- Persona SELA sudah diarahkan menjadi AI receptionist / customer service kampus
+- RAG lokal sudah aktif menggunakan dataset kampus
+- Scope jawaban sudah dibatasi agar tetap fokus pada UCIC
+- Dataset sedang dirapikan agar lebih sesuai untuk kebutuhan layanan customer service
 
-### Fallback Search
+## Pengembangan Berikutnya
 
-- Wikipedia API (knowledge base general)
-- Serper API (web search sebagai fallback)
+- FAQ layanan BAA, BAK, Kemahasiswaan, dan Perpustakaan
+- Kalender akademik resmi
+- Alur KRS, cuti, wisuda, dan surat aktif kuliah
+- Kontak per unit kampus
+- Dataset customer service yang lebih lengkap dan lebih rapi
 
-## 🎨 UI/UX Features
+## Author
 
-- Auto-scroll ke pesan terbaru
-- Message history display
-- Real-time speech recognition visual feedback
-- Responsive kiosk-friendly layout
-- Dark/Light theme support
+- Kharis
 
-## 📦 Dependencies Utama
-
-| Package                 | Versi        | Fungsi         |
-| ----------------------- | ------------ | -------------- |
-| react                   | ^18.2.0      | UI framework   |
-| groq-sdk                | ^1.1.2       | AI inference   |
-| fuse.js                 | ^7.3.0       | RAG search     |
-| @mediapipe/tasks-vision | ^0.10.34     | Face detection |
-| express                 | ^5.2.1       | Backend API    |
-| cheerio                 | ^1.0.0-rc.12 | Web scraping   |
-
-## 🔄 Recent Updates (v0.0.1)
-
-- ✨ System prompt constraints untuk topic boundaries
-- ✨ Auto-scroll chat ke bottom
-- 📊 93 entries dalam RAG dataset
-
-## 🤝 Contributing
-
-Untuk contributed improvements:
-
-1. Buat branch baru: `git checkout -b feature/nama-feature`
-2. Commit changes: `git commit -am 'Add feature description'`
-3. Push ke branch: `git push origin feature/nama-feature`
-4. Buat Pull Request
-
-## 📄 License
+## License
 
 Proprietary - Universitas Catur Insan Cendekia
-
-## 👥 Authors
-
-- **Kharis** - Development Lead
-
-## 📧 Support
-
-Untuk pertanyaan atau issue: [GitHub Issues](https://github.com/Kharisdestianmaulana-hub/selaui/issues)
