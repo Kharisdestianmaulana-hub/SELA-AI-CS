@@ -201,22 +201,6 @@
     "content": "UCIC menyediakan berbagai program beasiswa untuk mahasiswa berprestasi dan kurang mampu:\n\n- Beasiswa prestasi akademik\n- Beasiswa prestasi non-akademik (olahraga, seni, dll)\n- Beasiswa KIP-Kuliah (bantuan pemerintah)\n- Beasiswa internal UCIC\n\nUntuk informasi lebih lanjut tentang beasiswa, hubungi bagian kemahasiswaan UCIC."
   },
   {
-    "id": "fasilitas",
-    "category": "fasilitas",
-    "keywords": [
-      "fasilitas",
-      "lab",
-      "laboratorium",
-      "perpustakaan",
-      "wifi",
-      "gedung",
-      "ruang",
-      "sarana"
-    ],
-    "title": "Fasilitas UCIC",
-    "content": "Fasilitas yang tersedia di UCIC:\n\n- Laboratorium komputer modern\n- Perpustakaan dengan koleksi lengkap\n- Ruang kelas ber-AC dengan LCD projector\n- WiFi kampus\n- Laboratorium bahasa\n- Studio DKV (Desain Komunikasi Visual)\n- Lapangan olahraga\n- Mushola dan kantin\n- Area parkir luas\n\nUCIC terus mengembangkan fasilitas untuk mendukung kegiatan belajar mengajar."
-  },
-  {
     "id": "akreditasi",
     "category": "akreditasi",
     "keywords": [
@@ -1732,5 +1716,134 @@
     ],
     "title": "Data Ringkas UCIC",
     "content": "Universitas Catur Insan Cendekia (UCIC), Cirebon. Rektor: Assoc. Prof. Dr. Chandra Lukita, S.E., M.M., M.TI., Kampus 1: Jl. Kesambi No. 202 | Kampus 2: Jl. Kesambi No. 58A. WA: +62 895-1231-4188 | Email: info@ucic.ac.id.\nFakultas: FTI (S1 TI, SI, DKV; D3 MI), FEB (S1 Akuntansi, Manajemen, Bisnis Digital; D3 Manajemen Bisnis), FPS (S1 PKOR).\nBeasiswa: prestasi akademik, non-akademik, KIP Kuliah, internal, olahraga."
+  },
+  {
+    "id": "pmb_jadwal",
+    "category": "pendaftaran",
+    "keywords": [
+      "jadwal",
+      "kapan buka",
+      "gelombang pendaftaran",
+      "tanggal daftar",
+      "pmb",
+      "early bird",
+      "pendaftaran mahasiswa baru"
+    ],
+    "title": "Jadwal Pendaftaran Mahasiswa Baru UCIC",
+    "content": "Pendaftaran mahasiswa baru UCIC biasanya dibuka dalam beberapa gelombang. Gelombang Early Bird (18 - 31 Oktober), Gelombang 1 (1 - 28 Januari), dan Gelombang 2 (18 - 31 Juli) berdasarkan data tahun ajaran sebelumnya."
+  },
+  {
+    "id": "pmb_syarat",
+    "category": "pendaftaran",
+    "keywords": [
+      "syarat",
+      "dokumen",
+      "berkas",
+      "perlu disiapkan",
+      "bawa apa saja",
+      "daftar",
+      "pmb",
+      "ktp",
+      "akta",
+      "ijazah"
+    ],
+    "title": "Syarat dan Berkas Pendaftaran UCIC",
+    "content": "Untuk mendaftar, berkas yang wajib Anda siapkan adalah KTP, Akta Kelahiran, Ijazah atau Surat Keterangan Lulus (SKL), Nilai Raport, dan Kartu Keluarga (KK)."
+  },
+  {
+    "id": "pmb_alur_kontak",
+    "category": "pendaftaran",
+    "keywords": [
+      "cara daftar",
+      "alur pendaftaran",
+      "daftar online",
+      "offline",
+      "prosedur",
+      "kontak wa pmb",
+      "admin pmb",
+      "telepon",
+      "website",
+      "link daftar",
+      "jalan kesambi"
+    ],
+    "title": "Cara Mendaftar dan Kontak PMB UCIC",
+    "content": "Cara daftarnya sangat mudah! Bisa Offline dengan datang langsung ke Kampus 2 UCIC (Jl. Kesambi No.58a). Atau Online via website pmb.cic.ac.id, lalu klik \"Daftar Sekarang\" dan lengkapi formulirnya. Jika butuh bantuan, hubungi Admin PMB via WhatsApp di +6281216700519."
+  },
+  {
+    "id": "biaya_pmb_gelombang_1_summary",
+    "category": "biaya",
+    "keywords": [
+      "biaya",
+      "spp",
+      "ukt",
+      "uang bangunan",
+      "mahal gak",
+      "bayar",
+      "cicilan",
+      "gelombang 1",
+      "tahap 1",
+      "total tagihan",
+      "diskon"
+    ],
+    "title": "Ringkasan Opsi Pembayaran Gelombang 1",
+    "content": "Terdapat 3 opsi keringanan pembayaran untuk Gelombang 1. Opsi per 3 Bulan biayanya sekitar Rp1,8 - Rp2,9 Juta. Opsi per Semester (6 Bulan) mendapat diskon Rp170rb dengan kisaran Rp2,7 - Rp5 Juta. Opsi 1 Tahun penuh mendapat diskon Rp340rb dengan kisaran Rp4,7 - Rp9,2 Juta. Angka pasti menyesuaikan program studi yang Anda ambil."
+  },
+  {
+    "id": "ukm_kegiatan_ekskul",
+    "category": "kegiatan",
+    "keywords": [
+      "ukm",
+      "ekstrakurikuler",
+      "ekskul",
+      "organisasi",
+      "hobi",
+      "minat bakat",
+      "aktivitas kampus",
+      "futsal",
+      "basket",
+      "bem",
+      "musik",
+      "iptek",
+      "esport",
+      "mapala"
+    ],
+    "title": "Unit Kegiatan Mahasiswa (UKM) UCIC",
+    "content": "Di UCIC ada banyak lho wadah bakat mahasiswanya! Mulai dari UKM Seni (Musik, Tari, Arthography, RETOTIK), akademik seperti UKM IPTEK, hingga gaya hidup dan olahraga seperti E-Sport, Nusantari, dan Pecinta Alam IMPALA. Sangat cocok buat bangun portofolio dan soft skills di luar kelas!"
+  },
+  {
+    "id": "fasilitas_kampus_lengkap",
+    "category": "fasilitas",
+    "keywords": [
+      "fasilitas",
+      "lab",
+      "keuangan",
+      "gedung",
+      "ruangan",
+      "auditorium",
+      "perpus",
+      "perpustakaan",
+      "spek komputer",
+      "alat",
+      "canggih"
+    ],
+    "title": "Fasilitas Kampus Lengkap UCIC",
+    "content": "Fasilitas di UCIC Cirebon sangat terkini! Mulai dari Ruang Kelas Modern, Meeting Room, Perpustakaan, Auditorium, Student Business Corner, hingga Convention Hall. Khusus di bidang teknologi, kami memiliki Lab Multimedia, fasilitas Digital Marketing (DM), 3D Virtual Reality Lab, serta AI & Data Analysis Lab!"
+  },
+  {
+    "id": "kegiatan_ospek_maba",
+    "category": "kegiatan",
+    "keywords": [
+      "ospek",
+      "pkkmb",
+      "orientasi",
+      "masa bimbingan",
+      "maba",
+      "mahasiswa baru",
+      "penyambutan",
+      "acara awal",
+      "plonco"
+    ],
+    "title": "Kegiatan Sambutan Mahasiswa Baru (Ospek)",
+    "content": "Dalam menyambut mahasiswa baru, UCIC biasa mengadakan beberapa agenda seru! Biasanya ada Faculty Day, TM GUGUS, dan kegiatan Bina Keluarga Kampus. Namun perlu dicatat, formasi kegiatan pastinya menyesuaikan arahan panitia Ospek di tahun ajaran tersebut."
   }
 ]
