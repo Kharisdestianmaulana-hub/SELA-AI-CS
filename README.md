@@ -1,6 +1,6 @@
 # SELA
 
-SELA adalah nama AI receptionist sekaligus customer service kampus berbasis suara untuk Universitas Catur Insan Cendekia (UCIC). Project ini dirancang untuk membantu pengunjung, calon mahasiswa, orang tua, dan mahasiswa mendapatkan informasi kampus secara cepat, singkat, dan terarah.
+SELA adalah AI receptionist sekaligus customer service kampus berbasis suara untuk Universitas Catur Insan Cendekia (UCIC). Project ini dirancang untuk membantu pengunjung, calon mahasiswa, orang tua, dan mahasiswa mendapatkan informasi kampus secara cepat, singkat, dan terarah.
 
 SELA berfokus pada informasi UCIC seperti PMB, biaya, jurusan, fasilitas, kontak kampus, dan FAQ layanan umum. Jawaban diambil dari knowledge base lokal `ucic_dataset.json` agar lebih terkontrol dan sesuai dengan kebutuhan kampus.
 
