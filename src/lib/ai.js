@@ -5,10 +5,27 @@ import dataset from '../data/ucic_dataset.json';
 
 let fuse = null;
 
+const EXCLUDED_RAG_CATEGORIES = new Set(['berita', 'dosen', 'akademik']);
+const EXCLUDED_RAG_IDS = new Set([
+  'data_lengkap_ucic',
+  'informasi_kampus_0',
+  'info_pmb_1',
+  'berita_seputar_kampus_2',
+  'kegiatan_kampus_3',
+  'informasi_artikel_berita_seputar_univers_0',
+  'kegiatan_seputar_universitas_cic_0',
+  'data_lengkap',
+]);
+
+const ragDataset = dataset.filter(item => (
+  !EXCLUDED_RAG_CATEGORIES.has(item.category)
+  && !EXCLUDED_RAG_IDS.has(item.id)
+));
+
 async function getFuse() {
   if (fuse) return fuse;
   try {
-    fuse = new Fuse(dataset, {
+    fuse = new Fuse(ragDataset, {
       keys: ['keywords', 'title', 'content'],
       threshold: 0.6,
       ignoreLocation: true,

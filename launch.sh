@@ -42,6 +42,7 @@ google-chrome \
   --kiosk \
   --user-data-dir=/tmp/sela-kiosk-profile \
   --autoplay-policy=no-user-gesture-required \
+  --use-fake-ui-for-media-stream \
   --disable-infobars \
   --no-first-run \
   --noerrdialogs \

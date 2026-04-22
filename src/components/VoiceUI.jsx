@@ -703,59 +703,59 @@ export default function VoiceUI({ currentChat, onSend, onReceive, onNewChat, onR
       return (
         <main className="flex-1 relative flex flex-col items-center justify-center overflow-hidden">
 
-          {/* Kamera preview — tampilkan sebagai lingkaran di belakang tombol */}
-          <div className="relative flex flex-col items-center gap-6">
-
-            {/* Preview kamera dengan border warna berdasarkan deteksi */}
-            <div className={`relative w-44 h-44 rounded-full overflow-hidden border-4 transition-all duration-500 shadow-2xl
-              ${faceDetected
-                ? 'border-emerald-400 shadow-emerald-300/50'
-                : 'border-blue-300/50 shadow-blue-200/30'
-              }`}
-            >
-              <video
-                ref={videoRef}
-                className="w-full h-full object-cover scale-x-[-1]"
-                muted
-                playsInline
-                autoPlay
-              />
-              {/* Overlay gelap + icon saat tidak ada wajah */}
-              {!faceDetected && (
-                <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                  <IconMic size="lg" />
-                </div>
-              )}
-              {/* Pulse saat wajah terdeteksi */}
-              {faceDetected && (
-                <div className="absolute inset-0 rounded-full ring-4 ring-emerald-400 animate-ping opacity-30" />
-              )}
+          {/* Avatar 3D Background - FULL SCREEN */}
+          <div className="absolute inset-0 pointer-events-none z-0">
+            <div className="pointer-events-auto w-full h-full">
+              <AvatarPlaceholder state="idle" />
             </div>
+          </div>
 
-            {/* Tombol tap — hanya untuk unlock audio pertama kali */}
+          {/* Hidden Camera for Face Detection */}
+          <div className="absolute opacity-0 pointer-events-none overflow-hidden w-1 h-1">
+            <video
+              ref={videoRef}
+              muted
+              playsInline
+              autoPlay
+            />
+          </div>
+
+          {/* Floating UI Container */}
+          <div className="relative z-10 flex flex-col items-center justify-end h-full w-full pb-[140px] pointer-events-none">
+            
+            {/* Tombol tap berbentuk Glassmorphism */}
             <button
               onClick={handleActivate}
-              className="flex flex-col items-center gap-2 group"
+              className={`pointer-events-auto flex flex-col items-center justify-center backdrop-blur-xl border shadow-2xl px-10 py-5 rounded-3xl transition-all duration-500 hover:scale-105 active:scale-95 group relative overflow-hidden
+                ${faceDetected 
+                  ? 'bg-emerald-500/20 border-emerald-300/40 dark:bg-emerald-900/30 dark:border-emerald-500/30 shadow-emerald-400/20' 
+                  : 'bg-white/40 border-white/50 dark:bg-slate-800/40 dark:border-slate-600/50 shadow-blue-400/10'}`}
             >
-              <div className="text-center">
-                <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">
+              {faceDetected && (
+                 <div className="absolute inset-0 opacity-20 bg-emerald-400 animate-pulse" />
+              )}
+              <div className="relative z-10 flex flex-col items-center gap-1.5">
+                <p className="text-xl font-bold tracking-wide text-gray-800 dark:text-gray-100 drop-shadow-sm">
                   {faceDetected
                     ? (lang === 'id' ? 'Ketuk untuk aktifkan suara' : 'Tap to enable voice')
                     : (lang === 'id' ? 'Ketuk untuk memulai' : 'Tap to start')
                   }
                 </p>
-                <p className="text-sm mt-1 transition-colors duration-300
-                  ${faceDetected ? 'text-emerald-500' : 'text-gray-400 dark:text-gray-500'}">
-                  {faceDetected
-                    ? (lang === 'id' ? '✓ Wajah terdeteksi — SELA siap menyapa!' : '✓ Face detected — SELA ready to greet!')
-                    : (lang === 'id' ? 'SELA siap menyambut Anda' : 'SELA is ready to greet you')
-                  }
-                </p>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className={`w-2.5 h-2.5 rounded-full ${faceDetected ? 'bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]' : 'bg-gray-400 dark:bg-gray-500'}`} />
+                  <p className={`text-xs font-bold uppercase tracking-[0.2em] transition-colors duration-300
+                    ${faceDetected ? 'text-emerald-700 dark:text-emerald-300' : 'text-gray-600 dark:text-gray-400'}`}>
+                    {faceDetected
+                      ? (lang === 'id' ? 'Wajah Terdeteksi' : 'Face Detected')
+                      : (lang === 'id' ? 'SELA siap menyambut' : 'SELA is ready')
+                    }
+                  </p>
+                </div>
               </div>
             </button>
           </div>
 
-          <div className="absolute bottom-8">
+          <div className="absolute bottom-8 z-20">
             <ModeToggle />
           </div>
         </main>
