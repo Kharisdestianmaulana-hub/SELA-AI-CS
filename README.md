@@ -107,11 +107,10 @@ Buat file `.env.local`:
 echo "GROQ_API_KEY=your_key_here" > .env.local
 ```
 
-Jalankan frontend dan backend:
+Jalankan launch.sh:
 
 ```bash
-npm run dev
-npm run server
+bash launch.sh
 ```
 
 Build production:
