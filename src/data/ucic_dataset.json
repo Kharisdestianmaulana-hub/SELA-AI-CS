@@ -9,7 +9,10 @@
       "cendekia",
       "cirebon",
       "kampus",
-      "sejarah"
+      "sejarah",
+      "sejarah",
+      "kapan berdiri",
+      "info kampus"
     ],
     "title": "Profil Universitas Catur Insan Cendekia (UCIC)",
     "content": "Universitas Catur Insan Cendekia (UCIC) merupakan institusi pendidikan modern di Cirebon yang lahir dari penggabungan STMIK CIC dan AP CIC berdasarkan SK Kemenristekdikti 952/KPT/I/2019. Fokus utama UCIC ialah teknologi, bisnis, dan sains. UCIC berkomitmen untuk menghasilkan lulusan yang adaptif, kreatif, dan kompeten di era digital."
@@ -164,10 +167,16 @@
       "registrasi",
       "cara daftar",
       "masuk",
-      "persyaratan"
+      "persyaratan",
+      "maba",
+      "ospek",
+      "masuk",
+      "syarat",
+      "cara daftar",
+      "info daftar"
     ],
     "title": "Pendaftaran Mahasiswa Baru (PMB) UCIC",
-    "content": "Informasi Pendaftaran Mahasiswa Baru (PMB) UCIC:\n\nCara mendaftar:\n1. Kunjungi website resmi UCIC atau datang langsung ke kampus\n2. Isi formulir pendaftaran online/offline\n3. Lengkapi dokumen persyaratan\n4. Ikuti tes masuk (jika diperlukan)\n5. Lakukan pembayaran biaya pendaftaran\n\nPersyaratan umum:\n- Lulusan SMA/SMK/MA sederajat\n- Fotokopi ijazah dan transkrip nilai\n- Fotokopi KTP dan Kartu Keluarga\n- Pas foto terbaru\n\nUntuk info lebih lanjut hubungi: +62 895-1231-4188"
+    "content": "Cara daftar UCIC sangat mudah! Anda bisa daftar online via pmb.cic.ac.id atau datang langsung ke Kampus 2. Syarat utamanya: Lulus SMA/SMK sederajat, fotokopi Ijazah/SKL, KTP, KK, dan pas foto. Info lebih lanjut WA: +62 895-1231-4188."
   },
   {
     "id": "biaya_kuliah",
@@ -181,7 +190,14 @@
       "cicilan",
       "harga",
       "tarif",
-      "uang"
+      "uang",
+      "bayaran",
+      "mahal gak",
+      "spp",
+      "ukt",
+      "cicil",
+      "cicilan",
+      "uang masuk"
     ],
     "title": "Biaya Kuliah UCIC",
     "content": "Biaya Pendaftaran: Rp200.000\n\nEstimasi Biaya Awal per Program Studi:\n- Teknik Informatika: Rp2.800.000\n- Sistem Informasi: Rp1.800.000\n- DKV (Desain Komunikasi Visual): Rp2.500.000\n- Manajemen: Rp2.200.000\n- Akuntansi: Rp2.200.000\n- Bisnis Digital: Rp2.000.000\n- PKOR (Pendidikan Kepelatihan Olahraga): Rp2.000.000\n- D3 Manajemen Informatika: Rp1.400.000\n\nCatatan: Biaya estimasi sudah termasuk SPP awal dan administrasi. Untuk informasi biaya terbaru silakan hubungi PMB UCIC di +62 895-1231-4188.\n\nUCIC menyediakan beberapa opsi pembayaran:\n- Pembayaran penuh (full payment) dengan potongan khusus\n- Pembayaran per semester\n- Cicilan bertahap"
@@ -195,7 +211,12 @@
       "gratis",
       "potongan",
       "scholarship",
-      "prestasi"
+      "prestasi",
+      "gratis",
+      "potongan",
+      "kip",
+      "beasiswa prestasi",
+      "bantuan"
     ],
     "title": "Beasiswa UCIC",
     "content": "UCIC menyediakan berbagai program beasiswa untuk mahasiswa berprestasi dan kurang mampu:\n\n- Beasiswa prestasi akademik\n- Beasiswa prestasi non-akademik (olahraga, seni, dll)\n- Beasiswa KIP-Kuliah (bantuan pemerintah)\n- Beasiswa internal UCIC\n\nUntuk informasi lebih lanjut tentang beasiswa, hubungi bagian kemahasiswaan UCIC."
@@ -213,216 +234,6 @@
     ],
     "title": "Akreditasi UCIC",
     "content": "UCIC dan program studinya telah terakreditasi oleh BAN-PT (Badan Akreditasi Nasional Perguruan Tinggi). Setiap program studi memiliki status akreditasi yang menjamin kualitas pendidikan. UCIC terus berupaya meningkatkan mutu pendidikan untuk meraih akreditasi terbaik."
-  },
-  {
-    "id": "dosen_pengembangan_karakter",
-    "category": "dosen",
-    "keywords": [
-      "dosen",
-      "pengembangan karakter",
-      "turini",
-      "chang yulius",
-      "darmawan",
-      "karakter",
-      "mata kuliah"
-    ],
-    "title": "Dosen Pengembangan Karakter",
-    "content": "Dosen mata kuliah Pengembangan Karakter di UCIC:\n- Turini, S.E.\n- Chang Yulius Darmawan, M.Psi., Psi.\n\nMata kuliah ini mengajarkan pembentukan karakter dan nilai-nilai kepribadian bagi mahasiswa UCIC."
-  },
-  {
-    "id": "dosen_arsitektur_komputer",
-    "category": "dosen",
-    "keywords": [
-      "dosen",
-      "arsitektur",
-      "organisasi komputer",
-      "victor asih",
-      "komputer",
-      "hardware"
-    ],
-    "title": "Dosen Arsitektur dan Organisasi Komputer",
-    "content": "Dosen mata kuliah Arsitektur dan Organisasi Komputer di UCIC:\n- Victor Asih, S.Si., M.T.\n\nMata kuliah ini mempelajari struktur dan fungsi komputer, termasuk CPU, memori, dan sistem I/O."
-  },
-  {
-    "id": "dosen_general_english",
-    "category": "dosen",
-    "keywords": [
-      "dosen",
-      "general english",
-      "bahasa inggris",
-      "viar",
-      "kartika",
-      "english"
-    ],
-    "title": "Dosen General English",
-    "content": "Dosen mata kuliah General English di UCIC:\n- Viar Dwi Kartika, S.Pd., M.Pd.\n\nMata kuliah ini mengajarkan kemampuan dasar bahasa Inggris untuk komunikasi akademik dan profesional."
-  },
-  {
-    "id": "dosen_aljabar_linier",
-    "category": "dosen",
-    "keywords": [
-      "dosen",
-      "aljabar",
-      "linier",
-      "matriks",
-      "linda",
-      "norhan",
-      "matematika"
-    ],
-    "title": "Dosen Aljabar Linier Matriks",
-    "content": "Dosen mata kuliah Aljabar Linier Matriks di UCIC:\n- Linda Norhan, S.T., M.T.\n\nMata kuliah ini mempelajari konsep matriks, vektor, transformasi linier, dan aplikasinya dalam komputasi."
-  },
-  {
-    "id": "dosen_pancasila_kewarganegaraan",
-    "category": "dosen",
-    "keywords": [
-      "dosen",
-      "pancasila",
-      "kewarganegaraan",
-      "anti korupsi",
-      "taufan",
-      "huneman",
-      "sudadi",
-      "pranata",
-      "pkn"
-    ],
-    "title": "Dosen Pancasila, Kewarganegaraan, dan Anti Korupsi",
-    "content": "Dosen mata kuliah Pancasila, Kewarganegaraan, dan Anti Korupsi di UCIC:\n- Taufan Huneman, M.H.\n- Sudadi Pranata, S.E., M.Si.\n\nMata kuliah ini mengajarkan nilai-nilai Pancasila, hak dan kewajiban warga negara, serta upaya pencegahan korupsi."
-  },
-  {
-    "id": "dosen_pemrograman_internet",
-    "category": "dosen",
-    "keywords": [
-      "dosen",
-      "pemrograman internet",
-      "web",
-      "bambang",
-      "sugiarto",
-      "internet",
-      "programming"
-    ],
-    "title": "Dosen Pemrograman Internet",
-    "content": "Dosen mata kuliah Pemrograman Internet di UCIC:\n- Bambang Sugiarto, S.Kom., M.Kom.\n\nMata kuliah ini mengajarkan pengembangan aplikasi berbasis web, termasuk HTML, CSS, JavaScript, dan framework web modern."
-  },
-  {
-    "id": "dosen_algoritma_pemrograman",
-    "category": "dosen",
-    "keywords": [
-      "dosen",
-      "algoritma",
-      "pemrograman",
-      "petrus",
-      "sokibi",
-      "kusnadi",
-      "coding",
-      "programming"
-    ],
-    "title": "Dosen Algoritma Pemrograman",
-    "content": "Dosen mata kuliah Algoritma Pemrograman di UCIC:\n- Petrus Sokibi, S.Kom., M.Kom.\n- Kusnadi, S.Kom., M.Kom.\n\nMata kuliah ini mengajarkan dasar-dasar algoritma, logika pemrograman, dan penyelesaian masalah menggunakan bahasa pemrograman."
-  },
-  {
-    "id": "dosen_bahasa_indonesia",
-    "category": "dosen",
-    "keywords": [
-      "dosen",
-      "bahasa indonesia",
-      "mohammad",
-      "umar",
-      "fakhrudin",
-      "indonesian"
-    ],
-    "title": "Dosen Bahasa Indonesia",
-    "content": "Dosen mata kuliah Bahasa Indonesia di UCIC:\n- Mohammad Umar Fakhrudin, S.Pd., M.Pd.\n\nMata kuliah ini mengajarkan kemampuan berbahasa Indonesia yang baik dan benar untuk penulisan akademis dan komunikasi profesional."
-  },
-  {
-    "id": "dosen_komunikasi_data_jaringan",
-    "category": "dosen",
-    "keywords": [
-      "dosen",
-      "komunikasi data",
-      "jaringan",
-      "ridho",
-      "taufiq",
-      "subagio",
-      "network",
-      "networking"
-    ],
-    "title": "Dosen Komunikasi Data dan Jaringan",
-    "content": "Dosen mata kuliah Komunikasi Data dan Jaringan di UCIC:\n- Ridho Taufiq Subagio, S.T., M.Kom.\n\nMata kuliah ini mempelajari konsep jaringan komputer, protokol komunikasi data, topologi jaringan, dan keamanan jaringan."
-  },
-  {
-    "id": "dosen_struktur_data",
-    "category": "dosen",
-    "keywords": [
-      "dosen",
-      "struktur data",
-      "petrus",
-      "sokibi",
-      "data structure",
-      "linked list",
-      "tree"
-    ],
-    "title": "Dosen Struktur Data",
-    "content": "Dosen mata kuliah Struktur Data di UCIC:\n- Petrus Sokibi, S.Kom., M.Kom.\n\nMata kuliah ini mengajarkan berbagai jenis struktur data seperti array, linked list, stack, queue, tree, dan graph serta implementasinya."
-  },
-  {
-    "id": "dosen_sistem_operasi",
-    "category": "dosen",
-    "keywords": [
-      "dosen",
-      "sistem operasi",
-      "victor asih",
-      "os",
-      "operating system",
-      "linux",
-      "windows"
-    ],
-    "title": "Dosen Sistem Operasi",
-    "content": "Dosen mata kuliah Sistem Operasi di UCIC:\n- Victor Asih, S.Si., M.T.\n\nMata kuliah ini mempelajari konsep sistem operasi, manajemen proses, manajemen memori, file system, dan keamanan sistem."
-  },
-  {
-    "id": "dosen_kecerdasan_buatan",
-    "category": "dosen",
-    "keywords": [
-      "dosen",
-      "kecerdasan buatan",
-      "ai",
-      "artificial intelligence",
-      "marsani",
-      "asfi",
-      "machine learning"
-    ],
-    "title": "Dosen Kecerdasan Buatan",
-    "content": "Dosen mata kuliah Kecerdasan Buatan (AI) di UCIC:\n- Marsani Asfi, S.Si., M.Si.\n\nMata kuliah ini mengajarkan konsep dasar kecerdasan buatan, machine learning, neural network, dan implementasinya dalam berbagai aplikasi."
-  },
-  {
-    "id": "dosen_rekayasa_aplikasi_internet",
-    "category": "dosen",
-    "keywords": [
-      "dosen",
-      "rekayasa",
-      "aplikasi internet",
-      "bambang",
-      "sugiarto",
-      "web app",
-      "fullstack"
-    ],
-    "title": "Dosen Rekayasa Aplikasi Internet",
-    "content": "Dosen mata kuliah Rekayasa Aplikasi Internet di UCIC:\n- Bambang Sugiarto, S.Kom., M.Kom.\n\nMata kuliah ini mengajarkan analisis, desain, dan pengembangan aplikasi internet modern menggunakan teknologi terkini."
-  },
-  {
-    "id": "dosen_intermediate_english",
-    "category": "dosen",
-    "keywords": [
-      "dosen",
-      "intermediate english",
-      "bahasa inggris lanjut",
-      "mohammad",
-      "umar",
-      "fakhrudin"
-    ],
-    "title": "Dosen Intermediate English",
-    "content": "Dosen mata kuliah Intermediate English di UCIC:\n- Mohammad Umar Fakhrudin, S.Pd., M.Pd.\n\nMata kuliah ini mengajarkan kemampuan bahasa Inggris tingkat menengah untuk keperluan akademis, presentasi, dan penulisan ilmiah."
   },
   {
     "id": "daftar_dosen_lengkap",
@@ -455,50 +266,6 @@
     ],
     "title": "Detail Program Studi S1 Teknik Informatika",
     "content": "S1 Teknik Informatika UCIC fokus pada teknologi komputer dan pemrograman, meliputi pemrograman, pengembangan aplikasi, AI, robotika, cybersecurity, database, dan pengembangan software.\n\nProspek Karir: Software Engineer, Programmer, AI Engineer, Game Developer, Web Developer, Mobile App Developer, Cybersecurity Specialist, Data Scientist, IT Consultant."
-  },
-  {
-    "id": "kurikulum_ti_sem1_2",
-    "category": "jurusan",
-    "keywords": [
-      "kurikulum",
-      "teknik informatika",
-      "semester 1",
-      "semester 2",
-      "mata kuliah",
-      "ti"
-    ],
-    "title": "Kurikulum Teknik Informatika Semester 1-2",
-    "content": "Semester 1: Pancasila dan kewarganegaraan, Bahasa Indonesia, Pembangunan karakter dan Etika Profesi, General English, Pemrograman Internet, Aljabar Linear dan Matriks, Arsitektur dan Organisasi Komputer, Algoritma dan Pemrograman.\n\nSemester 2: Pendidikan Agama, Intermediate English, Sistem Basis Data, Komunikasi Data dan Jaringan, Rekayasa Aplikasi Internet, Teknik Multimedia Digital, Sistem Operasi, Struktur Data."
-  },
-  {
-    "id": "kurikulum_ti_sem3_4",
-    "category": "jurusan",
-    "keywords": [
-      "kurikulum",
-      "teknik informatika",
-      "semester 3",
-      "semester 4",
-      "mata kuliah",
-      "ti"
-    ],
-    "title": "Kurikulum Teknik Informatika Semester 3-4",
-    "content": "Semester 3: English for Specific Purpose, Statistik for Data Science, Pemrograman Berorientasi Objek, Administrasi Jaringan, Analisis dan Desain Perangkat Lunak, UI & UX Designer, Kecerdasan Buatan, Manajemen Data & Informasi.\n\nSemester 4: TOEFL Preparation, Mobile Programming, Keamanan Sistem Informasi dan Jaringan, Sistem Digital, Data Mining, Sistem Penunjang Keputusan, Grafika Komputer & Pengolahan Citra Digital, Sistem Pakar, Sistem Terdistribusi, Pengujian dan Pemeliharaan Sistem."
-  },
-  {
-    "id": "kurikulum_ti_sem5_8",
-    "category": "jurusan",
-    "keywords": [
-      "kurikulum",
-      "teknik informatika",
-      "semester 5",
-      "semester 6",
-      "semester 8",
-      "mata kuliah",
-      "ti",
-      "skripsi"
-    ],
-    "title": "Kurikulum Teknik Informatika Semester 5-8",
-    "content": "Semester 5: Student Exchange, Technopreneurhip, Pengembangan Aplikasi Mobile, Machine Learning, Internet of Things, Computer Vision and NLP, Game Cerdas, Jaminan Kualitas Perangkat Lunak, Manajemen Proyek Perangkat Lunak.\n\nSemester 6: Student Exchange, Kopita Seleksi, Proyek Technopreneurhip, Realitas Virtual dan Augmentasi, Metodologi Penelitian & Riset Pustaka, Proyek Teknologi Informasi, KKN Tematik, MBMK (Studi Independen Bersertifikat), Magang (Studi Independen Mandiri).\n\nSemester 8: Skripsi."
   },
   {
     "id": "prodi_sistem_informasi_detail",
@@ -571,19 +338,6 @@
     "content": "S1 Bisnis Digital UCIC mempelajari bisnis berbasis teknologi digital seperti e-commerce, startup, digital marketing, dan strategi bisnis online.\n\nProspek Karir: Digital Marketer, Startup Founder, E-commerce Specialist, Business Strategist, Social Media Manager."
   },
   {
-    "id": "kurikulum_bisdi_sem1_4",
-    "category": "jurusan",
-    "keywords": [
-      "kurikulum",
-      "bisnis digital",
-      "semester",
-      "mata kuliah",
-      "bisdi"
-    ],
-    "title": "Kurikulum Bisnis Digital Semester 1-4",
-    "content": "Semester 1: Bahasa Indonesia, Pancasila dan Kewarganegaraan, Pengembangan Karakter & Etika Profesi, General English, Ekonomika Bisnis, Etika dan Komunikasi Bisnis, Konsep dan Ide Bisnis Digital, Manajemen Bisnis.\n\nSemester 2: Pendidikan Agama, Graphic Design (Video Animation), Financial Management, Web Design, Search Engine Optimization (SEO), Statistika Bisnis, Digital Marketing, Management Information System.\n\nSemester 3: Technopreneurship, Financial Technology, Model Bisnis MSMEs, Analisis Bisnis Digital, Startup Business Model, Analisa Investasi Bisnis & Portfolio, Metodologi Penelitian Bisnis, Studi Kelayakan Bisnis.\n\nSemester 4: Project Technopreneurship, English for Business, e-Customer Relationship Management, Academic Writing and Publication, Customer Behaviour, Integrated Marketing Communication."
-  },
-  {
     "id": "prodi_pkor_detail",
     "category": "jurusan",
     "keywords": [
@@ -610,39 +364,6 @@
     ],
     "title": "Detail Program D3 Manajemen Informatika",
     "content": "D3 Manajemen Informatika UCIC mempelajari teknologi informasi terapan, desain digital, dan manajemen media digital.\n\nKurikulum meliputi: AI Technician, Komputer Grafis, Digital Copywriting, Fotography Digital, Videograf, Brand Identity, Manajemen Media Sosial, Visual Storytelling, Digital Content Marketing, Digital Bisnis Startup, UI & UX Design, E-Commerce, dan Monetisasi Konten Digital."
-  },
-  {
-    "id": "biaya_kuliah_detail",
-    "category": "biaya",
-    "keywords": [
-      "biaya",
-      "ukt",
-      "spp",
-      "kuliah",
-      "bayar",
-      "harga",
-      "tarif",
-      "uang",
-      "pendaftaran",
-      "registrasi"
-    ],
-    "title": "Biaya Kuliah UCIC (Estimasi)",
-    "content": "Biaya Pendaftaran: Rp200.000\n\nEstimasi Biaya Awal per Program Studi:\n- Teknik Informatika: Rp2.800.000\n- Sistem Informasi: Rp1.800.000\n- DKV: Rp2.500.000\n- Manajemen: Rp2.200.000\n- Akuntansi: Rp2.200.000\n- Bisnis Digital: Rp2.000.000\n- PKOR: Rp2.000.000\n- D3 Manajemen Informatika: Rp1.400.000\n\nCatatan: Biaya estimasi sudah termasuk SPP awal dan administrasi. Untuk informasi terbaru hubungi PMB."
-  },
-  {
-    "id": "beasiswa_detail",
-    "category": "beasiswa",
-    "keywords": [
-      "beasiswa",
-      "bantuan",
-      "kip",
-      "prestasi",
-      "olahraga",
-      "scholarship",
-      "gratis"
-    ],
-    "title": "Program Beasiswa UCIC",
-    "content": "UCIC menyediakan berbagai program beasiswa:\n\n1. Beasiswa prestasi akademik - untuk mahasiswa dengan nilai akademik tinggi\n2. Beasiswa prestasi non akademik - untuk mahasiswa berprestasi di bidang non-akademik\n3. Beasiswa KIP Kuliah - bantuan dari pemerintah untuk mahasiswa kurang mampu\n4. Beasiswa internal kampus - beasiswa dari UCIC sendiri\n5. Beasiswa olahraga - untuk mahasiswa berprestasi di bidang olahraga\n\nHubungi bagian kemahasiswaan UCIC untuk informasi lebih lanjut."
   },
   {
     "id": "magang_detail",
@@ -764,194 +485,6 @@
     "content": "Dosen yang mengajar mata kuliah wajib universitas (seperti Bahasa, Pancasila, Sejarah, dan Karakter) meliputi:\n1. Mohammad Umar Fakhrudin (Bahasa Indonesia & Intermediate English)\n2. Viar Dwi Kartika (General English)\n3. Taufan Huneman & Sudadi Pranata (Pancasila & Kewarganegaraan)\n4. Turini & Chang Yulius Darmawan (Pengembangan Karakter)\n5. Linda Norhan (Matematika Bisnis & Aljabar Linier)."
   },
   {
-    "id": "jadwal_ganjil_senin",
-    "category": "jadwal",
-    "keywords": [
-      "jadwal",
-      "senin",
-      "semester ganjil",
-      "kuliah",
-      "kelas",
-      "waktu",
-      "ruang"
-    ],
-    "title": "Jadwal Kuliah Semester Ganjil 2025/2026 - Hari Senin (Kampus Utama)",
-    "content": "Jadwal hari Senin di Kampus Utama:\n\nR-102: Algoritma dan Pemrograman (07:30-09:30, Kusnadi M.Kom, TI-1/1), Algoritma dan Pemrograman (09:30-11:30, Petrus S M.Kom, TI-1/2).\n\nR-103: Statistika dan analisis bisnis (07:30-09:30, Dessy Kumala Dewi, ACT-1/5), General English (09:30-11:30, Viar Dwi Kartika, MB-1/1).\n\nR-106: Manajemen dan organisasi (07:30-09:30, Lena Magdalena, SI-1/1), Teknologi Informasi Untuk Bisnis (09:30-11:30, Agung Supriyadi, ACT-1/1), Statistik for Data Science (14:30-16:30, Wiwiek ND, TI-2/3).\n\nR-107: General English (07:30-09:30, Moh. Umar Fakhrudin, ACT-1/1), Statistik for Data Science (09:30-11:30, Wiwiek ND, TI-1/3), Statistik (12:30-14:30, Oryz Agnu, SI 1/3).\n\nR-201: Basic Fotografi (07:30-09:30, Ine Rachmawati, DKV-1/3 DKV-2/3), Desain Komunikasi Visual Sosial (09:30-11:30, Dzulfiqar Fickri, DKV-1/5).\n\nAuditorium: Technopreneurship (07:30-09:30, Petrus Sokibi), Bahasa Indonesia (09:30-11:30, Moh Umar Fakhrudin, TI SI), Bahasa Indonesia (12:30-14:30, Nur Muhamad Hildan, DKV ACT MI), Bahasa Indonesia (14:30-16:30, Helmi Akmal, MGT BISDI PIKOR).\n\nLAB i-3: Algoritma dan Pemrograman (07:30-09:30, Kusnadi, TI 2/1), Algoritma dan Pemrograman (09:30-11:30, Petrus S, TI-1/1)."
-  },
-  {
-    "id": "jadwal_ganjil_selasa",
-    "category": "jadwal",
-    "keywords": [
-      "jadwal",
-      "selasa",
-      "semester ganjil",
-      "kuliah",
-      "kelas"
-    ],
-    "title": "Jadwal Kuliah Semester Ganjil 2025/2026 - Hari Selasa (Kampus Utama)",
-    "content": "Jadwal hari Selasa di Kampus Utama:\n\nR-102: General English (07:30-09:30, Yuni A.S., DKV-1/1 DKV-2/1), Dasar Desain Grafis (09:30-11:30, Ine Rachmawati, DKV-1/1 DKV-2/1), General English (12:30-14:30, Viar Dwi Kartika, MGT-1/1).\n\nR-103: UI & UX Design (07:30-09:30, Agus Sevitiana, MI-WP-1/5), General English (09:30-11:30, Viar Dwi Kartika, BISDI 1/1), Pengantar Akuntansi (12:30-14:30, Sitta Nurhajah, MB-1/1).\n\nR-104: Sistem Basis Data (07:30-09:30, Petrus Sokibi, SI-1/3), Interaksi Manusia dan Komputer (09:30-11:30, Rifqi Fahrudin, SI-1/3).\n\nR-106: Rekayasa Perangkat Lunak Agile (07:30-09:30, Lena Magdalena, SI-1/5), Advertising Copywriting (09:30-11:30, Yuni A.S., DKV-1/3), Ekonomi Mikro (12:30-14:30, Gytha Nurhana, ACT-1/1).\n\nAuditorium: UI & UX Designer (07:30-09:30, Rifqi/Kusnadi, TI-1/3 TI-2/3), English for Specific Purpose (09:30-11:30, Moh Umar, TI-1/3 TI-2/3), Pancasila dan kewarganegaraan (12:30-16:30, Dr. Taufan Hunneman)."
-  },
-  {
-    "id": "jadwal_ganjil_rabu",
-    "category": "jadwal",
-    "keywords": [
-      "jadwal",
-      "rabu",
-      "semester ganjil",
-      "kuliah",
-      "kelas"
-    ],
-    "title": "Jadwal Kuliah Semester Ganjil 2025/2026 - Hari Rabu (Kampus Utama)",
-    "content": "Jadwal hari Rabu di Kampus Utama:\n\nR-102: Etika dan Komunikasi Bisnis (07:30-09:30, Oryz Agnu, BISDI 1/1), Jaminan Kualitas Perangkat Lunak (09:30-11:30, Ridho Taufiq, TI-SE-1/5), Bahasa Rupa (12:30-14:30, Dzulfiqar Fickri, DKV-1/1), Basic Tipografi (14:30-16:30, Tiara Khodijah, DKV-1/1).\n\nR-106: Akuntansi Keuangan Dasar (07:30-09:30, Safitri Akbari, ACT-1/1), Manajemen Inovasi berbasis Teknologi (09:30-11:30, Marsani Asfi, MGT-1/5), Manajemen Keuangan (12:30-14:30, Agung Supriyadi/Fanny Andrian, ACT-1/3).\n\nAuditorium: Pemrograman Berorientasi Objek (07:30-09:30, Bambang S/Muh. Hatta, TI-1/3 TI-2/3), Manajemen Data & Informasi (09:30-11:30, Petrus S, TI-1/3 TI-2/3), Internet of Things (12:30-14:30, Ridho Taufiq/Kusnadi, TI-1/5), Student Exchange Agile (14:30-16:30, Rifqi Fahrudin)."
-  },
-  {
-    "id": "jadwal_ganjil_kamis",
-    "category": "jadwal",
-    "keywords": [
-      "jadwal",
-      "kamis",
-      "semester ganjil",
-      "kuliah",
-      "kelas"
-    ],
-    "title": "Jadwal Kuliah Semester Ganjil 2025/2026 - Hari Kamis (Kampus Utama)",
-    "content": "Jadwal hari Kamis di Kampus Utama:\n\nR-102: Komunikasi Bisnis dan Negosiasi (07:30-09:30, Dewi Laily, MGT-1/3), Sistem Informasi Manajemen (09:30-11:30, Wiwiek ND, MGT-1/3), Matematika Bisnis (12:30-14:30, Linda Norhan, SI 1/1).\n\nR-103: Anatomi (07:30-09:30, Helmi Akmal, PIKOR 1/1), Hukum Perpajakan (09:30-11:30, Aan Kanivia, ACT-1/3), Akuntansi Sosial dan Lingkungan (12:30-14:30, Ade Elza, ACT-1/5).\n\nR-106: Web Design (07:30-09:30, Willy Eka Septian, DKV-1/3 DKV-2/3), Manajemen & Bisnis Dasar (09:30-11:30, Muthia Fariza, MB-1/1), Audit Sistem Informasi (12:30-14:30, Ridho Taufiq, SI-EB-1/5).\n\nAuditorium: Machine Learning (07:30-09:30, Marsani Asfi, TI-IS-1/5 TI-SE-1/5), Student Exchange Fotografi (09:30-11:30, Ine Rachmawati), Student Exchange AR (12:30-14:30, Bambang Sugiarto), Technopreneurship (14:30-16:30, Feri Fauzi, MGT MB ACT)."
-  },
-  {
-    "id": "jadwal_ganjil_jumat",
-    "category": "jadwal",
-    "keywords": [
-      "jadwal",
-      "jumat",
-      "semester ganjil",
-      "kuliah",
-      "kelas"
-    ],
-    "title": "Jadwal Kuliah Semester Ganjil 2025/2026 - Hari Jumat (Kampus Utama)",
-    "content": "Jadwal hari Jumat di Kampus Utama:\n\nR-102: E-Government (07:30-09:30, Agus Svetiana, SI-EB-1/5), Estetika Visual Desain (09:30-11:30, Galih M.P., DKV-1/1), Tinjauan dan Kritik Desain (13:30-15:30, Galih M.P., DKV-1/3).\n\nR-106: Sistem Informasi Akuntansi (07:30-09:30, Amroni/Aditya, ACT-1/3), Pelatihan Cabor Futsal (09:30-11:30, Nur Muhamad Hildan, PKOR 1/1), Manajemen Transformasi Digital (13:30-15:30, Suwardi, MGT-1/5).\n\nR-301: Arsitektur dan Organisasi Komputer (07:30-09:30, Victor Asih, TI-1/1 TI-2/1).\n\nAuditorium: Technopreneurhip (07:30-09:30, Galih M.P., DKV-1/5 MI 1/3), Analisis dan Desain Perangkat Lunak (09:30-11:30, Ridho Taufiq, TI-1/3 TI-2/3), Pengembangan Aplikasi Mobile (13:30-15:30, Bambang Sugiarto, TI-IS-1/5 TI-SE-1/5)."
-  },
-  {
-    "id": "jadwal_ganjil_sabtu",
-    "category": "jadwal",
-    "keywords": [
-      "jadwal",
-      "sabtu",
-      "semester ganjil",
-      "kuliah",
-      "kelas",
-      "mbkm"
-    ],
-    "title": "Jadwal Kuliah Semester Ganjil 2025/2026 - Hari Sabtu (Kampus Utama)",
-    "content": "Jadwal hari Sabtu di Kampus Utama (termasuk MBKM):\n\nR-102: Komunikasi dan Teamwork MBKM (07:30-09:30, Kusnadi), Penguasaan Teknologi MBKM (09:30-11:30, Kusnadi, DKV), Etika Profesi Kerja MBKM (12:30-14:30, Petrus Sokibi), Ide Inisiatif MBKM (14:30-16:30, Petrus Sokibi), Manajemen Proyek Perangkat Lunak (12:30-14:30, Kinaidi Adam/Willy Eka, TI-SE-1/5).\n\nAuditorium: Pembangunan karakter dan Etika Profesi (07:30-11:30, Chiang Yulius/Turini), Administrasi Jaringan (12:30-14:30, Unang Solihin, TI-1/3 TI-2/3)."
-  },
-  {
-    "id": "jadwal_genap_senin",
-    "category": "jadwal",
-    "keywords": [
-      "jadwal",
-      "senin",
-      "semester genap",
-      "kuliah",
-      "genap 2025 2026"
-    ],
-    "title": "Jadwal Kuliah Semester Genap 2025/2026 - Hari Senin (Kampus Utama)",
-    "content": "Jadwal hari Senin Semester Genap:\n\nR-102: Algoritma dan Pemrograman 2 (07:30-10:00, Muh. Hatta, SI 1/2), Desain Display dan Komunikasi Visual (10:00-12:30, Tiara Khodijah, DKV-1/6).\n\nR-103: Akuntansi Internasional (07:30-10:00, Dessy Kumala Dewi, ACT-1/4), Intermediate English (10:00-12:30, Moh. Umar, ACT-1/2), Tata Tulis Karya Ilmiah (12:30-15:00, Wiwiek ND, MI-1/6).\n\nAuditorium: Struktur Data (07:30-10:00, Kusnadi/Petrus S, TI 1/2 & TI 2/2), Rekayasa Aplikasi Internet (10:00-12:30, Bambang S/Willy Eka S, TI 1/2 & TI 2/2), Data Mining (12:30-15:00, Verina Tita, TI SE & IS 1/4), Grafika Komputer & Pengolahan Citra Digital (15:00-17:30, Marsani Asfi, TI SE & IS 1/4)."
-  },
-  {
-    "id": "jadwal_genap_rabu",
-    "category": "jadwal",
-    "keywords": [
-      "jadwal",
-      "rabu",
-      "semester genap",
-      "kuliah",
-      "genap"
-    ],
-    "title": "Jadwal Kuliah Semester Genap 2025/2026 - Hari Rabu (Kampus Utama)",
-    "content": "Jadwal hari Rabu Semester Genap:\n\nR-102: Statistika Bisnis (07:30-10:00, Oryz Agnu, BISDI 1/2), Fotography Digital (10:00-12:30, Ine Rachmawati, MI-1/2).\n\nR-201: Analisa Proses Bisnis (07:30-10:00, Mesi Febima, SI 1/2), Intermediate English (10:00-12:30, Moh Umar, SI 1/2), Psikologi Persepsi (12:30-15:00, Ine Rachmawati/Chiang Yulius, DKV-1/6).\n\nAuditorium: Deep Learning (07:30-10:00, Verina Tita Nabila, TI 1/6), Etika dalam AI (10:00-12:30, Arif Nursetyo, TI 1/6), Intermediate English (12:30-15:00, Moh Umar, TI 1/2 TI 2/2), Sistem Basis Data (15:00-17:30, Petrus Sokibi, TI 1/2 TI 2/2)."
-  },
-  {
-    "id": "jadwal_genap_jumat",
-    "category": "jadwal",
-    "keywords": [
-      "jadwal",
-      "jumat",
-      "semester genap",
-      "kuliah",
-      "genap",
-      "kecerdasan buatan"
-    ],
-    "title": "Jadwal Kuliah Semester Genap 2025/2026 - Hari Jumat (Kampus Utama)",
-    "content": "Jadwal hari Jumat Semester Genap:\n\nR-103: Kurikulum dan Pembelajaran (07:30-10:00, Yogi Slamet, PKO), Pelatihan Cabor Sepak Bola (10:00-12:30, Nur Muhamad Hildan, PKO).\n\nR-301: Sistem Operasi (07:30-10:00, Victor Asih, TI-1/2 TI-2/2).\n\nAuditorium: Ekspor-Impor (07:30-10:00, Dr. Muhammad Fadheel, MGT-1/4), Kecerdasan Buatan (10:00-12:30, Team AI, TI 1/2 ACT 1/2 BISDI 1/2), Kecerdasan Buatan (12:30-15:00, Team AI, DKV 1/2 MGT 1/2 PKO 1/2), Kecerdasan Buatan (15:00-17:30, Team AI, SI 1/2 MI 1/2 MB 1/2).\n\nLAB-2: Komunikasi dan Teamwork MBKM (07:30-10:00, Petrus Sokibi, TI 1/6), Keterampilan Interpersonal MBKM (10:00-12:30, Kusnadi, TI 1/6), Keterampilan Presentasi MBKM (12:30-15:00, Ridho Taufiq, TI 1/6)."
-  },
-  {
-    "id": "jadwal_hub_rabu_kamis",
-    "category": "jadwal",
-    "keywords": [
-      "jadwal",
-      "hub",
-      "kampus hub",
-      "rabu",
-      "kamis",
-      "semester ganjil"
-    ],
-    "title": "Jadwal Kuliah Semester Ganjil 2025/2026 - Kampus HUB (Rabu-Kamis)",
-    "content": "Jadwal Kampus HUB - Hari Rabu:\nLab HUB: Machine Learning (07:30-10:00, Marsani Asfi, TI-IS/SE-1/5), Komputer Grafis & Multimedia (10:00-12:30, Agus Sevtiana, MI-1/1), Pemrograman Berorientasi Objek (12:30-15:00, Bambang S/Muh. Hatta, TI-1/3), Kecerdasan Buatan (15:00-17:30, Marsani Asfi/Arif, TI-1/3).\n\nHUB-201: Metodologi Penelitian (07:30-10:00, Dr. Ika Iryanti, MGT-1/3), Manajemen Periklanan (10:00-12:30, Linda Norhan, DKV-1/5-DA).\n\nHUB-205: General English (07:30-10:00, Viar Dwi Kartika, TI-1/1 & TI-2/1), Aljabar Linear dan Matriks (10:00-12:30, Linda Norhan, TI-1/1 & TI-2/1), Kecerdasan Buatan (12:30-15:00, Marsani Asfi/Arif, TI-1/3).\n\nHari Kamis:\nLab HUB: AI Technician (07:30-10:00, Linda Norhan, MI 1/1), 3D Artist (10:00-12:30, Tiara Khodijah, DKV-1/3).\nHUB-203: Konsep dan Ide Bisnis Digital (07:30-10:00, Rifqi Fahrudin, BISDI 1/1), Metodologi Penelitian (10:00-12:30, Ade Elza, ACT-1/5)."
-  },
-  {
-    "id": "kelas_malam_mgt_sem1",
-    "category": "jadwal",
-    "keywords": [
-      "kelas malam",
-      "reguler",
-      "manajemen",
-      "semester 1",
-      "hybrid",
-      "mgt"
-    ],
-    "title": "Kelas Malam Reguler - Manajemen Semester 1 (MGT-B-1/1)",
-    "content": "Kelas Malam Manajemen Semester 1 (19 mahasiswa, metode Hybrid):\n- Pembangunan karakter dan Etika Profesi (Selasa 18:30, R-107, Turini M.M)\n- Pancasila, Kewarganegaraan, dan Anti Korupsi (Senin 19:50, R-107, Petrus Sokibi)\n- General English (Senin 18:30, R-107, Viar Dwi Kartika)\n- Matematika Ekonomi dan Bisnis (Rabu 18:30, R-107, Suwandi/Dr. Ika Iryanti)\n- Akuntansi Keuangan Dasar (Kamis 19:50, R-107, Agung Supriyadi)\n- Teknologi Informasi Untuk Bisnis (Selasa 19:50, R-107, Turini)\n- Manajemen & Bisnis Dasar (Kamis 18:30, R-107, Gytha Nurhana)\n- Bahasa Indonesia (Rabu 19:50, R-107, Helmi Akmal/Moh. Umar)"
-  },
-  {
-    "id": "kelas_malam_mgt_sem3",
-    "category": "jadwal",
-    "keywords": [
-      "kelas malam",
-      "reguler",
-      "manajemen",
-      "semester 3",
-      "hybrid",
-      "mgt"
-    ],
-    "title": "Kelas Malam Reguler - Manajemen Semester 3",
-    "content": "Kelas Malam Manajemen Semester 3 (metode Hybrid):\n- Hukum Bisnis (Selasa 19:50, R-106, Ni Wayan FAL)\n- Digital Marketing (Selasa 18:30, R-106, Oryz Agnu)\n- Metodologi Penelitian (Rabu 19:50, R-106, Dr. Ika Iryanti)\n- Komunikasi Bisnis dan Negosiasi (Senin 19:30, R-106, Aditya KC/Sudadi)\n- Technopreneurship (Rabu 18:30, R-106, Feri Fauzi)\n- Ekonomi Makro (Jumat 18:30, R-106, Ade Elza)\n- Metode Kualitatif dan Kuantitatif (Senin 18:30, R-106, Dessy Kumala Dewi)\n- Sistem Informasi Manajemen (Kamis 18:30, R-106, Mesi Febima)"
-  },
-  {
-    "id": "kelas_malam_mgt_sem5",
-    "category": "jadwal",
-    "keywords": [
-      "kelas malam",
-      "manajemen",
-      "semester 5",
-      "hybrid"
-    ],
-    "title": "Kelas Malam Reguler - Manajemen Semester 5",
-    "content": "Kelas Malam Manajemen Semester 5 (metode Hybrid):\n- Manajemen Inovasi berbasis Teknologi (Jumat, Suwandi)\n- Academik Writing 2 (Senin 18:30, R-102, Hartanto)\n- Etika Profesi Bisnis (Selasa 18:30, R-102, Sitta Nurhajjah)\n- Manajemen Transformasi Digital (Rabu 19:50, R-102, Willy Eka Septian)\n- Seminar Strategi Pemasaran (Rabu 18:30, R-102, Feri Fauzi)\n- Kepemimpinan Entrepreneur (Kamis 18:30, R-102, Ika Kartika)\n- Data Analytics for Business Decision (Kamis 19:50, R-102, Dr. Chandra Lukita/Sudadi)"
-  },
-  {
-    "id": "kelas_mbkm_sem7",
-    "category": "jadwal",
-    "keywords": [
-      "mbkm",
-      "semester 7",
-      "skripsi",
-      "magang",
-      "onsite"
-    ],
-    "title": "Program MBKM Semester 7",
-    "content": "Mata Kuliah MBKM Semester 7 (metode Onsite):\n- Kemampuan Komunikasi (Selasa 19:50, R-104, Suwandi)\n- Kemampuan Kerja Tim (Selasa 18:30, R-104, Feri Fauzi)\n- Kedisiplinan Kerja (Rabu 18:30, R-104, Ni Wayan FAL)\n- Kreativitas (Senin 18:30, R-104, Oryz Agnu)\n- Literasi Digital (Rabu 18:30, R-104, Sudadi Pranata)\n- Skripsi/Project Akhir (6 SKS, Tim Dosen Pembimbing)"
-  },
-  {
     "id": "dosen_tambahan_lengkap",
     "category": "dosen",
     "keywords": [
@@ -964,104 +497,6 @@
     ],
     "title": "Daftar Dosen Tambahan UCIC",
     "content": "Dosen-dosen UCIC tambahan berdasarkan data jadwal terbaru:\n\n- Lena Magdalena, MMSI. - Manajemen dan Organisasi, Rekayasa Perangkat Lunak\n- Agung Supriyadi, S.E., M.Ak. - Teknologi Informasi untuk Bisnis, Akuntansi\n- Wiwiek Nurkomala Dewi, S.T., M.M. - Statistik, SIM\n- Oryz Agnu Dian Wulandari, S.E., M.M. - Statistik, Etika Komunikasi Bisnis\n- Ine Rachmawati, M.Sn. - Basic Fotografi, Desain\n- Dzulfiqar Fickri Rosyid, M.Ds. - DKV Sosial, Bahasa Rupa\n- Dewi Anggun, S.E., M.Ak. - Akuntansi Syariah\n- Rifqi Fahrudin, M.Kom. - UI & UX Design, Interaksi Manusia Komputer\n- Agus Sevitiana, S.T., M.Kom. - UI & UX Design, Komputer Grafis\n- Sitta Nurhajjah, S.AB., M.Si - Pengantar Akuntansi, Hukum Bisnis\n- Tiara Khodijah, M.Ds. - DKV Identitas, Basic Tipografi, Animasi 3D\n- Yuni Awalaturrohmah S, M.Pd - General English, Advertising Copywriting\n- Muthia Fariza, S.IP., M.M. - Manajemen SDM, Perilaku Konsumen\n- Galih M.P., M.Ds. - Estetika Visual Desain, Technopreneurship DKV\n- Dewi Laily Purnamasari, S.T., M.M. - Komunikasi Bisnis, Pemasaran\n- Willy Eka Septian, M.Kom. - Web Design, Enterprise Resource Planning\n- Unang Solihin, M.Kom. - Administrasi Jaringan, Keamanan Sistem\n- Mesi Febima, M.Kom. - Pemrograman Internet, Business Intelligence\n- Gytha Nurhana Dhea P.G., S.E., M.M. - Ekonomi Mikro, Matematika Ekonomi\n- Muhammad Hatta, M.Kom. - Rekayasa Aplikasi Internet, Mobile Programming\n- Safitri Akbari, S.E., M.Ak. - Akuntansi Keuangan Dasar/Lanjutan\n- Aan Kanivia, S.E., M.Ak., ACPA - Hukum Perpajakan, Audit\n- Feri Fauzi, S.E., M.M. - Technopreneurship, Seminar Pemasaran\n- Verina Tita Nabila, M.Si. - Data Mining, Deep Learning\n- Arif Nursetyo, M.Kom. - Kecerdasan Buatan, Etika dalam AI\n- Helmi Akmal Fauzan, S.Pd., M.Pd. - Bahasa Indonesia, Pelatihan Cabor\n- Nur Muhamad Hildan, S.Pd., M.Pd. - Bahasa Indonesia, Pelatihan Cabor Futsal\n- Dr. Chandra Lukita, S.E., M.M., M.T.I. - Data Analytics, Rektor UCIC\n- Kinaidi Adam, M.Comp. - Manajemen Proyek Perangkat Lunak\n- Ridho Taufiq S., M.Kom. - Jaminan Kualitas PL, Komunikasi Data\n- Bambang Sugiarto, M.Kom. - Pemrograman Internet, Pengembangan Aplikasi Mobile, Realitas Virtual dan Augmentasi"
-  },
-  {
-    "id": "jadwal_genap_selasa",
-    "category": "jadwal",
-    "keywords": [
-      "jadwal",
-      "selasa",
-      "semester genap",
-      "kuliah",
-      "genap 2025 2026"
-    ],
-    "title": "Jadwal Kuliah Semester Genap 2025/2026 - Hari Selasa (Kampus Utama)",
-    "content": "Jadwal hari Selasa Semester Genap:\n\nR-102: Manajemen Pemasaran AI For Marketing (07:30-10:00, Oryz Agnu, MGT-1/2), Digital Bisnis Startup (10:00-12:30, Wiwiek ND, MI-1/4).\n\nR-103: Matematika Ekonomi dan Bisnis (07:30-10:00, Marsani Asfi/Verina, ACT-1/2), Manajemen Kas dan Portofolio (10:00-12:30, Gytha, MB-1/4).\n\nR-104 Akt: Aplikasi Software Akuntansi (07:30-10:00, Amroni, MB-1/4), AI for Accounting (10:00-12:30, Agung Supriyadi, ACT-1/6), Pelatihan Cabor Atletik 1 (12:30-15:00, Helmi Akmal, PKO 1/2), Pelatihan Cabor Renang 1 (15:00-17:30, Helmi Akmal, PKO 1/2).\n\nR-106: Intermediate English (07:30-10:00, Yuni A.S., DKV-1/2), Metoda Produksi Grafika (10:00-12:30, Ine Rachmawati, DKV-1/2), Sustainability & ESG in Business (12:30-15:00, Dewi Laily, MGT-1/6), E-Commerce & Platform (15:00-17:30, Aqua Svetiana, MGT-1/6). Juga: Analisa Proses Bisnis (07:30-10:00, Mesi Febima, SI-1/2), Teknologi dan Tren E-commerce (10:00-12:30, Lena Magdalena, SI-1/2), Graphic Design (12:30-15:00, Tiara Khodijah, BISDI 1/2), Financial Management (15:00-17:30, Suwandi, BISDI 1/2).\n\nAuditorium: Intelligent Audio Visual Effect (07:30-10:00, Dzulfiqar Fickri, DKV-1/4 SI 1/6), Komunikasi Data dan Jaringan (10:00-12:30, Ridho Taufiq, TI 1/2 & TI 2/2), Audit Sistem Informasi (12:30-15:00, Lena Magdalena, TI 1/6)."
-  },
-  {
-    "id": "jadwal_genap_kamis",
-    "category": "jadwal",
-    "keywords": [
-      "jadwal",
-      "kamis",
-      "semester genap",
-      "kuliah",
-      "genap",
-      "pendidikan agama"
-    ],
-    "title": "Jadwal Kuliah Semester Genap 2025/2026 - Hari Kamis (Kampus Utama)",
-    "content": "Jadwal hari Kamis Semester Genap:\n\nR-102: Pendidikan Agama (07:30-10:00, Petrus Sokibi, semua prodi), Sistem Penunjang Keputusan (10:00-12:30, Ridho Taufiq, SI Enterprise 1/6), AI for Web Design HTML CSS Copilot (12:30-15:00, Mesi Febima, SI-1/2).\n\nR-103: Business Intelligence (07:30-10:00, Mesi Febima, SI E-Bisnis 1/4), Design Thinking (10:00-12:30, Agus Sevitana, MI-1/2), Ilmu Keolahragaan Dasar (12:30-15:00, Nadia Nur Paramitha, PKO 1/2).\n\nR-104 Akt: English for Business (07:30-10:00, Viar D.K., ACT-1/4), Auditing 1 (10:00-12:30, Aan Kanivia, ACT-1/4).\n\nR-106: Implementasi Arsitektur Enterprise (07:30-10:00, Willy Septian, SI Enterprise 1/4), Sosiologi Desain (10:00-12:30, Dzulfiqar Fickri, DKV-1/2).\n\nR-301: Kerja Tim dan Kolaborasi MBKM (07:30-10:00, Kusnadi/Ine, DKV-1/6), Keterampilan Presentasi MBKM (10:00-12:30), Keterampilan Interpersonal MBKM (12:30-15:00).\n\nAuditorium: Proyek Technopreneurhip (07:30-10:00, Rifqi/Kusnadi, TI SI DKV MI 1/6), Pendidikan Agama Islam (10:00-15:00, Amroni/Feri Fauzi, semua prodi).\n\nLAB-2: Studi Kelayakan Bisnis (07:30-10:00, Turini, MB-1/4), Management Information System (10:00-12:30, Willy Eka, BISDI 1/2)."
-  },
-  {
-    "id": "jadwal_genap_sabtu",
-    "category": "jadwal",
-    "keywords": [
-      "jadwal",
-      "sabtu",
-      "semester genap",
-      "kuliah",
-      "genap",
-      "keamanan",
-      "data mining"
-    ],
-    "title": "Jadwal Kuliah Semester Genap 2025/2026 - Hari Sabtu (Kampus Utama)",
-    "content": "Jadwal hari Sabtu Semester Genap:\n\nR-102: Data Mining & Data Warehouse (07:30-10:00, Kinaldi/Willy E.S., SI-1/6), Manajemen Proyek (10:00-12:30, Unang Solihin, SI-1/6).\n\nR-103: Domain dan Manajemen Web Server (07:30-10:00, Muhammad Afif Sulhan, MI 1/4), Integrated Marketing Communication (10:00-12:30, Ricky Perdana Kusuma, MI 1/4).\n\nR-104 Akt: Optimasi Aplikasi Web (07:30-10:00, Ricky Perdana Kusuma, MI 1/6), Keamanan Web (10:00-12:30, Muhammad Afif Sulhan, MI 1/6), Etika dan Regulasi Media Digital (12:30-15:00, Ricky Perdana Kusuma, MI 1/4).\n\nAuditorium: Keamanan Sistem Informasi dan Jaringan (07:30-10:00, Unang Solihin/Muh. Hatta, TI-IS 1/4 & TI SE 1/4), Sistem Terdistribusi (10:00-12:30, Unang Solihin), Sistem Penunjang Keputusan (12:30-15:00, Rinaldi/Willy E.S.).\n\nLAB-2: Fisiologi Olahraga (07:30-10:00, Ridwan Alif, PKO), Pelatihan Cabor Sepak Bola (10:00-12:30, Nur Muhamad Hildan, PKO)."
-  },
-  {
-    "id": "jadwal_hub_genap_senin_selasa",
-    "category": "jadwal",
-    "keywords": [
-      "jadwal",
-      "hub",
-      "kampus hub",
-      "senin",
-      "selasa",
-      "semester genap"
-    ],
-    "title": "Jadwal Kuliah Semester Genap 2025/2026 - Kampus HUB (Senin-Selasa)",
-    "content": "Kampus HUB - Hari Senin Genap:\nLab HUB: E-CRM (07:30-10:00, Mesi Febima, SI E-Bisnis 1/6), Metodologi Penelitian dan Riset Pustaka (10:00-12:30, Marsani Asfi, SI 1/4), Manajemen Kualitas (12:30-15:00, Muthia Fariza, MB-1/4).\nHUB-201: Manajemen Anggaran (07:30-10:00, Gytha, MGT-1/3), Perilaku Organisasional (10:00-12:30, Mualif Ismail, MGT-1/4), Machine Learning (12:30-15:00, Verina Tita, SI E-Bisnis 1/4).\nHUB-202: Manajemen Anggaran (07:30-10:00, Safitri Akbari, MGT-1/4), Perilaku Organisasional (10:00-12:30, Chiang Yulius, MGT-1/4), Teori Portofolio dan Analisis Investasi (12:30-15:00, Ade Elza, ACT-1/6).\nHUB-205: Struktur Data (07:30-10:00, Kusnadi/Petrus S, TI-1/2 TI-2/2), Rekayasa Aplikasi Internet (10:00-12:30, Bambang S/Willy, TI), Manajemen Keuangan (12:30-15:00, Feri Fauzi, MGT), Kecerdasan Buatan (15:00-17:30, Sudadi Pranata, MGT-1/2).\n\nKampus HUB - Hari Selasa Genap:\nLab HUB: AI for Accounting (07:30-10:00, Agung Supriyadi, ACT-1/6).\nHUB-201: TOEFL Preparation (07:30-10:00, Moh Umar, SI 1/4), Pemrograman Internet Intermediate Framework MVC (10:00-12:30, Muh. Hatta, SI 1/4), Packaging Design (12:30-15:00, Tiara Khodijah, DKV-1/4).\nHUB-205: Applied Photography (07:30-10:00, Ine Rachmawati, DKV-1/4), Pengujian dan Pemeliharaan Sistem (10:00-12:30, Arif Nursetyo, TI 1/4), Mobile Programming (12:30-15:00, Muh. Hatta/Bambang, TI 1/4)."
-  },
-  {
-    "id": "jadwal_hub_genap_rabu_kamis",
-    "category": "jadwal",
-    "keywords": [
-      "jadwal",
-      "hub",
-      "kampus hub",
-      "rabu",
-      "kamis",
-      "semester genap"
-    ],
-    "title": "Jadwal Kuliah Semester Genap 2025/2026 - Kampus HUB (Rabu-Kamis)",
-    "content": "Kampus HUB - Hari Rabu Genap:\nHUB-201: Intermediate English (07:30-10:00, Mohammad Umar, MGT-1/2), Manajemen Operasi (10:00-12:30, Sudadi/Taufan, MGT-1/2), Sosiologi Desain (12:30-15:00, Dzulfiqar Fickri, DKV-1/2).\nHUB-202: Manajemen Proyek (07:30-10:00, Mesi Febima, SI E-Bisnis 1/6), TOEFL Preparation (10:00-12:30, Viar Dwi Kartika, MB-1/4), Pemrograman Internet Intermediate (12:30-15:00, Prema, SI 1/4).\nHUB-203: TOEFL Preparations (07:30-10:00, Yuni A.S., MI-1/4), Kecerdasan Buatan (10:00-12:30, Amroni/Helmi, PKO 1/2), Intermediate English (12:30-15:00, PKO 1/2).\nHUB-205: TOEFL Preparation (07:30-10:00, Viar, TI 1/4), Sistem Digital (10:00-12:30, Ridho Taufiq, TI 1/4), Technopreneurship Lanjutan (12:30-15:00, Dr. Chandra Lukita/Feri, MGT-1/4), Manajemen Strategis (15:00-17:30, Dr. Ika Iryanti/Muthia, MGT-1/4).\n\nKampus HUB - Hari Kamis Genap:\nHUB-201: Etika Profesi Bisnis (07:30-10:00, Gytha, MB-1/6), Komunikasi Bisnis (10:00-12:30, Muthia Fariza, MB-1/6).\nHUB-202: Technopreneurship Lanjutan (07:30-10:00, Dr. Chandra Lukita/Suwandi, MB-1/4), UI & UX Design (10:00-12:30, Rifqi Fahrudin, SI 1/4).\nHUB-203: Sustainability Reporting (07:30-10:00, Ade Elza, ACT-1/6), Brand Identity (10:00-12:30, Linda Norhan, MI-1/6).\nHUB-205: Academic Writing 1 Digital & AI Literacy (07:30-10:00, Sudadi, MGT-1/4), English For Business (10:00-12:30, Viar, MGT-1/4), Metodologi Penelitian & Riset Pustaka (12:30-15:00, Ridho Taufiq, TI 1/6), Realitas Virtual dan Augmentasi (15:00-17:30, Bambang S, TI 1/6)."
-  },
-  {
-    "id": "jadwal_hub_genap_jumat",
-    "category": "jadwal",
-    "keywords": [
-      "jadwal",
-      "hub",
-      "kampus hub",
-      "jumat",
-      "semester genap",
-      "animasi",
-      "tipografi"
-    ],
-    "title": "Jadwal Kuliah Semester Genap 2025/2026 - Kampus HUB (Jumat)",
-    "content": "Kampus HUB - Hari Jumat Genap:\nLab HUB: Animasi 3D (07:30-10:00, Tiara Khodijah, DKV-1/4), Kinetic Tipografi (10:00-12:30, Tiara Khodijah, DKV-1/2 DKV-2/2).\nHUB-201: Design Thinking (07:30-10:00, Galih M.P., DKV-1/2 DKV-2/2), Desain Komunikasi Visual Promosi (10:00-12:30, Galih M.P., DKV-1/4), Creative Content Advertising (12:30-15:00, Galih M.P., DKV-1/4).\nHUB-203: Praktikum Auditing (07:30-10:00, Aan Kanivia, ACT-1/6), Etika Profesi Akuntan (10:00-12:30, Dewi Anggun, ACT-1/6, Online).\nHUB-205: Animasi 3D (07:30-10:00, Tiara Khodijah, DKV-1/4), Kinetic Tipografi (10:00-12:30, Tiara Khodijah, DKV-1/2 DKV-2/2), Sistem Pakar (12:30-15:00, Bambang S, TI 1/4).\nHari Sabtu: Tidak ada jadwal di Kampus HUB."
-  },
-  {
-    "id": "kelas_rpl",
-    "category": "jadwal",
-    "keywords": [
-      "rpl",
-      "rekognisi pembelajaran lampau",
-      "kelas rpl",
-      "angkatan",
-      "transfer"
-    ],
-    "title": "Kelas RPL (Rekognisi Pembelajaran Lampau) Manajemen",
-    "content": "Kelas RPL Angkatan 2025/2 (4 mahasiswa, Hybrid):\n- Manajemen Inovasi berbasis Teknologi (Jumat 18:30, R-102, Suwandi)\n- Etika Profesi Bisnis (Selasa 18:30, R-102, Sitta Nurhajjah)\n- Manajemen Transformasi Digital (Rabu 19:50, R-102, Willy Eka Septian)\n- Seminar Strategi Pemasaran (Rabu 18:30, R-102, Feri Fauzi)\n- Kepemimpinan Entrepreneur (Kamis 18:30, R-102, Ika Kartika)\n- Data Analytics for Business Decision (Kamis 19:50, R-102, Dr. Chandra Lukita/Sudadi)\n- Komunikasi Bisnis dan Negosiasi (Senin 19:30, R-106, Aditya KC/Sudadi)\n- Metode Kualitatif dan Kuantitatif (Senin 18:30, R-106, Dessy KD)\n\nKelas RPL Angkatan 2024/2 (Hybrid):\n- Hukum Bisnis (Selasa 19:50, R-106, Ni Wayan FAL)\n- Digital Marketing (Selasa 18:30, R-106, Oryz Agnu)\n- Metodologi Penelitian (Rabu 19:50, R-106, Dr. Ika Iryanti)\n- Ekonomi Makro (Jumat 18:30, R-106, Ade Elza S)\n- Sistem Informasi Manajemen (Kamis 18:30, R-106, Mesi Febima)\n- Manajemen Inovasi berbasis Teknologi (Senin 18:30, R-102, Suwandi)\n- Data Analytics for Business Decision (Kamis 19:50, R-102, Dr. Chandra Lukita/Sudadi)\n- Seminar Strategi Pemasaran (Rabu 18:30, R-102, Feri Fauzi)"
   },
   {
     "id": "kurikulum_d3mi_lengkap",
@@ -1077,158 +512,6 @@
     ],
     "title": "Kurikulum Lengkap D3 Manajemen Informatika",
     "content": "Semester 1: Pancasila dan kewarganegaraan, Bahasa Indonesia, Pembangunan karakter dan Etika Profesi, General English, Pengantar Media Digital, Komputer Grafis 1, Komunikasi dan Presentasi Dasar, AI Technician.\n\nSemester 2: Pendidikan Agama, Intermediate English, Design Thinking, Fotography Digital, Komputer Grafis 2 (Data Visualization), Statistik Informatika, Digital Copywriting.\n\nSemester 3: English for Specific Purpose, Technopreneurship, Videograf, Brand Identity (Corporate & Personal Branding), Manajemen Media Sosial, Visual Storytelling, Digital Content Marketing.\n\nSemester 4: TOEFL Preparation, Proyek Technopreneurship, Fotography dan Videograf lanjutan, Digital Bisnis (Startup), Integrated Marketing Communication, Digital Content Interaktif, Monetisasi Konten Digital, Mata Kuliah Pilihan (Kecerdasan Buatan / Business Intelegence / Audio Visual Effects).\n\nSemester 5: Trend dan Eksplorasi Content Digital, E-Commerce, UI & UX Design, Proyek Manajemen Informatika, Etika dan Regulasi Media Digital, Sertifikasi Kompetensi & HakI Produk Digital, Manajemen Proyek Media Digital.\n\nSemester 6: Tugas Akhir, Kapita Selekta, Tata Tulis Karya Ilmiah, Influencer Networking & Collaboration, Kampanye Konten Digital, Optimasi Content Digital, Mata Kuliah Pilihan (Pemrogramanan Internet Advance / Animasi 3D / Realitas Virtual dan Augmentasi)."
-  },
-  {
-    "id": "kurikulum_bisdi_sem6_8",
-    "category": "jurusan",
-    "keywords": [
-      "kurikulum",
-      "bisnis digital",
-      "semester 6",
-      "semester 8",
-      "mata kuliah",
-      "bisdi",
-      "skripsi"
-    ],
-    "title": "Kurikulum Bisnis Digital Semester 6 & 8",
-    "content": "Semester 6: Digital Business Development (Project) - Digital MSMEs-Preneur, Digital Business Development (Project) - Digital Business Consultant, Digital Business Development (Project) - Digital Business Startup, Crowdfunding & Fintech Ecosystem, Enterprise Resources Planning, Data Mining, Kopita Selekt, Writing Business Report, Business Intelligence, Digital Business Platform, Design Thinking Method, Supply Chain Management, Student Exchange: Fotografi (DKV).\n\nSemester 8: Skripsi."
-  },
-  {
-    "id": "kata_sambutan_rektor_universitas_cic_0",
-    "category": "profil",
-    "keywords": [
-      "kata",
-      "sambutan",
-      "rektor",
-      "universitas"
-    ],
-    "title": "Kata Sambutan Rektor - Universitas CIC",
-    "content": "Assalamu'alaikum Wr.Wb.,  Salam Sejahtera, Puji syukur ke hadirat Tuhan Yang Maha Esa, yang tidak henti-hentinya mencurahkan Rahmat dan HidayahNya bagi kita semua. Kehadiran website Universitas CIC yang mudah diakses, akurat dan informatif, kiranya dapat mempermudah bagi keluarga besar civitas akademika Universitas CIC dan masyarakat luas untuk mendapatkan informasi tentang Universitas CIC, pendaftaran, Beasiswa, Sistem Informasi Manajemen Akademik (SIMAK), perpustakaan, kegiatan Olahraga, Iptek, Seni Budaya, Penelitian dan informasi lainnya. Pendirian Universitas CIC diawali dengan berdirinya Lembaga Pendidikan Kursus dan Pelatihan CIC (dahulu Cirebon Institute of Computer) pada tanggal 13 Januari 1984, yang berarti sudah lebih dari 30 tahun secara konsisten dan komitmen berkiprah di dunia pendidikan. Pada tahun 1999 Lembaga Pendidikan CIC mengembangkan diri dengan mendirikan Sekolah Tinggi Manajemen Informatika dan Komputer Catur Insan Cendekia (STMIK CIC) dengan ijin operasional resmi dari Menteri Pendidikan Nasional nomer 123/D/O/1999 dan pada tanggal 21 Oktober 2019 STMIK CIC beralih status menjadi Universitas CIC yang telah disahkan oleh kemenristekdik. Konsistensi Universitas CIC sebagai IT (Information Technology) SCHOOL diharapkan mampu memberikan kontribusi positif berupa ilmu pengetahuan berbasis IT kepada dunia usaha dan industri serta mendukung langkah-langkah pemerintah daerah se-karesidenan Cirebon menuju Good Corporate Governance. Universitas CIC sejak tahun 2005 telah mendapatkan akreditasi dari BAN-PT(Badan Akreditasi Perguruan Tinggi) untuk 4 (empat) program studi yang ada di lingkungan STMIK CIC,yaitu Program Studi Sistem Informasi, Program Studi Teknik Informatika, Program Studi Manajemen Informatika dan Program Studi Komputerisasi Akuntansi, sehingga STMIK CIC menjadi satu-satunya Perguruan Tinggi Komputer yang semua program studinya terakreditasi oleh BAN-PT dan proaktif untuk terus melakukan re-akreditasi pada setiap program studi yang ada di"
-  },
-  {
-    "id": "visi_misi_tujuan_universitas_cic_0",
-    "category": "visi_misi",
-    "keywords": [
-      "visi",
-      "misi",
-      "tujuan",
-      "universitas"
-    ],
-    "title": "Visi Misi & Tujuan - Universitas CIC",
-    "content": "Universitas CIC juga menjalankan perannya sebagai Knowledge based dengan melakukan kerjasama-kerjasama dengan dunia usaha dan industri serta pemerintah daerah se-karesidenan Cirebon,   baik berupa kajian kurikulum berbasis PBL (Problem Based Learning), pengiriman tenaga praktisi untuk mengajar di Universitas CIC maupun penyaluran mahasiswa/i untuk praktek kerja lapang   dan menyerap lulusan Universitas CIC serta menjadikan lulusan Universitas CIC sebagai wirausaha tangguh di era global. Untuk mewujudkan hal tersebut Universitas CIC    memiliki visi, misi, serta tujuan yaitu sebagai berikut : \"Menjadi universitas yang berorientasi dalam bidang teknologi dan kewirausahaan, untuk mendukung masyarakat daerah dengan menghasilkan lulusan yang marnpu untuk menanggapi perubahan jaman.\" 1. Menyelenggarakan pengajaran yang berfokus untuk menghasilkan lulusan-lulusan yang mampu untuk menanggapi perubahan jaman. 2. Mendukung dan menciptakan lingkungan yang positif untuk pembelajaran, inovasi, dan penerapan dalam bidang teknologi dan kewirausahaan. 3. Menjalankan aktivitas Tri Dharma untuk memberikan kontribusi terhadap masyarakat daerah. 4. Menyelenggarakan pendidikan tinggi yang terjangkau dalam memperluas akses pendidikan di masyarakat daerah. Tujuan strategis institusi dirumuskan dalam Rencana Strategis Perguruan Tinggi Universitas Catur Insan Cendekia, tujuan strategis yang ingin dicapai Universitas CIC adalah : 1. Menghasilkan mahasiswa yang unggul dan berprestasi di tingkat nasional serta memiliki jiwa technopreneur. 2. Menghasilkan sistem pembelajaran yang bermutu berbasis teknologi informasi. 3. Menghasilkan dosen dan tenaga kependidikan yang bermutu dan kompeten dalam bidangnya. 4. Menghasilkan penelitian dosen yang berkualitas dan memberi kontribusi bagi pengembangan riset di Indonesia. 5. Menciptakan suasana akademik yang kondusif bagi pengembangan penelitian di institusi. 6. Memberikan kontribusi positif bagi masyarakat melalu kegiatan pengabdian kepada masyarakat y"
-  },
-  {
-    "id": "sejarah_cic_universitas_cic_0",
-    "category": "profil",
-    "keywords": [
-      "sejarah",
-      "universitas"
-    ],
-    "title": "Sejarah CIC - Universitas CIC",
-    "content": "CIC mulai didirikan pada tahun 1984 sebagai lembaga pendidikan kursus dan pelatihan. Pada tahun 1994, CIC mendirikan Akademi Perdagangan Widya Dharma. Kemudian Lembaga pendidikan CIC berkembang dengan mendirikan Sekolah Tinggi Manajemen Informatika dan Komputer (STMIK) Catur Insan Cendekia pada 1999. Pada tahun 2006 Akademi Perdagangan Widya Dharma berubah nama menjadi Akademi Perdagangan CIC. Universitas Catur Insan Cendekia (UCIC) merupakan hasil penggabungan antara Akademi Perdagangan Catur Insan Cendekia dan Sekolah Tinggi Manajemen Informatika Komputer (STMIK) CIC pada tahun 2019, dan mendapat pengesahan dengan terbitnya Surat Keputusan Menteri Riset, Teknologi dan Pendidikan Tinggi Republik Indonesia Nomor 952/KPT/I/2019 tertanggal 10 Oktober 2019. UCIC saat ini memiliki 2 Fakultas, yaitu Fakultas Ekonomi dan Bisnis serta Fakultas Teknologi Informasi. Universitas Catur Insan Cendekia (UCIC) sebagai holding bagi unit bisnis dan usaha yang ada di bawahnya. UCIC saat ini memiliki ekosistem di bidang pendidikan, kemanusiaan atau sosial, dan Unit bisnis yang mendukung pelaksanaan kegiatan Tridharma Perguruan Tinggi serta menjadi other income bagi UCIC. Di bidang pendidikan, terdapat Sekolah Pelita Bangsa Cambridge International School dari jenjang Playgroup hingga SMA dengan status akreditasi A pada setiap jenjang yang didirikan pada tahun 2006, International Language school EF English First Kota Cirebon yang didirikan pada tahun 1997, Enspire School of Digital Art (ESDA) pada 2019, dan Code First yang didirikan pada 2020. Di bidang Sosial dan Kemasyarakatan terdapat Harapanku Insan Sejahtera yang didirikan pada tahun 2001, yang membantu masyarakat disabilitas, dan mendampingi serta melatih kemandirian anak-anak Down Syndrome melalui Griya Karya Harapanku. Di bidang unit bisnis terdapat Bisnis Properti berupa Perumahan Taman Cipto yang didirikan pada 2006 dan Perumahan Taman Wahidin yang didirikan pada 1996. Bisnis lainnya adalah Sport Center Taman Cipto, Sport Cen"
-  },
-  {
-    "id": "program_studi_teknik_informatika_univers_0",
-    "category": "akademik",
-    "keywords": [
-      "program",
-      "studi",
-      "teknik",
-      "informatika",
-      "universitas"
-    ],
-    "title": "Program Studi Teknik Informatika - Universitas CIC",
-    "content": "Program Studi Teknik Informatika memberikan penguasaan dan kemampuan kepada mahasiswa untuk membangun dan mengembangkan berbagai aspek teknis teknologi informasi. Penekanan dari program studi ini adalah pada bidang pemrograman dan komputasi, rekayasa perangkat lunak untuk berbagai bidang aplikasi dalam berbagai bidang usaha, dan teknologi jaringan komputer. Selain itu program studi ini memberikan bidang-bidang ilmu yang berkaitan dengan pengembangan sistem informasi dan pemanfaatan teknologi lainnya dengan tujuan dapat meningkatkan efisiensi kerja di berbagai bidang usaha yang menerapkan komputerisasi. Program Studi Teknik Informatika akan memberikan bekal kepada mahasiswa untuk mampu melakukan analisa dan perancangan komputasi, melakukan rekayasa perangkat lunak untuk meningkatkan performance perangkat lunak, dan penguasaan dalam teknik-teknik optimasi perangkat lunak. Secara garis besar materi perkuliahan pada program studi ini disesuaikan dengan kurikulum nasional dan mengacu kepada kebutuhan pasar dunia kerja yang dapat dikelompokkan menjadi : Program Studi Teknik Informatika dengan jenjang pendidikan Strata Satu (S1) dilaksanakan dalam 8 Semester dengan jumlah total SKS (Satuan Kredit Semester) 144 SKS"
-  },
-  {
-    "id": "program_studi_sistem_informasi_universit_0",
-    "category": "akademik",
-    "keywords": [
-      "program",
-      "studi",
-      "sistem",
-      "informasi",
-      "universitas"
-    ],
-    "title": "Program Studi Sistem Informasi - Universitas CIC",
-    "content": "Program studi Sistem Informasi ini lebih berfokus pada hal-hal yang terkait dengan pengelolaan informasi dalam organisasi untuk mendukung pencapaian tujuan organisasi. Sistem Informasi mempelajari berbagai aspek mencakup perencanaan Sistem Informasi, perancangan Sistem Informasi, pembangunan Sistem Informasi, operasional Sistem Informasi, evaluasi Sistem Informasi. Jadi para profesional di bidang Sistem Informasi harus dapat memahami faktor-faktor orang, proses bisnis dan teknologi dari suatu organisasi, dan harus dapat membantu organisasi tersebut untuk menentukan bagaimana informasi dan proses bisnis yang didukung oleh teknologi dapat menjadi landasan untuk unjuk kinerja yang tinggi dari organisasi tersebut. Para profesional Sistem Informasi menjadi jembatan antara kelompok teknis dan bisnis dalam organisasi tersebut Lulusan Program Studi Sistem Informasi UCIC memiliki kesempatan untuk bekerja di berbagai tempat antara lain (namun tidak terbatas): Perusahaan Swasta, BUMD dan BUMN, Perusahaan Internasional, Perusahaan Start-up. Namun selain secara langsung bekerja, lulusan bisa melanjutkan sekolah S2. Beberapa profesi/pekerjaan lulusan adalah sebagai berikut: 1.\tKerjasama dengan Indurstri dan Instansi Pendidikan. \t\t\t2.\tKurikulum mengacu Standart Pendidikan Tinggi. \t\t\t3.\tMetode Pembelajaran Uptodate. \t\t\t4.\tDosen & Praktisi Berkompeten. \t\t\t5.\tLulusan dibekali Sertifikat."
-  },
-  {
-    "id": "program_studi_desain_komunikasi_visual_u_0",
-    "category": "akademik",
-    "keywords": [
-      "program",
-      "studi",
-      "desain",
-      "komunikasi",
-      "visual",
-      "universitas"
-    ],
-    "title": "Program Studi Desain Komunikasi Visual - Universitas CIC",
-    "content": "Perkembangan komputer dan teknologi informasi yang begitu pesat dalam masa 20 tahun terakhir perlu diimbangi dengan ketersediaan sumber daya manusia yang profesional didaerah. Menjawab tantangan kebutuhan tersebut Universitas CIC turut berpartisipasi dengan menyelenggarakan program studi Desain Komunikasi Visual sejak setahun yang lalu. Menyongsong datangnya milenium baru dan era pasar bebas, tantangan dan persaingan kerja dalam bidang teknologi informasi akan semakin ketat. Tenaga kerja yang profesional dengan daya saing tinggi menjadi keharusan."
-  },
-  {
-    "id": "program_studi_manajemen_informatika_univ_0",
-    "category": "akademik",
-    "keywords": [
-      "program",
-      "studi",
-      "manajemen",
-      "informatika",
-      "universitas"
-    ],
-    "title": "Program Studi Manajemen Informatika - Universitas CIC",
-    "content": "Program studi Manajemen Informatika adalah program Studi yang dirancang untuk menghasilkan lulusan yang memiliki spesialisasi dalam bidang teknologi informasi. Manajemen Informatika UCIC merupakan Program Studi Diploma 3 pada Fakultas Teknologi Informasi (FTI). Manajemen Informatika D3 UCIC lebih banyak Praktik dan berfokus pada pengembangan skill Manjemen, Programming dan Design menggunakan Teknologi Informasi. MI- UCIC mempunyai kurikulum terupdate dan program Proyek Magang pada industri BUMN/Swasta dengan sertifikat keahlian sehingga prosfek panerimaan pada dunia kerja nya sangat Luas."
-  },
-  {
-    "id": "program_studi_komputerisasi_akutansi_uni_0",
-    "category": "akademik",
-    "keywords": [
-      "program",
-      "studi",
-      "komputerisasi",
-      "akutansi",
-      "universitas"
-    ],
-    "title": "Program Studi Komputerisasi Akutansi - Universitas CIC",
-    "content": "Perkembangan teknologi informasi di bidang akuntansi, terutama produk-produk software yang berguna untuk proses akuntansi di perusahaan semakin banyak dan semakin membutuhkan tenaga-tenaga yang memang ahli dalam penggunaan serta pembuatan software tersebut. Keahlian dan kemampuan dalam bidang sistem informasi akuntansi mutlak dan tidak bisa ditawar lagi serta siap bekerja dalam mengoperasikan dan mengembangkan sistem informasi akuntansi, dan mengembangkan diri serta mengikuti perkembangan ilmu dan teknologi, itulah sebenarnya yang menjadi tujuan dari tujuan program Komputer Akuntansi. Program Studi Komputer Akuntansi dengan jenjang pendidikan Diploma Tiga (D3) ini dilaksanakan dalam 6 Semester dengan jumlah total SKS (Satuan Kredit Semester) 113"
-  },
-  {
-    "id": "program_studi_manajemen_universitas_cic_0",
-    "category": "akademik",
-    "keywords": [
-      "program",
-      "studi",
-      "manajemen",
-      "universitas"
-    ],
-    "title": "Program Studi Manajemen - Universitas CIC",
-    "content": "Di pebisnis yang sukses pasti ada kendala yang harus dilalui sebelumnya.  Dengan mengikuti proses pembelajaran di  Prodi Manajemen Universitas  Catur Insan Cendekia, mahasiswa dilatih  untuk selalu mencari solusi inovatif dalam menanggapi setiap tantangan bisnis yang dihadapi. Proses  pembelajaran di Prodi Manajemen dirancang untuk mempersiapkan mahasiswa  dengan kompetisi global ke depan. Melalui pendekatan blanded learning, mahasiswa  menjalani pembelajaran dan mencerminkan pembelajaran mereka ke dalam  konseptualisasi. Pendekatan ini menuntun siswa untuk memecahkan akar masalah  melalui kerangka kerja pembelajaran berbasis project. Mahasiswa Program Bisnis  S1 juga diundang ke berbagai kegiatan belajar yang meningkatkan keterampilan,  pengetahuan, dan sikap mereka. mahasiswa akan mengalami studi kasus,  perusahaan, dan kunjungan awal, perencanaan bisnis, simulasi bisnis, dan project  kewirausahaan lainnya yang bertujuan untuk menghasilkan kreativitas dan inovasi  siswa. Proses pembelajaran Program Manajemen membiasakan mahasiswa dengan  suasana kerja dan bisnis. Situasi ini akan mensimulasikan sensitivitas proses  bisnis mahasiswa dan memberikan mereka keterampilan pengambilan keputusan yang  bijaksana. Peluang karir  untuk lulusan sangat terbuka lebar seperti Entrepreneur, Professional in  Business Development Area, Business Planning, Business Analyst, Management  & Business Consultant, Small Business, Manager, Business Advisor, Business  Researcher, Business Economist, General Management, Administrative Manager,  Executive Manager, Project Manager, Trade Manager, etc. Program Studi Manajemen dengan jenjang pendidikan Sarjana (S1) ini dilaksanakan dalam 8 Semester dengan jumlah total SKS (Satuan Kredit Semester) 144 Entrepreneur, Professional in Business Development Area, Business Planning, Business Analyst, Management & Business Consultant, Small Business, Manager, Business Advisor, Business Researcher, Business Economist, General Management, Administrative Man"
-  },
-  {
-    "id": "program_studi_akuntansi_universitas_cic_0",
-    "category": "akademik",
-    "keywords": [
-      "program",
-      "studi",
-      "akuntansi",
-      "universitas"
-    ],
-    "title": "Program Studi Akuntansi - Universitas CIC",
-    "content": "Program Studi Akuntansi  merupakan bagian dari Fakultas Ekonomi dan Bisnis Universitas Catur Insan  Cendekia. Program Studi Akuntansi menjadi salah satu jawaban atas meningkatnya  kebutuhan Akuntan di Indonesia saat ini. Akuntansi sangat memegang peranan penting  dalam dunia bisnis. Tak heran jika ada istilah business language yang menjadi sebutan untuk akuntansi. Setiap  organisasi bisnis sudah tentu membutuhkan akuntansi. Hal ini menunjukan bahwa  selama masih ada bisnis, tenaga akuntansi jelas masih dibutuhkan. Program Akuntansi ini  menekankan penerapan pengetahuan dan keterampilan akuntansi dengan pemahaman  yang lebih baik tentang perspektif proses bisnis. Beberapa pengembangan  soft-skill juga diberikan di sepanjang kursus, seperti keterampilan komunikasi  yang efektif, kerja tim, keterampilan pemecahan masalah, dan kesadaran sosial. Salah satu kemampuan yang  harus dimiliki pemimpin bisnis adalah kemampuan manajemen keuangan. Akuntansi  adalah salah satu program yang menawarkan kelengkapan yang seimbang antara  kemampuan manajemen keuangan dan keterampilan manajemen bisnis untuk berbagai  industri atau bidang.                 Karena keputusan penting  dibuat berdasarkan kemampuan perusahaan untuk menghasilkan laba maksimum, dan  karena manajemen perlu mempertanggungjawabkan laporan pertanggungjawabannya  kepada investor dan regulator, akuntansi memang memainkan peran yang sangat  penting. Tidak mengherankan bahwa banyak sekali CEO, lahir, dan akan lahir dari  latar belakang akuntansi.                   Lulusan program ini akan menguasai knowladge dan skill  Akuntansi yang diperlukan, memahami proses bisnis yang mendasarinya serta  penilaian bisnis dasar yang sehat, diharapkan menjadi akuntan profesional yang  dapat membantu dan memberikan informasi keuangan yang tepat dan berguna untuk  manajemen organisasi perusahaan dalam membuat keputusan yang lebih baik. Peluang karir untuk lulusan sangat terbuka lebar karena akuntansi adalah fungsi yang sangat dibutuhka"
-  },
-  {
-    "id": "program_studi_manajemen_bisnis_universit_0",
-    "category": "akademik",
-    "keywords": [
-      "program",
-      "studi",
-      "manajemen",
-      "bisnis",
-      "universitas"
-    ],
-    "title": "Program Studi Manajemen Bisnis - Universitas CIC",
-    "content": "Program Manajemen Bisnis  merupakan bagian dari Fakultas Ekonomi dan Bisnis Universitas Catur Insan  Cendekia. Program Studi Manajemen Bisnis menjadi salah satu jawaban atas meningkatnya  kebutuhan Akuntan di Indonesia saat ini. Akuntansi sangat memegang peranan penting  dalam dunia bisnis. Tak heran jika ada istilah business language yang menjadi sebutan untuk akuntansi. Setiap  organisasi bisnis sudah tentu membutuhkan manajemen bisnis. Hal ini menunjukan bahwa  selama masih ada bisnis, tenaga akuntansi jelas masih dibutuhkan. Program Manajemen Bisnis ini  menekankan penerapan pengetahuan dan keterampilan akuntansi dengan pemahaman  yang lebih baik tentang perspektif proses bisnis. Beberapa pengembangan  soft-skill juga diberikan di sepanjang kursus, seperti keterampilan komunikasi  yang efektif, kerja tim, keterampilan pemecahan masalah, dan kesadaran sosial. Salah satu kemampuan yang  harus dimiliki pemimpin bisnis adalah kemampuan manajemen keuangan. Akuntansi  adalah salah satu program yang menawarkan kelengkapan yang seimbang antara  kemampuan manajemen keuangan dan keterampilan manajemen bisnis untuk berbagai  industri atau bidang.                 Karena keputusan penting  dibuat berdasarkan kemampuan perusahaan untuk menghasilkan laba maksimum, dan  karena manajemen perlu mempertanggungjawabkan laporan pertanggungjawabannya  kepada investor dan regulator, akuntansi memang memainkan peran yang sangat  penting. Tidak mengherankan bahwa banyak sekali CEO, lahir, dan akan lahir dari  latar belakang akuntansi.                   Lulusan program ini akan menguasai knowladge dan skill  Akuntansi yang diperlukan, memahami proses bisnis yang mendasarinya serta  penilaian bisnis dasar yang sehat, diharapkan menjadi akuntan profesional yang  dapat membantu dan memberikan informasi keuangan yang tepat dan berguna untuk  manajemen organisasi perusahaan dalam membuat keputusan yang lebih baik. Peluang karir untuk lulusan  sangat terbuka lebar karena akuntansi adalah fungs"
   },
   {
     "id": "jurusan_ucic",
@@ -1531,63 +814,6 @@
     "content": "Kurikulum D3 Manajemen Bisnis tersedia semester 1-6. Fokus pada bisnis dasar, ritel, perpajakan, akuntansi bisnis, SDM, supply chain, pemasaran ritel, kepemimpinan, seminar bisnis, dan tugas akhir."
   },
   {
-    "id": "biaya_pmb_opsi1",
-    "category": "biaya",
-    "keywords": [
-      "biaya",
-      "ukt",
-      "spp",
-      "kuliah",
-      "bayar",
-      "cicilan",
-      "pmb",
-      "2026",
-      "opsi 1",
-      "3 bulan",
-      "tahap 1"
-    ],
-    "title": "Biaya PMB 2026 - Opsi 1 (3 Bulan)",
-    "content": "Rincian biaya pembayaran Tahap 1 (1/2 Semester: 3 Bulan) PMB Gelombang 1 Februari UCIC 2026:\n- S1 Teknik Informatika: Tahap-1 Rp2.150.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.900.000.\n- S1 Teknik Informatika (Sore): Tahap-1 Rp2.220.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.970.000.\n- S1 Sistem Informasi: Tahap-1 Rp2.150.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.900.000.\n- S1 Sistem Informasi (Sore): Tahap-1 Rp2.220.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.970.000.\n- S1 Desain Komunikasi Visual: Tahap-1 Rp2.150.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.900.000.\n- S1 DKV (Sore): Tahap-1 Rp2.220.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.970.000.\n- S1 Manajemen: Tahap-1 Rp1.850.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.600.000.\n- S1 Manajemen (Sore): Tahap-1 Rp1.935.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.685.000.\n- S1 Manajemen (Kelas RPI): Tahap-1 Rp2.100.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.850.000.\n- S1 Akuntansi: Tahap-1 Rp1.850.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.600.000.\n- S1 Akuntansi (Sore): Tahap-1 Rp1.935.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.685.000.\n- S1 Pendidikan Kepelatihan Olahraga: Tahap-1 Rp1.290.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.040.000.\n- S1 Bisnis Digital: Tahap-1 Rp1.340.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.090.000.\n- S1 Bisnis Digital (Sore): Tahap-1 Rp1.440.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.190.000.\n- D3 Manajemen Bisnis: Tahap-1 Rp1.095.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp1.845.000.\n- D3 Manajemen Informatika: Tahap-1 Rp1.095.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp1.845.000.\n- D3 Manajemen Informatika (Sore): Tahap-1 Rp1.245.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp1.955.000."
-  },
-  {
-    "id": "biaya_pmb_opsi2",
-    "category": "biaya",
-    "keywords": [
-      "biaya",
-      "ukt",
-      "spp",
-      "kuliah",
-      "bayar",
-      "cicilan",
-      "pmb",
-      "2026",
-      "opsi 2",
-      "6 bulan",
-      "1 semester"
-    ],
-    "title": "Biaya PMB 2026 - Opsi 2 (1 Semester)",
-    "content": "Rincian biaya pembayaran Tahap 1 & 2 (1 Semester: 6 Bulan) PMB Gelombang 1 Februari UCIC 2026:\n- S1 Teknik Informatika: Tahap-1 Rp4.130.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp4.880.000.\n- S1 Teknik Informatika (Sore): Tahap-1 Rp4.270.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp5.020.000.\n- S1 Sistem Informasi: Tahap-1 Rp4.130.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp4.880.000.\n- S1 Sistem Informasi (Sore): Tahap-1 Rp4.270.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp5.020.000.\n- S1 Desain Komunikasi Visual: Tahap-1 Rp4.130.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp4.880.000.\n- S1 DKV (Sore): Tahap-1 Rp4.270.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp5.020.000.\n- S1 Manajemen: Tahap-1 Rp3.530.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp4.280.000.\n- S1 Manajemen (Sore): Tahap-1 Rp3.700.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp4.450.000.\n- S1 Manajemen (Kelas RPI): Tahap-1 Rp4.030.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp4.780.000.\n- S1 Akuntansi: Tahap-1 Rp3.530.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp4.280.000.\n- S1 Akuntansi (Sore): Tahap-1 Rp3.700.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp4.450.000.\n- S1 Pendidikan Kepelatihan Olahraga: Tahap-1 Rp2.410.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp3.160.000.\n- S1 Bisnis Digital: Tahap-1 Rp2.510.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp3.260.000.\n- S1 Bisnis Digital (Sore): Tahap-1 Rp2.710.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp3.460.000.\n- D3 Manajemen Bisnis: Tahap-1 Rp2.020.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.770.000.\n- D3 Manajemen Informatika: Tahap-1 Rp2.020.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp2.770.000.\n- D3 Manajemen Informatika (Sore): Tahap-1 Rp2.320.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp3.070.000."
-  },
-  {
-    "id": "biaya_pmb_opsi3",
-    "category": "biaya",
-    "keywords": [
-      "biaya",
-      "ukt",
-      "spp",
-      "kuliah",
-      "bayar",
-      "cicilan",
-      "pmb",
-      "2026",
-      "opsi 3",
-      "1 tahun",
-      "2 semester"
-    ],
-    "title": "Biaya PMB 2026 - Opsi 3 (1 Tahun)",
-    "content": "Rincian biaya pembayaran Tahap 1, 2, 3, 4 (2 Semester: 1 Tahun) PMB Gelombang 1 Februari UCIC 2026:\n- S1 Teknik Informatika: Tahap-1 Rp8.260.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp9.010.000.\n- S1 Teknik Informatika (Sore): Tahap-1 Rp8.540.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp9.290.000.\n- S1 Sistem Informasi: Tahap-1 Rp8.260.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp9.010.000.\n- S1 Sistem Informasi (Sore): Tahap-1 Rp8.540.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp9.290.000.\n- S1 Manajemen: Tahap-1 Rp7.060.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp7.810.000.\n- S1 Manajemen (Sore): Tahap-1 Rp7.400.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp8.150.000.\n- S1 Manajemen (Kelas RPI): Tahap-1 Rp8.060.000, Pendaftaran Rp250.000, Perlengkapan Rp500.000, DPP Rp3.000.000, Gedung Rp4.000.000, 4IT Rp8.810.000."
-  },
-  {
     "id": "magang",
     "category": "jurusan",
     "keywords": [
@@ -1628,10 +854,15 @@
       "tanggal daftar",
       "pmb",
       "early bird",
-      "pendaftaran mahasiswa baru"
+      "pendaftaran mahasiswa baru",
+      "gelombang",
+      "kapan buka",
+      "deadline",
+      "tutup kapan",
+      "pendaftaran ditutup"
     ],
     "title": "Jadwal Pendaftaran Mahasiswa Baru UCIC",
-    "content": "Pendaftaran mahasiswa baru UCIC biasanya dibuka dalam beberapa gelombang. Gelombang Early Bird (18 - 31 Oktober), Gelombang 1 (1 - 28 Januari), dan Gelombang 2 (18 - 31 Juli) berdasarkan data tahun ajaran sebelumnya."
+    "content": "Pendaftaran mahasiswa baru dibuka dalam beberapa gelombang. Gelombang Early Bird (Okt-Des), Gelombang 1 (Jan-Apr), dan Gelombang 2 (Mei-Agt). Kuota terbatas, jadi lebih baik daftar sekarang!"
   },
   {
     "id": "pmb_syarat",
@@ -1665,7 +896,11 @@
       "telepon",
       "website",
       "link daftar",
-      "jalan kesambi"
+      "jalan kesambi",
+      "no wa",
+      "nomer wa",
+      "kontak pmb",
+      "tanya pmb"
     ],
     "title": "Cara Mendaftar dan Kontak PMB UCIC",
     "content": "Cara daftarnya sangat mudah! Bisa Offline dengan datang langsung ke Kampus 2 UCIC (Jl. Kesambi No.58a). Atau Online via website pmb.cic.ac.id, lalu klik \"Daftar Sekarang\" dan lengkapi formulirnya. Jika butuh bantuan, hubungi Admin PMB via WhatsApp di +6281216700519."
@@ -1746,5 +981,21 @@
     ],
     "title": "Kegiatan Sambutan Mahasiswa Baru (Ospek)",
     "content": "Dalam menyambut mahasiswa baru, UCIC biasa mengadakan beberapa agenda seru! Biasanya ada Faculty Day, TM GUGUS, dan kegiatan Bina Keluarga Kampus. Namun perlu dicatat, formasi kegiatan pastinya menyesuaikan arahan panitia Ospek di tahun ajaran tersebut."
+  },
+  {
+    "id": "jadwal_kuliah_umum",
+    "category": "jadwal",
+    "keywords": [
+      "jadwal",
+      "kelas",
+      "masuk kapan",
+      "jam kuliah",
+      "pagi",
+      "malam",
+      "karyawan",
+      "kuliah malam"
+    ],
+    "title": "Jadwal Kuliah UCIC",
+    "content": "Jadwal kuliah di UCIC menyesuaikan dengan program yang diambil. Tersedia Kelas Reguler Pagi, Kelas Sore/Malam untuk karyawan, dan program Hybrid/Onsite. Jadwal spesifik per mata kuliah dapat dicek oleh mahasiswa melalui Portal Akademik (SIAKAD)."
   }
 ]
