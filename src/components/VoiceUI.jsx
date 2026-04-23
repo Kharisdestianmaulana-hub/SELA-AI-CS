@@ -684,16 +684,6 @@ export default function VoiceUI({ currentChat, onSend, onReceive, onNewChat, onR
 
   const messages = currentChat?.messages ?? []
 
-  // ── Activation handler ───────────────────────────────────────
-  const handleActivate = () => {
-    // Unlock Chrome audio policy dengan silent utterance
-    const unlock = new SpeechSynthesisUtterance('')
-    unlock.volume = 0
-    window.speechSynthesis.speak(unlock)
-    audioUnlockedRef.current = true  // permanen selama halaman terbuka
-    setActivated(true)
-  }
-
   // ── SPEAK MODE ────────────────────────────────────────────────
   if (mode === 'speak') {
     const latestMsg = messages[messages.length - 1]
@@ -706,7 +696,7 @@ export default function VoiceUI({ currentChat, onSend, onReceive, onNewChat, onR
           {/* Avatar 3D Background - FULL SCREEN */}
           <div className="absolute inset-0 pointer-events-none z-0">
             <div className="pointer-events-auto w-full h-full">
-              <AvatarPlaceholder state="idle" />
+              <AvatarPlaceholder state="idle" theme={theme} />
             </div>
           </div>
 
@@ -718,41 +708,6 @@ export default function VoiceUI({ currentChat, onSend, onReceive, onNewChat, onR
               playsInline
               autoPlay
             />
-          </div>
-
-          {/* Floating UI Container */}
-          <div className="relative z-10 flex flex-col items-center justify-end h-full w-full pb-[140px] pointer-events-none">
-            
-            {/* Tombol tap berbentuk Glassmorphism */}
-            <button
-              onClick={handleActivate}
-              className={`pointer-events-auto flex flex-col items-center justify-center backdrop-blur-xl border shadow-2xl px-10 py-5 rounded-3xl transition-all duration-500 hover:scale-105 active:scale-95 group relative overflow-hidden
-                ${faceDetected 
-                  ? 'bg-emerald-500/20 border-emerald-300/40 dark:bg-emerald-900/30 dark:border-emerald-500/30 shadow-emerald-400/20' 
-                  : 'bg-white/40 border-white/50 dark:bg-slate-800/40 dark:border-slate-600/50 shadow-blue-400/10'}`}
-            >
-              {faceDetected && (
-                 <div className="absolute inset-0 opacity-20 bg-emerald-400 animate-pulse" />
-              )}
-              <div className="relative z-10 flex flex-col items-center gap-1.5">
-                <p className="text-xl font-bold tracking-wide text-gray-800 dark:text-gray-100 drop-shadow-sm">
-                  {faceDetected
-                    ? (lang === 'id' ? 'Ketuk untuk aktifkan suara' : 'Tap to enable voice')
-                    : (lang === 'id' ? 'Ketuk untuk memulai' : 'Tap to start')
-                  }
-                </p>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className={`w-2.5 h-2.5 rounded-full ${faceDetected ? 'bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]' : 'bg-gray-400 dark:bg-gray-500'}`} />
-                  <p className={`text-xs font-bold uppercase tracking-[0.2em] transition-colors duration-300
-                    ${faceDetected ? 'text-emerald-700 dark:text-emerald-300' : 'text-gray-600 dark:text-gray-400'}`}>
-                    {faceDetected
-                      ? (lang === 'id' ? 'Wajah Terdeteksi' : 'Face Detected')
-                      : (lang === 'id' ? 'SELA siap menyambut' : 'SELA is ready')
-                    }
-                  </p>
-                </div>
-              </div>
-            </button>
           </div>
 
           <div className="absolute bottom-8 z-20">
@@ -787,7 +742,7 @@ export default function VoiceUI({ currentChat, onSend, onReceive, onNewChat, onR
         {/* Avatar full screen */}
         <div className="absolute inset-0 pointer-events-none z-0">
           <div className="pointer-events-auto w-full h-full">
-            <AvatarPlaceholder state={avatarState} />
+            <AvatarPlaceholder state={avatarState} theme={theme} />
           </div>
         </div>
 

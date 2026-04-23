@@ -1,6 +1,6 @@
-import { Suspense, useMemo, useRef } from 'react'
+import { Suspense, useMemo, useRef, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { ContactShadows, Html, PerspectiveCamera, useGLTF } from '@react-three/drei'
+import { ContactShadows, Html, PerspectiveCamera, useGLTF, useAnimations, Environment } from '@react-three/drei'
 import * as THREE from 'three'
 import { clone as cloneSkeleton } from 'three/examples/jsm/utils/SkeletonUtils.js'
 
@@ -129,16 +129,38 @@ function SelaModel({ state }) {
     start: 0,
     nextAt: 1.2 + Math.random() * 2.8,
   })
-  const { scene } = useGLTF('/models/sela.glb')
-  const clonedScene = useMemo(() => cloneSkeleton(scene), [scene])
+  const { scene, animations } = useGLTF('/models/SELA_BARU.glb')
+  const { actions } = useAnimations(animations, groupRef)
+
+  useEffect(() => {
+    if (!actions) return
+
+    // Stop semua action yang sedang berjalan secara perlahan
+    Object.values(actions).forEach(action => action?.fadeOut(0.5))
+
+    let actionName = 'Idle'
+    if (state === 'listening') actionName = 'Idle'
+    if (state === 'thinking') actionName = 'Rest'
+    if (state === 'speaking') actionName = 'Talking'
+
+    const action = actions[actionName]
+    if (action) {
+      action.reset().fadeIn(0.5).play()
+    }
+
+    return () => {
+      if (action) action.fadeOut(0.5)
+    }
+  }, [state, actions])
+
   const bindings = useMemo(() => {
     const nextBindings = []
-    clonedScene.traverse((child) => {
+    scene.traverse((child) => {
       const binding = createBinding(child)
       if (binding) nextBindings.push(binding)
     })
     return nextBindings
-  }, [clonedScene])
+  }, [scene])
 
   useFrame((renderState, delta) => {
     const group = groupRef.current
@@ -175,19 +197,19 @@ function SelaModel({ state }) {
 
     const eyeWideBase =
       state === 'listening' ? 0.24 :
-      state === 'thinking' ? 0.08 + (Math.sin(t * 1.8) + 1) * 0.04 :
-      state === 'speaking' ? 0.1 :
-      0
+        state === 'thinking' ? 0.08 + (Math.sin(t * 1.8) + 1) * 0.04 :
+          state === 'speaking' ? 0.1 :
+            0
 
     const browLift =
       state === 'listening' ? 0.14 :
-      state === 'thinking' ? 0.2 :
-      state === 'speaking' ? 0.08 :
-      0.03
+        state === 'thinking' ? 0.2 :
+          state === 'speaking' ? 0.08 :
+            0.03
 
     const browDown =
       state === 'thinking' ? 0.06 :
-      0
+        0
 
     const trackedKeys = [
       'visemeSil',
@@ -212,12 +234,12 @@ function SelaModel({ state }) {
     trackedKeys.forEach((key) => {
       const target =
         key === activeViseme ? 0.95 :
-        key === 'visemeSil' ? (state === 'speaking' ? 0.08 : 0.82) :
-        key === 'eyeBlinkLeft' || key === 'eyeBlinkRight' ? blinkWeight :
-        key === 'eyeWideLeft' || key === 'eyeWideRight' ? Math.max(0, eyeWideBase - blinkWeight * 0.8) :
-        key === 'browInnerUp' || key === 'browOuterUpLeft' || key === 'browOuterUpRight' ? browLift :
-        key === 'browDownLeft' || key === 'browDownRight' ? browDown :
-        0
+          key === 'visemeSil' ? (state === 'speaking' ? 0.08 : 0.82) :
+            key === 'eyeBlinkLeft' || key === 'eyeBlinkRight' ? blinkWeight :
+              key === 'eyeWideLeft' || key === 'eyeWideRight' ? Math.max(0, eyeWideBase - blinkWeight * 0.8) :
+                key === 'browInnerUp' || key === 'browOuterUpLeft' || key === 'browOuterUpRight' ? browLift :
+                  key === 'browDownLeft' || key === 'browDownRight' ? browDown :
+                    0
 
       applyMorph(bindings, key, target)
     })
@@ -225,38 +247,42 @@ function SelaModel({ state }) {
 
   return (
     <group ref={groupRef} scale={MODEL_SCALE} position={[0, MODEL_BASE_Y, 0]}>
-      <primitive object={clonedScene} />
+      <primitive object={scene} />
     </group>
   )
 }
 
-function SelaAvatar3D({ state }) {
+function SelaAvatar3D({ state, theme }) {
+  const isDark = theme === 'dark'
+
   return (
     <Canvas dpr={[1, 2]} gl={{ antialias: true, alpha: true }}>
       <PerspectiveCamera makeDefault position={[0, 0.8, 5.5]} fov={32} />
 
-      <ambientLight intensity={2.0} />
-      <hemisphereLight intensity={1.5} groundColor="#0f172a" />
-      
+      <ambientLight intensity={isDark ? 0.85 : 1.2} color={isDark ? "#f0f9ff" : "#ffffff"} />
+      <hemisphereLight intensity={isDark ? 0.5 : 0.8} skyColor={isDark ? "#e0f2fe" : "#ffffff"} groundColor="#0f172a" />
+
       {/* Lampu utama dan samping disesuaikan posisinya */}
-      <directionalLight position={[3.0, 1.0, 4.0]} intensity={2.5} color="#ffffff" />
-      <directionalLight position={[-3.0, 1.0, 3.0]} intensity={1.5} color="#7dd3fc" />
-      
+      <directionalLight position={[3.0, 1.0, 4.0]} intensity={isDark ? 1.0 : 1.5} color={isDark ? "#f0f9ff" : "#ffffff"} />
+      <directionalLight position={[-3.0, 1.0, 3.0]} intensity={isDark ? 0.65 : 1.0} color="#7dd3fc" />
+
       {/* Cahaya rata dari depan yang tegak lurus (Z-axis) agar rambut tidak memberi bayangan ke wajah */}
-      <directionalLight position={[0, 0, 10.0]} intensity={3.0} color="#ffffff" />
-      
+      <directionalLight position={[0, 0, 10.0]} intensity={isDark ? 1.0 : 1.5} color={isDark ? "#f0f9ff" : "#ffffff"} />
+
       {/* Point light (seperti ring light) diletakkan persis di depan wajah (y=1.0) */}
-      <pointLight position={[0, 1.0, 3.0]} intensity={5.0} distance={15} color="#ffffff" />
+      <pointLight position={[0, 2.5, 3.0]} intensity={isDark ? 1.3 : 2.0} distance={15} color={isDark ? "#e0f2fe" : "#ffffff"} />
 
       <Suspense fallback={<AvatarFallback />}>
+        {/* Environment map memberikan pantulan natural (Global Illumination) */}
+        <Environment preset="city" environmentIntensity={isDark ? 0.45 : 0.7} />
         <SelaModel state={state} />
-        <ContactShadows position={[0, SHADOW_Y, 0]} opacity={0.16} scale={5.2} blur={2.4} far={4.4} />
+        <ContactShadows position={[0, SHADOW_Y, 0]} opacity={isDark ? 0.25 : 0.16} scale={5.2} blur={2.4} far={4.4} color={isDark ? "#000000" : "#1e293b"} />
       </Suspense>
     </Canvas>
   )
 }
 
-export default function AvatarPlaceholder({ state = 'idle' }) {
+export default function AvatarPlaceholder({ state = 'idle', theme = 'light' }) {
   const cfg = STATE_CONFIG[state] ?? STATE_CONFIG.idle
   const isSpeaking = state === 'speaking'
 
@@ -274,7 +300,7 @@ export default function AvatarPlaceholder({ state = 'idle' }) {
       </div>
 
       <div className="absolute inset-0 z-10 w-full h-full pointer-events-auto">
-        <SelaAvatar3D state={state} />
+        <SelaAvatar3D state={state} theme={theme} />
       </div>
 
       <div className="absolute bottom-[22%] z-20 flex flex-col items-center pointer-events-none">
@@ -297,4 +323,4 @@ export default function AvatarPlaceholder({ state = 'idle' }) {
   )
 }
 
-useGLTF.preload('/models/sela.glb')
+useGLTF.preload('/models/SELA_BARU.glb')
