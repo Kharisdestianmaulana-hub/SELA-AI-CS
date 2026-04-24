@@ -569,16 +569,20 @@ export default function VoiceUI({ currentChat, onSend, onReceive, onNewChat, onR
 
   // ── Type mode ─────────────────────────────────────────────────
   const handleSubmit = async (e) => {
+    let textToSubmit = value
+
     // Handle both form event and direct string call (from quick replies/suggestions)
     if (typeof e === 'string') {
       // Direct call with text
-      setValue(e)
+      textToSubmit = e
+      setValue('')
       e = { preventDefault: () => {} }
+    } else {
+      e.preventDefault()
     }
 
-    e.preventDefault()
-    if (!value.trim()) return
-    const userText = value.trim()
+    if (!textToSubmit.trim()) return
+    const userText = textToSubmit.trim()
     setValue('')
     setIsAtBottom(true)
     if (isFarewell(userText)) { handleFarewell(userText); return }

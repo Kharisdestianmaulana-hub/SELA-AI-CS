@@ -27,8 +27,9 @@ async function getFuse() {
   try {
     fuse = new Fuse(ragDataset, {
       keys: ['keywords', 'title', 'content'],
-      threshold: 0.6,
+      threshold: 0.85,
       ignoreLocation: true,
+      ignoreFieldNorm: true,
       includeScore: true,
     });
   } catch (e) {
@@ -126,7 +127,7 @@ export async function getChatCompletion(messageHistory, lang = 'id') {
     console.log('RAG Match Score (Top 1):', results[0]?.score, 'Query:', userQuery);
     if (results.length > 0) {
       ragScore = results[0].score ?? 1;
-      contextStr = results.slice(0, 2)
+      contextStr = results.slice(0, 3)
         .map(r => `Topik: ${r.item.title}\nInfo: ${r.item.content}`)
         .join('\n\n');
     }
@@ -163,8 +164,10 @@ Kamu HANYA bertugas dan DIIZINKAN menjawab pertanyaan seputar kampus UCIC (seper
 ${contextStr || 'Kosong'}
 
 [PERTANYAAN LANJUTAN]:
-Setelah menjawab pertanyaan SEPUTAR UCIC, SELALU tambahkan 2 pertanyaan lanjutan yang relevan di AKHIR jawaban dengan format: [Pertanyaan 1?] | [Pertanyaan 2?]
-Contoh: "Pendaftaran dibuka bulan Maret. [Bagaimana cara mendaftar?] | [Apa saja persyaratannya?]"
+Setelah menjawab pertanyaan SEPUTAR UCIC, SELALU berikan 2 saran pertanyaan lanjutan yang BISA DITANYAKAN OLEH USER.
+Saran ini HARUS DITULIS DARI SUDUT PANDANG USER (seolah-olah user yang sedang bertanya), BUKAN AI yang bertanya kepada user.
+Gunakan format di AKHIR jawaban: [Pertanyaan 1?] | [Pertanyaan 2?]
+Contoh: "Pendaftaran dibuka bulan Maret. [Bagaimana cara mendaftar ke UCIC?] | [Apa saja syarat pendaftarannya?]"
 JIKA kamu MENOLAK menjawab karena di luar topik kampus, kamu TIDAK PERLU menambahkan pertanyaan lanjutan.`;
 
   const systemPromptEN = `You are SELA, the virtual receptionist for Universitas Catur Insan Cendekia (UCIC) who embodies a gentle, charismatic, authoritative, and deeply intelligent persona.
@@ -190,8 +193,10 @@ You ONLY serve and are PERMITTED to answer questions related to the UCIC campus 
 ${contextStr || 'Empty'}
 
 [FOLLOW-UP QUESTIONS]:
-After answering a UCIC-RELATED question, ALWAYS add 2 relevant follow-up questions at the END of your answer using the format: [Question 1?] | [Question 2?]
-Example: "Registration opens in March. [How do I register?] | [What are the requirements?]"
+After answering a UCIC-RELATED question, ALWAYS add 2 relevant follow-up questions at the END of your answer that the USER CAN ASK NEXT.
+These suggestions MUST BE WRITTEN FROM THE USER'S PERSPECTIVE (as if the user is asking), NOT as the AI asking the user.
+Use the format: [Question 1?] | [Question 2?]
+Example: "Registration opens in March. [How do I apply to UCIC?] | [What are the admission requirements?]"
 IF you DECLINE to answer because the topic is unrelated to the campus, DO NOT add follow-up questions.`;
 
   const messages = [

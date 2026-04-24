@@ -313,11 +313,6 @@ export default function AvatarPlaceholder({ state = 'idle', theme = 'light' }) {
             />
           ))}
         </div>
-
-        <div className="mt-3 flex items-center gap-2">
-          <span className={`w-2 h-2 rounded-full ${cfg.dot} ${cfg.pulse ? 'animate-pulse' : ''}`} />
-          <span className="text-xs font-semibold uppercase tracking-widest text-gray-400">{cfg.label}</span>
-        </div>
       </div>
     </div>
   )
