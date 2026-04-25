@@ -26,8 +26,12 @@ async function getFuse() {
   if (fuse) return fuse;
   try {
     fuse = new Fuse(ragDataset, {
-      keys: ['keywords', 'title', 'content'],
-      threshold: 0.85,
+      keys: [
+        { name: 'keywords', weight: 2 },
+        { name: 'title', weight: 1.5 },
+        { name: 'content', weight: 1 },
+      ],
+      threshold: 0.75,
       ignoreLocation: true,
       ignoreFieldNorm: true,
       includeScore: true,
@@ -233,6 +237,16 @@ IF you DECLINE to answer because the topic is unrelated to the campus, DO NOT ad
 
   if (!res.ok) throw new Error('Maaf, otak SELA lagi loading nih. Coba tanya lagi ya.');
   const { text } = await res.json();
+
+  // Cek IGNORE_NOISE sebelum parsing, agar tidak muncul sebagai suggestion
+  if (text?.trim().includes('[IGNORE_NOISE]')) {
+    return {
+      text: '[IGNORE_NOISE]',
+      suggestions: [],
+      media: [],
+      detectedLang: effectiveLang,
+    };
+  }
 
   // Parse follow-up suggestions from response
   const { text: cleanText, suggestions } = parseSuggestions(text || '');
