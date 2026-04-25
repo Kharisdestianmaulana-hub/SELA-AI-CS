@@ -36,20 +36,34 @@ for i in $(seq 1 30); do
   sleep 1
 done
 
-# 5. Buka Chrome kiosk (--user-data-dir baru = tidak join existing session)
-echo "[SELA] Membuka Chrome..."
-google-chrome \
-  --kiosk \
-  --user-data-dir=/tmp/sela-kiosk-profile \
-  --autoplay-policy=no-user-gesture-required \
-  --use-fake-ui-for-media-stream \
-  --disable-infobars \
-  --no-first-run \
-  --noerrdialogs \
-  --disable-session-crashed-bubble \
-  --disable-translate \
-  --start-fullscreen \
-  "$URL"
+# 5. Buka browser (Chrome kiosk jika tersedia, atau fallback ke default browser)
+echo "[SELA] Membuka browser..."
+if command -v google-chrome &> /dev/null; then
+  # Linux: gunakan google-chrome dengan flags kiosk
+  google-chrome \
+    --kiosk \
+    --user-data-dir=/tmp/sela-kiosk-profile \
+    --autoplay-policy=no-user-gesture-required \
+    --use-fake-ui-for-media-stream \
+    --disable-infobars \
+    --no-first-run \
+    --noerrdialogs \
+    --disable-session-crashed-bubble \
+    --disable-translate \
+    --start-fullscreen \
+    "$URL"
+elif command -v open &> /dev/null; then
+  # macOS: gunakan open dengan Google Chrome jika ada
+  if [ -d "/Applications/Google Chrome.app" ]; then
+    open -a "Google Chrome" "$URL"
+  else
+    # Fallback ke default browser
+    open "$URL"
+  fi
+else
+  # Fallback ke xdg-open (Linux)
+  xdg-open "$URL"
+fi
 
 # 6. Saat Chrome ditutup, matikan backend & frontend
 kill $BACKEND_PID $FRONTEND_PID 2>/dev/null
