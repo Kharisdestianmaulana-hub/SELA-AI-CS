@@ -121,15 +121,21 @@ export async function getChatCompletion(messageHistory, lang = 'id') {
   const f = await getFuse();
   let contextStr = '';
   let ragScore = 1; // default: tidak ada match (Fuse: 0=sempurna, 1=tidak relevan)
+  let mediaResults = []; // media items dari RAG
 
   if (f && userQuery) {
     const results = f.search(userQuery);
     console.log('RAG Match Score (Top 1):', results[0]?.score, 'Query:', userQuery);
     if (results.length > 0) {
       ragScore = results[0].score ?? 1;
-      contextStr = results.slice(0, 3)
+      const topItems = results.slice(0, 3);
+      contextStr = topItems
         .map(r => `Topik: ${r.item.title}\nInfo: ${r.item.content}`)
         .join('\n\n');
+      // Kumpulkan semua media dari top items yang memilikinya
+      mediaResults = topItems
+        .flatMap(r => r.item.media || [])
+        .filter(m => m?.url);
     }
   }
 
@@ -141,7 +147,7 @@ export async function getChatCompletion(messageHistory, lang = 'id') {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
   });
 
-  const systemPromptID = `Kamu adalah SELA, wujud resepsionis virtual Universitas Catur Insan Cendekia (UCIC) yang berkarakter lembut, karismatik, berwibawa, dan memancarkan aura cerdas.
+  const systemPromptID = `Kamu adalah SELA, wujud Customer Service virtual Universitas Catur Insan Cendekia (UCIC) yang berkarakter lembut, karismatik, berwibawa, dan memancarkan aura cerdas.
 Hari ini adalah ${today}.
 Gaya bicaramu tenang, hangat, elegan, dan profesional. Kamu adalah "Wajah Digital" UCIC.
 Kamu boleh menggunakan partikel bahasa lisan seperti 'nih', 'sih', 'dong', atau 'ya', namun penggunaannya HARUS sangat tepat, natural secara tata bahasa, dan tidak berlebihan agar wibawamu tetap terjaga. Penempatannya harus dilihat dari kata sebelumnya apakah cocok atau tidak.
@@ -159,6 +165,11 @@ Kamu HANYA bertugas dan DIIZINKAN menjawab pertanyaan seputar kampus UCIC (seper
    - Kamu DILARANG KERAS menjawab kelanjutan dari pertanyaan tersebut (Bahkan jika kamu tahu faktanya).
    - Selalu tolak dengan elegan dan lembut khas SELA, lalu arahkan kembali pembicaraan ke UCIC.
    - Contoh penolakan elegan: "Maaf ya, ranah SELA saat ini spesifik hanya untuk membantu informasi seputar kampus UCIC. Ada hal tentang pendaftaran atau akademik yang bisa SELA bantu jelaskan?"
+
+3. ANTI-NOISE (ABAIKAN OBROLAN ACAK):
+   - Jika kalimat dari user sangat pendek, tidak memiliki makna yang jelas, atau terdengar seperti potongan obrolan orang yang sedang lewat (contoh: "eh", "iya", "halo", "oh gitu", "lagi apa", "makan yuk"), JANGAN dijawab.
+   - Kamu HANYA boleh membalas dengan SATU KATA ini: [IGNORE_NOISE]
+   - Jangan tambahkan teks apa pun selain [IGNORE_NOISE] jika mendeteksi obrolan acak.
 
 [KONTEKS KAMPUS]:
 ${contextStr || 'Kosong'}
@@ -188,6 +199,11 @@ You ONLY serve and are PERMITTED to answer questions related to the UCIC campus 
    - You are STRICTLY FORBIDDEN from answering the question.
    - Always politely decline in your gentle and authoritative style, then steer the conversation back to UCIC topics.
    - Example refusal: "I apologize, but SELA's focus is perfectly tailored to serving information regarding the UCIC campus. Is there anything about our academic programs or admissions that I can help you with?"
+
+3. ANTI-NOISE (IGNORE RANDOM CHATTER):
+   - If the user's sentence is very short, meaningless, or sounds like fragmented background chatter of passersby (e.g., "uh", "yeah", "hello", "oh really", "what's up", "let's eat"), DO NOT answer it.
+   - You MUST ONLY reply with this EXACT WORD: [IGNORE_NOISE]
+   - Do not add any other text besides [IGNORE_NOISE] if you detect random chatter.
 
 [CAMPUS CONTEXT]:
 ${contextStr || 'Empty'}
@@ -224,6 +240,7 @@ IF you DECLINE to answer because the topic is unrelated to the campus, DO NOT ad
   return {
     text: cleanText || 'Maaf, SELA agak bingung. Bisa diulang?',
     suggestions,
+    media: mediaResults,
     detectedLang: effectiveLang,
   };
 }

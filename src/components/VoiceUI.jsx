@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import ChatBubble from "./ChatBubble";
 import AvatarPlaceholder from "./AvatarPlaceholder";
 import SuggestionButtons from "./SuggestionButtons";
+import MediaCarousel from "./MediaCarousel";
 import {
   transcribeAudio,
   getChatCompletion,
@@ -117,7 +118,7 @@ const SILENCE_DURATION = 1500; // ms diam setelah ada suara → auto-stop
 const MIN_SPEECH_MS = 800; // ms minimum bicara — cegah noise pendek masuk Whisper
 const MIN_BLOB_SIZE = 30000; // bytes minimum audio — audio terlalu kecil = pasti noise
 const MAX_RECORD_MS = 20000; // 20 detik maksimal recording sebagai failsafe
-const THRESHOLD_MULTIPLIER = 1.5; // baseline * 1.5 = dynamic threshold
+const THRESHOLD_MULTIPLIER = 2.5; // baseline * 2.5 = dynamic threshold (lebih ketat untuk noise)
 const BASELINE_SAMPLE_MS = 500; // ms untuk sample baseline noise
 
 // Farewell detection
@@ -511,7 +512,13 @@ export default function VoiceUI({
     if (modeRef.current !== "speak") return;
 
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: false,
+        },
+      });
       streamRef.current = stream;
       setMicDenied(false);
       isListeningRef.current = true;
@@ -684,7 +691,13 @@ export default function VoiceUI({
     setAvatarState("thinking");
     try {
       const text = await transcribeAudio(audioBlob, lang);
-      if (!text?.trim()) {
+
+      // 1. Filter Client-Side: Buang ucapan terlalu pendek/obrolan acak
+      const words = text?.trim().split(/\s+/) || [];
+      const isNoise = words.length <= 2 && text.length < 15;
+
+      if (!text?.trim() || isNoise) {
+        console.log("[SELA] Diabaikan (terlalu pendek/noise):", text);
         isProcessingRef.current = false;
         setAvatarState("idle");
         setTimeout(() => startListeningRef.current?.(), 300);
@@ -706,6 +719,16 @@ export default function VoiceUI({
       history.push({ role: "user", content: text });
       const response = await getChatCompletion(history, lang);
       setIsWaitingAI(false);
+
+      // 2. Filter LLM-Side: SELA mendeteksi obrolan orang lewat
+      if (response.text?.includes("[IGNORE_NOISE]")) {
+        console.log("[SELA] AI mendeteksi noise/obrolan acak, mengabaikan input.");
+        isProcessingRef.current = false;
+        setAvatarState("idle");
+        setTimeout(() => startListeningRef.current?.(), 300);
+        return;
+      }
+
       if (onReceive) onReceive(response);
 
       setAvatarState("speaking");
@@ -1037,13 +1060,17 @@ export default function VoiceUI({
               className="flex flex-col gap-1 overflow-y-auto hide-scrollbar"
             >
               {messages.map((msg) => (
-                <ChatBubble
-                  key={msg.id}
-                  role={msg.role}
-                  text={msg.text}
-                  lang={lang}
-                  isNew={msg.role === "assistant" && msg.id === latestSelaId}
-                />
+                <div key={msg.id}>
+                  <ChatBubble
+                    role={msg.role}
+                    text={msg.text}
+                    lang={lang}
+                    isNew={msg.role === "assistant" && msg.id === latestSelaId}
+                  />
+                  {msg.role === "assistant" && msg.media && msg.media.length > 0 && (
+                    <MediaCarousel media={msg.media} />
+                  )}
+                </div>
               ))}
               {isWaitingAI && (
                 <ChatBubble role="assistant" text="" lang={lang} isLoading />
@@ -1194,6 +1221,9 @@ export default function VoiceUI({
                       isVisible
                     />
                   )}
+                {msg.role === "assistant" && msg.media && msg.media.length > 0 && (
+                  <MediaCarousel media={msg.media} />
+                )}
               </div>
             ))}
             {isWaitingAI && (

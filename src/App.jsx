@@ -99,9 +99,10 @@ export default function App() {
   const handleReceiveMessage = (data) => {
     const targetId = currentChatIdRef.current;
 
-    // Handle both string (legacy) and object with text + suggestions (new)
+    // Handle both string (legacy) and object with text + suggestions + media (new)
     const text = typeof data === 'string' ? data : data?.text
     const suggestions = typeof data === 'object' ? data?.suggestions : undefined
+    const media = typeof data === 'object' ? data?.media : undefined
 
     if (!text?.trim() || !targetId) return
 
@@ -111,6 +112,9 @@ export default function App() {
       const msgObj = { id: msgId, role: 'assistant', text: text.trim(), ts: new Date() }
       if (suggestions && suggestions.length > 0) {
         msgObj.suggestions = suggestions
+      }
+      if (media && media.length > 0) {
+        msgObj.media = media
       }
       return {
         ...c,

@@ -15,7 +15,14 @@
       "info kampus"
     ],
     "title": "Profil Universitas Catur Insan Cendekia (UCIC)",
-    "content": "Universitas Catur Insan Cendekia (UCIC) merupakan institusi pendidikan modern di Cirebon yang lahir dari penggabungan STMIK CIC dan AP CIC berdasarkan SK Kemenristekdikti 952/KPT/I/2019. Fokus utama UCIC ialah teknologi, bisnis, dan sains. UCIC berkomitmen untuk menghasilkan lulusan yang adaptif, kreatif, dan kompeten di era digital."
+    "content": "Universitas Catur Insan Cendekia (UCIC) merupakan institusi pendidikan modern di Cirebon yang lahir dari penggabungan STMIK CIC dan AP CIC berdasarkan SK Kemenristekdikti 952/KPT/I/2019. Fokus utama UCIC ialah teknologi, bisnis, dan sains. UCIC berkomitmen untuk menghasilkan lulusan yang adaptif, kreatif, dan kompeten di era digital.",
+    "media": [
+      {
+        "type": "image",
+        "url": "https://placehold.co/600x400/1e3a8a/ffffff?text=Gedung+UCIC",
+        "caption": "Gedung Utama Universitas Catur Insan Cendekia (UCIC)"
+      }
+    ]
   },
   {
     "id": "rektor",
@@ -963,7 +970,24 @@
       "canggih"
     ],
     "title": "Fasilitas Kampus Lengkap UCIC",
-    "content": "Fasilitas di UCIC Cirebon sangat terkini! Mulai dari Ruang Kelas Modern, Meeting Room, Perpustakaan, Auditorium, Student Business Corner, hingga Convention Hall. Khusus di bidang teknologi, kami memiliki Lab Multimedia, fasilitas Digital Marketing (DM), 3D Virtual Reality Lab, serta AI & Data Analysis Lab!"
+    "content": "Fasilitas di UCIC Cirebon sangat terkini! Mulai dari Ruang Kelas Modern, Meeting Room, Perpustakaan, Auditorium, Student Business Corner, hingga Convention Hall. Khusus di bidang teknologi, kami memiliki Lab Multimedia, fasilitas Digital Marketing (DM), 3D Virtual Reality Lab, serta AI & Data Analysis Lab!",
+    "media": [
+      {
+        "type": "image",
+        "url": "https://placehold.co/600x400/1e40af/ffffff?text=Lab+Komputer",
+        "caption": "Laboratorium Komputer UCIC"
+      },
+      {
+        "type": "image",
+        "url": "https://placehold.co/600x400/0f766e/ffffff?text=Perpustakaan",
+        "caption": "Perpustakaan Digital UCIC"
+      },
+      {
+        "type": "image",
+        "url": "https://placehold.co/600x400/4338ca/ffffff?text=VR+Lab",
+        "caption": "3D Virtual Reality Lab UCIC"
+      }
+    ]
   },
   {
     "id": "kegiatan_ospek_maba",
