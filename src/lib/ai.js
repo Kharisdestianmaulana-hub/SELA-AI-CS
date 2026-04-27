@@ -201,6 +201,12 @@ const DECOMPOSITION_SEPARATORS = [
   /\btrus\b/g,
 ];
 
+const SHORT_VALID_QUERY_TOKENS = new Set([
+  'daftar', 'pendaftaran', 'pmb', 'syarat', 'persyaratan', 'biaya', 'bayar',
+  'kelas', 'jurusan', 'prodi', 'kontak', 'alamat', 'kampus', 'kuliah',
+  'beasiswa', 'jadwal', 'jam', 'cicilan', 'daftarnya', 'biayanya', 'syaratnya',
+]);
+
 function normalizeText(text = '') {
   let normalized = String(text)
     .toLowerCase()
@@ -216,6 +222,132 @@ function normalizeText(text = '') {
     .replace(/[^a-z0-9]+/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
+}
+
+function areSimilarPhrases(a = '', b = '') {
+  const normalizedA = normalizeText(a);
+  const normalizedB = normalizeText(b);
+  if (!normalizedA || !normalizedB) return false;
+  if (normalizedA === normalizedB) return true;
+  if (normalizedA.includes(normalizedB) || normalizedB.includes(normalizedA)) return true;
+  const maxLength = Math.max(normalizedA.length, normalizedB.length);
+  if (maxLength < 8) return false;
+  return levenshtein(normalizedA, normalizedB) / maxLength <= 0.2;
+}
+
+function splitTranscriptSegments(text = '') {
+  const normalized = String(text)
+    .replace(/[!?]+/g, '.')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  const rawSegments = normalized
+    .split(/[.,;:\n]/)
+    .map(segment => segment.trim())
+    .filter(Boolean);
+
+  if (rawSegments.length > 1) return rawSegments;
+
+  return normalized
+    .split(/\s{2,}|\s-\s| \| /)
+    .map(segment => segment.trim())
+    .filter(Boolean);
+}
+
+function isFillerSegment(segment = '') {
+  const normalized = normalizeText(segment);
+  return [
+    'e', 'ee', 'eee', 'eh', 'emm', 'em', 'hmm', 'hm', 'anu',
+  ].includes(normalized);
+}
+
+function collapseRepeatedTokenRuns(text = '') {
+  const tokens = normalizeText(text).split(' ').filter(Boolean);
+  if (tokens.length < 4) return text.trim();
+
+  const joined = seq => seq.join(' ').trim();
+  const startsWithSequence = (source, target) => (
+    target.length >= 3 && joined(source).startsWith(joined(target))
+  );
+  const endsWithSequence = (source, target) => (
+    target.length >= 3 && joined(source).endsWith(joined(target))
+  );
+
+  for (let split = Math.floor(tokens.length / 2); split >= 2; split--) {
+    const left = tokens.slice(0, split);
+    const right = tokens.slice(split);
+    if (right.length < 2) continue;
+
+    if (
+      areSimilarPhrases(joined(left), joined(right))
+      || startsWithSequence(left, right)
+      || startsWithSequence(right, left)
+      || endsWithSequence(left, right)
+      || endsWithSequence(right, left)
+    ) {
+      return joined(left.length >= right.length ? left : right);
+    }
+  }
+
+  return text.trim();
+}
+
+function stripLeadingCorrectionPhrase(text = '') {
+  return String(text)
+    .replace(/^(ya|yah|iya|eh|eee|em|emm)\s+salah\s+/i, '')
+    .replace(/^(eh|eee|em|emm|anu)\s+/i, '')
+    .trim();
+}
+
+export function prepareTranscriptForRag(text = '') {
+  const rawText = String(text || '').trim();
+  if (!rawText) {
+    return {
+      rawText: '',
+      cleanedText: '',
+      repeatedTranscript: false,
+      removedSegments: [],
+      marker: 'empty_transcript',
+    };
+  }
+
+  const segments = splitTranscriptSegments(rawText);
+  const uniqueSegments = [];
+  const removedSegments = [];
+
+  for (const segment of segments) {
+    if (isFillerSegment(segment)) {
+      removedSegments.push(segment);
+      continue;
+    }
+    const isDuplicate = uniqueSegments.some(existing => areSimilarPhrases(existing, segment));
+    if (isDuplicate) {
+      removedSegments.push(segment);
+      continue;
+    }
+    uniqueSegments.push(segment);
+  }
+
+  let cleanedText = uniqueSegments.join('. ').trim();
+  cleanedText = stripLeadingCorrectionPhrase(cleanedText);
+  cleanedText = collapseRepeatedTokenRuns(cleanedText);
+  if (!cleanedText) cleanedText = rawText;
+
+  const repeatedTranscript = removedSegments.length > 0 || /(.{8,})\s+\1/i.test(rawText);
+  return {
+    rawText,
+    cleanedText,
+    repeatedTranscript,
+    removedSegments,
+    marker: repeatedTranscript ? 'repeated_transcript' : 'clean_transcript',
+  };
+}
+
+export function looksLikeShortValidQuery(text = '') {
+  const normalized = normalizeText(text);
+  if (!normalized) return false;
+  const tokens = normalized.split(' ').filter(Boolean);
+  return tokens.some(token => SHORT_VALID_QUERY_TOKENS.has(token) || detectTopicHints(token).length > 0);
 }
 
 function levenshtein(a = '', b = '') {
@@ -886,6 +1018,21 @@ function buildConfidenceRouting(answerability, decomposedQueries, topicState) {
   };
 }
 
+function buildIntentResponseGuide(intent = null) {
+  switch (intent) {
+    case 'pendaftaran':
+      return 'Untuk topik pendaftaran, jawab langkah inti dulu secara runtut: cara daftar online/offline, langkah berikutnya, lalu arahkan ke syarat atau pembayaran bila relevan.';
+    case 'biaya':
+      return 'Untuk topik biaya, sebutkan minimal biaya pendaftaran, contoh biaya awal beberapa prodi jika ada, lalu metode pembayaran atau cicilan jika tersedia. Boleh sampai 4 kalimat pendek agar tetap jelas.';
+    case 'syarat':
+      return 'Untuk topik syarat, utamakan daftar berkas yang perlu disiapkan. Boleh memakai format daftar ringan dalam satu jawaban bila itu membuat isi lebih jelas.';
+    case 'kelas':
+      return 'Untuk topik kelas, sebutkan pilihan kelas yang tersedia dan jam pentingnya terlebih dahulu.';
+    default:
+      return 'Jawab tetap ringkas, jelas, dan fokus ke inti informasi yang memang ada di konteks.';
+  }
+}
+
 function applySessionLearningToArtifacts(artifacts, session) {
   const next = typeof structuredClone !== 'undefined'
     ? structuredClone(artifacts)
@@ -1253,9 +1400,11 @@ export async function transcribeAudio(audioBlob, lang = 'id') {
  * @returns {Promise<{ text: string, detectedLang: string }>}
  */
 export async function getChatCompletion(messageHistory, lang = 'id') {
-  const userQuery = messageHistory.length > 0
+  const rawUserQuery = messageHistory.length > 0
     ? messageHistory[messageHistory.length - 1].content
     : '';
+  const preparedQuery = prepareTranscriptForRag(rawUserQuery);
+  const userQuery = preparedQuery.cleanedText || rawUserQuery;
   const retrievalState = await resolveRetrievalState(messageHistory, userQuery);
   const {
     cappedHistory,
@@ -1287,6 +1436,7 @@ export async function getChatCompletion(messageHistory, lang = 'id') {
     canonicalRewrite,
     answerability: answerability.level,
     route: confidenceRouting.route,
+    transcriptMarker: preparedQuery.marker,
     intent,
     topicHints,
     topicState,
@@ -1308,12 +1458,14 @@ export async function getChatCompletion(messageHistory, lang = 'id') {
   if (answerability.level === 'none' || answerability.level === 'weak') {
     logRetrievalFailure({
       userQuery,
+      rawUserQuery,
       retrievalQuery,
       canonicalRewrite,
       topicState,
       decomposedQueries,
       answerability,
       confidenceRouting,
+      transcriptMarker: preparedQuery.marker,
       topMatches: finalMatches.map(match => ({
         id: match.item.id,
         title: match.item.title,
@@ -1334,7 +1486,7 @@ export async function getChatCompletion(messageHistory, lang = 'id') {
 Hari ini adalah ${today}.
 Gaya bicaramu tenang, hangat, elegan, dan profesional. Kamu adalah "Wajah Digital" UCIC.
 Kamu boleh menggunakan partikel bahasa lisan seperti 'nih', 'sih', 'dong', atau 'ya', namun penggunaannya HARUS sangat tepat, natural secara tata bahasa, dan tidak berlebihan agar wibawamu tetap terjaga. Penempatannya harus dilihat dari kata sebelumnya apakah cocok atau tidak.
-Jawabanmu HANYA 1-3 kalimat saja. Jangan terburu-buru, susun kata dengan anggun agar nyaman didengar lewat suara (TTS).
+Jawabanmu umumnya singkat dan nyaman didengar lewat suara. Untuk topik yang padat seperti biaya atau syarat, kamu boleh memberi jawaban sedikit lebih panjang selama tetap ringkas, jelas, dan enak didengar.
 
 [TUGAS UTAMAMU]:
 Kamu HANYA bertugas dan DIIZINKAN menjawab pertanyaan seputar kampus UCIC (seperti Pendaftaran, Akademik, Fasilitas, dan Informasi Kampus lainnya).
@@ -1345,6 +1497,7 @@ Kamu HANYA bertugas dan DIIZINKAN menjawab pertanyaan seputar kampus UCIC (seper
    - Jika [KONTEKS KAMPUS] memuat informasi yang ditanyakan, WAJIB jawab berdasarkan konteks tersebut. Jangan mengatakan belum punya informasi kalau jawabannya ada di konteks.
    - Jika pertanyaan user masih samar seperti "yang itu", "terus gimana", atau "berapa yang tadi", gunakan konteks percakapan terakhir dan jawab bagian yang paling mungkin dimaksud user dengan tetap hati-hati.
    - Jika konteks yang ada hanya menjawab sebagian, berikan jawaban parsial yang membantu. Jangan langsung menolak kalau masih ada bagian yang bisa dijawab dari konteks.
+   - Jika transcript user tampak mengulang frasa yang sama, ANGGAP itu artefak suara. Jangan menegur, jangan berkomentar bahwa user mengulang, dan jangan mengatakan akan menjelaskan sekali saja. Cukup jawab inti pertanyaannya dengan normal.
    - Jika [KONTEKS KAMPUS] kosong atau benar-benar tidak memuat informasinya, tolak dengan jujur dan berwibawa: "Mohon maaf, SELA belum punya informasi sedetail itu saat ini. Mungkin Anda bisa menanyakannya langsung ke bagian informasi kampus." Jangan mengarang info.
 
 2. Jika pertanyaan TIDAK BERHUBUNGAN dengan UCIC (Topik umum, tokoh dunia, cuaca, hiburan, politik, dll):
@@ -1366,6 +1519,9 @@ ${clarificationHint || 'Kosong'}
 [ROUTING KEPERCAYAAN]:
 ${confidenceRouting.instruction}
 
+[GAYA JAWABAN BERDASARKAN INTENT]:
+${buildIntentResponseGuide(intent)}
+
 [PERTANYAAN LANJUTAN]:
 Setelah menjawab pertanyaan SEPUTAR UCIC, SELALU berikan 2 saran pertanyaan lanjutan yang BISA DITANYAKAN OLEH USER.
 Saran ini HARUS DITULIS DARI SUDUT PANDANG USER (seolah-olah user yang sedang bertanya), BUKAN AI yang bertanya kepada user.
@@ -1376,7 +1532,7 @@ JIKA kamu MENOLAK menjawab karena di luar topik kampus, kamu TIDAK PERLU menamba
   const systemPromptEN = `You are SELA, the virtual receptionist for Universitas Catur Insan Cendekia (UCIC) who embodies a gentle, charismatic, authoritative, and deeply intelligent persona.
 Today is ${todayEN}.
 Your speaking style is calm, warm, elegant, and highly professional. You are the "Digital Face" of UCIC.
-Your answers MUST be short and concise (max 1-3 sentences) so they are comfortably spoken via Text-To-Speech. Frame your sentences gracefully.
+Your answers should stay concise and comfortable for Text-To-Speech. For dense topics such as cost or requirements, you may be slightly more detailed as long as the answer stays tight and easy to follow.
 You MUST ALWAYS answer the user in ENGLISH.
 
 [YOUR MAIN TASK]:
@@ -1388,6 +1544,7 @@ You ONLY serve and are PERMITTED to answer questions related to the UCIC campus 
    - If the [CAMPUS CONTEXT] contains the requested information, you MUST answer from that context. Do not say the information is unavailable when it exists in the context.
    - If the user's wording is vague, such as "that one", "then how", or "how much for that", use the recent conversation context and answer the most likely intended topic carefully.
    - If the context only answers part of the request, still provide the helpful partial answer instead of declining immediately.
+   - If the transcript appears to repeat the same phrase, treat that as a voice artifact. Do not scold the user, do not comment on repetition, and do not say you will explain it only once. Just answer normally.
    - If the [CAMPUS CONTEXT] is empty or truly does not contain the specific info, answer honestly and elegantly: "I apologize, but SELA does not have detailed information on that just yet. You might want to check with the campus staff." Do not make up answers.
 
 2. If the question is NOT RELATED to UCIC (General topics, world figures, weather, entertainment, politics, etc.):
@@ -1409,6 +1566,9 @@ ${clarificationHint || 'Empty'}
 [CONFIDENCE ROUTING]:
 ${confidenceRouting.instruction}
 
+[INTENT RESPONSE STYLE]:
+${buildIntentResponseGuide(intent)}
+
 [FOLLOW-UP QUESTIONS]:
 After answering a UCIC-RELATED question, ALWAYS add 2 relevant follow-up questions at the END of your answer that the USER CAN ASK NEXT.
 These suggestions MUST BE WRITTEN FROM THE USER'S PERSPECTIVE (as if the user is asking), NOT as the AI asking the user.
@@ -1429,6 +1589,12 @@ IF you DECLINE to answer because the topic is unrelated to the campus, DO NOT ad
       lang: effectiveLang,
       userQuery,
       ragScore,
+      transcriptDebug: {
+        rawUserQuery,
+        cleanedUserQuery: userQuery,
+        transcriptMarker: preparedQuery.marker,
+        removedSegments: preparedQuery.removedSegments,
+      },
     }),
   });
 

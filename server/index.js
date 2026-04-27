@@ -92,9 +92,17 @@ app.post('/api/transcribe', upload.single('file'), async (req, res) => {
 // Terima { messages }, panggil LLM secara langsung tanpa web search tambahan
 app.post('/api/chat', async (req, res) => {
   try {
-    const { messages, userQuery = '' } = req.body;
+    const { messages, userQuery = '', transcriptDebug = null } = req.body;
 
     console.log(`[SELA Chat] Menerima pertanyaan: "${userQuery.slice(0, 50)}"`);
+    if (transcriptDebug) {
+      console.log('[SELA Chat] Transcript debug:', {
+        raw: transcriptDebug.rawUserQuery,
+        cleaned: transcriptDebug.cleanedUserQuery,
+        marker: transcriptDebug.transcriptMarker,
+        removedSegments: transcriptDebug.removedSegments,
+      });
+    }
 
     // Panggil LLM dengan messages komplit (System Prompt + RAG + Chat History)
     const completion = await groq.chat.completions.create({

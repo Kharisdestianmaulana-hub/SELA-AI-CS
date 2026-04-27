@@ -10,6 +10,22 @@ URL="http://localhost:5173?kiosk=1"
 BACKEND_PID=""
 FRONTEND_PID=""
 
+kill_port() {
+  local port="$1"
+  if command -v lsof >/dev/null 2>&1; then
+    local pids
+    pids="$(lsof -ti tcp:"$port" 2>/dev/null || true)"
+    if [ -n "$pids" ]; then
+      echo "$pids" | xargs kill -9 2>/dev/null || true
+    fi
+    return
+  fi
+
+  if command -v fuser >/dev/null 2>&1; then
+    fuser -k "${port}/tcp" >/dev/null 2>&1 || true
+  fi
+}
+
 cleanup() {
   echo
   echo "[SELA] Menghentikan launcher..."
@@ -23,8 +39,8 @@ trap cleanup EXIT INT TERM
 echo "[SELA] Menghentikan proses lama..."
 pkill -f "node.*server"    2>/dev/null
 pkill -f "vite"            2>/dev/null
-fuser -k 3001/tcp          2>/dev/null
-fuser -k 5173/tcp          2>/dev/null
+kill_port 3001
+kill_port 5173
 # Bersihkan profile kiosk lama agar Chrome selalu fresh (tidak join existing session)
 rm -rf /tmp/sela-kiosk-profile
 sleep 1

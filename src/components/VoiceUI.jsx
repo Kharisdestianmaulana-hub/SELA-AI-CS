@@ -9,6 +9,8 @@ import {
   speakText,
   getTimeBasedGreeting,
   archiveConversationSession,
+  prepareTranscriptForRag,
+  looksLikeShortValidQuery,
 } from "../lib/ai";
 
 // ── SVG Icons ────────────────────────────────────────────────────
@@ -115,12 +117,16 @@ const quickReplies = {
 };
 
 // ─────────────────────────────────────────────────────────────────
-const SILENCE_DURATION = 1500; // ms diam setelah ada suara → auto-stop
-const MIN_SPEECH_MS = 800; // ms minimum bicara — cegah noise pendek masuk Whisper
+const SILENCE_DURATION = 850; // ms diam setelah ada suara → auto-stop lebih cepat
+const MIN_SPEECH_MS = 500; // ms minimum bicara — tetap tahan noise tapi lebih ramah pertanyaan pendek
 const MIN_BLOB_SIZE = 30000; // bytes minimum audio — audio terlalu kecil = pasti noise
 const MAX_RECORD_MS = 20000; // 20 detik maksimal recording sebagai failsafe
-const THRESHOLD_MULTIPLIER = 2.5; // baseline * 2.5 = dynamic threshold (lebih ketat untuk noise)
+const THRESHOLD_MULTIPLIER = 2.0; // baseline * 2.0 = lebih ramah untuk ucapan pertama
 const BASELINE_SAMPLE_MS = 500; // ms untuk sample baseline noise
+const EARLY_SPEECH_THRESHOLD_MULTIPLIER = 1.35;
+const MIN_TRANSCRIPT_CHARS = 6;
+const QUICK_COMMIT_SILENCE_MS = 550; // commit cepat setelah speech valid
+const QUICK_COMMIT_MIN_SPEECH_MS = 500;
 const IDLE_SESSION_MS = 90 * 1000; // 90 detik tanpa interaksi -> reset sesi
 const FACE_LOST_END_MS = 12 * 1000; // 12 detik wajah hilang saat sesi aktif -> reset
 
@@ -177,6 +183,8 @@ export default function VoiceUI({
   const silenceStartRef = useRef(null);
   const hasSpeechRef = useRef(false);
   const speechStartRef = useRef(null);
+  const firstSpeechDetectedAtRef = useRef(null);
+  const baselineStartedAtRef = useRef(null);
   const modeRef = useRef(mode);
   const dynamicThresholdRef = useRef(10); // fallback fallback jika baseline gagal
   const suppressRecorderOnStopRef = useRef(false);
@@ -565,6 +573,8 @@ export default function VoiceUI({
     silenceStartRef.current = null;
     hasSpeechRef.current = false;
     speechStartRef.current = null;
+    firstSpeechDetectedAtRef.current = null;
+    baselineStartedAtRef.current = null;
   };
 
   // ── Start auto-listen ─────────────────────────────────────────
@@ -581,7 +591,7 @@ export default function VoiceUI({
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
-          autoGainControl: false,
+          autoGainControl: true,
         },
       });
       streamRef.current = stream;
@@ -623,6 +633,10 @@ export default function VoiceUI({
           hadSpeech,
           "| speechDuration:",
           speechDuration,
+          "ms | firstSpeechDelay:",
+          firstSpeechDetectedAtRef.current && baselineStartedAtRef.current
+            ? firstSpeechDetectedAtRef.current - baselineStartedAtRef.current
+            : null,
           "ms | blobSize:",
           audioBlob.size,
         );
@@ -650,6 +664,7 @@ export default function VoiceUI({
 
       recorder.start(100);
       setAvatarState("listening");
+      baselineStartedAtRef.current = Date.now();
 
       // Failsafe: force stop setelah MAX_RECORD_MS
       const maxTimer = setTimeout(() => {
@@ -660,7 +675,6 @@ export default function VoiceUI({
       // ── Baseline sampling phase (500ms) ────────────────────
       const data = new Uint8Array(analyser.fftSize);
       let baselineRmsValues = [];
-      let baselinePhaseComplete = false;
 
       const baselineCheck = () => {
         if (!isListeningRef.current) return;
@@ -670,17 +684,42 @@ export default function VoiceUI({
           data.reduce((s, v) => s + (v - 128) * (v - 128), 0) / data.length,
         );
         baselineRmsValues.push(rms);
+        const avgSoFar =
+          baselineRmsValues.reduce((a, b) => a + b, 0) / baselineRmsValues.length;
+        const provisionalThreshold = Math.max(
+          7,
+          avgSoFar * EARLY_SPEECH_THRESHOLD_MULTIPLIER,
+        );
 
-        if (baselineRmsValues.length < 30) {
-          // Masih sampling (300ms = 30 frame @ ~100ms per frame)
+        if (rms > provisionalThreshold && !hasSpeechRef.current) {
+          hasSpeechRef.current = true;
+          speechStartRef.current = Date.now();
+          firstSpeechDetectedAtRef.current = speechStartRef.current;
+          dynamicThresholdRef.current = Math.max(
+            provisionalThreshold,
+            avgSoFar * THRESHOLD_MULTIPLIER,
+          );
+          console.log(
+            "[SELA VAD] Early speech detected during baseline",
+            {
+              rms: Number(rms.toFixed(2)),
+              provisionalThreshold: Number(provisionalThreshold.toFixed(2)),
+            },
+          );
+          startActualVAD();
+          return;
+        }
+
+        if (Date.now() - baselineStartedAtRef.current < BASELINE_SAMPLE_MS) {
           vadFrameRef.current = requestAnimationFrame(baselineCheck);
         } else {
-          // Baseline complete
-          baselinePhaseComplete = true;
           const avgBaseline =
             baselineRmsValues.reduce((a, b) => a + b, 0) /
             baselineRmsValues.length;
-          dynamicThresholdRef.current = avgBaseline * THRESHOLD_MULTIPLIER;
+          dynamicThresholdRef.current = Math.max(
+            7,
+            avgBaseline * THRESHOLD_MULTIPLIER,
+          );
           console.log(
             "[SELA VAD] Baseline:",
             avgBaseline.toFixed(2),
@@ -724,17 +763,30 @@ export default function VoiceUI({
             if (!hasSpeechRef.current) {
               hasSpeechRef.current = true;
               speechStartRef.current = Date.now();
+              firstSpeechDetectedAtRef.current = speechStartRef.current;
               console.log("[SELA VAD] Speech detected! RMS:", rms.toFixed(2));
             }
             silenceStartRef.current = null;
           } else if (hasSpeechRef.current) {
             if (!silenceStartRef.current) {
               silenceStartRef.current = Date.now();
+              console.log("[SELA VAD] Silence window started");
             } else if (
               Date.now() - silenceStartRef.current >
-              SILENCE_DURATION
+              (
+                speechStartRef.current
+                && Date.now() - speechStartRef.current >= QUICK_COMMIT_MIN_SPEECH_MS
+                  ? QUICK_COMMIT_SILENCE_MS
+                  : SILENCE_DURATION
+              )
             ) {
               // Diam cukup lama → stop otomatis
+              console.log("[SELA VAD] Auto-stop commit", {
+                speechMs: speechStartRef.current
+                  ? Date.now() - speechStartRef.current
+                  : 0,
+                silenceMs: Date.now() - silenceStartRef.current,
+              });
               clearTimeout(maxTimer);
               if (recorderRef.current?.state !== "inactive") {
                 recorderRef.current.stop();
@@ -761,13 +813,27 @@ export default function VoiceUI({
     isProcessingRef.current = true;
     setAvatarState("thinking");
     try {
-      const text = await transcribeAudio(audioBlob, lang);
+      const rawText = await transcribeAudio(audioBlob, lang);
+      const preparedTranscript = prepareTranscriptForRag(rawText);
+      const text = preparedTranscript.cleanedText;
+      console.log("[SELA Voice] Transcript pipeline:", {
+        rawText: preparedTranscript.rawText,
+        cleanedText: preparedTranscript.cleanedText,
+        marker: preparedTranscript.marker,
+        removedSegments: preparedTranscript.removedSegments,
+      });
 
       // 1. Filter Client-Side: Buang ucapan terlalu pendek/obrolan acak
       const words = text?.trim().split(/\s+/) || [];
-      const isNoise = words.length <= 2 && text.length < 15;
+      const isNoise =
+        (!text?.trim() || text.trim().length < MIN_TRANSCRIPT_CHARS)
+        || (
+          words.length <= 2
+          && text.length < 18
+          && !looksLikeShortValidQuery(text)
+        );
 
-      if (!text?.trim() || isNoise) {
+      if (isNoise) {
         console.log("[SELA] Diabaikan (terlalu pendek/noise):", text);
         isProcessingRef.current = false;
         setAvatarState("idle");
@@ -791,6 +857,11 @@ export default function VoiceUI({
       history.push({ role: "user", content: text });
       const response = await getChatCompletion(history, lang);
       setIsWaitingAI(false);
+      console.log("[SELA Voice] Query final ke RAG:", {
+        original: rawText,
+        final: text,
+        transcriptMarker: preparedTranscript.marker,
+      });
 
       // 2. Filter LLM-Side: SELA mendeteksi obrolan orang lewat
       if (response.text?.includes("[IGNORE_NOISE]")) {
@@ -1128,27 +1199,6 @@ export default function VoiceUI({
 
     return (
       <main className="flex-1 relative flex flex-col overflow-hidden">
-        {/* Mobile caption overlay */}
-        {latestMsg && (
-          <div className="absolute top-4 left-4 right-4 z-20 flex md:hidden animate-fade-in pointer-events-none">
-            <div
-              className={`w-full px-5 py-4 rounded-3xl backdrop-blur-md border shadow-xl transition-colors
-              ${
-                latestMsg.role === "user"
-                  ? "bg-blue-50/60 dark:bg-blue-900/40 border-blue-200/50 dark:border-blue-800/50"
-                  : "bg-white/60 dark:bg-slate-900/60 border-gray-100/50 dark:border-white/10"
-              }`}
-            >
-              <p className="text-[10px] font-bold uppercase tracking-widest mb-1 opacity-50 text-gray-500 dark:text-gray-400">
-                {latestMsg.role === "user" ? t[lang].you : t[lang].sela}
-              </p>
-              <p className="text-sm font-medium leading-relaxed text-gray-800 dark:text-gray-100">
-                {latestMsg.text}
-              </p>
-            </div>
-          </div>
-        )}
-
         {/* Avatar full screen */}
         <div className="absolute inset-0 pointer-events-none z-0">
           <div className="pointer-events-auto w-full h-full">
@@ -1157,7 +1207,7 @@ export default function VoiceUI({
         </div>
 
         {/* Chat bubbles — desktop only */}
-        <div className="absolute top-0 right-0 bottom-36 w-[340px] hidden md:flex flex-col justify-end pr-8 pb-6 pt-4 pointer-events-auto z-10 transition-colors overflow-hidden">
+        <div className="absolute top-0 right-0 bottom-28 w-[340px] hidden md:flex flex-col justify-end pr-8 pb-6 pt-4 pointer-events-auto z-10 transition-colors overflow-hidden">
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center gap-2 pb-4 opacity-50">
               <IconSparkle />
@@ -1206,31 +1256,28 @@ export default function VoiceUI({
 
         <div className="flex-1 pointer-events-none" />
 
-        {/* Status indicator + mode toggle */}
-        <div className="flex flex-col items-center gap-4 pb-8 pt-2 relative z-20 pointer-events-auto">
-          {/* Visual indicator — warna berubah sesuai state, tidak perlu diklik */}
-          <div
-            className={`relative w-28 h-28 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300
-            ${
-              avatarState === "listening"
-                ? "bg-gradient-to-br from-red-400 to-red-500 shadow-red-300/50 dark:shadow-red-900/30"
-                : avatarState === "speaking"
-                  ? "bg-gradient-to-br from-emerald-400 to-emerald-500 shadow-emerald-300/50"
-                  : avatarState === "thinking"
-                    ? "bg-gradient-to-br from-amber-400 to-amber-500 shadow-amber-300/50"
-                    : "bg-gradient-to-br from-blue-500 to-blue-600 shadow-blue-400/50 dark:shadow-blue-900/40"
-            }`}
-          >
-            {avatarState === "listening" && (
-              <span className="absolute inset-0 rounded-full animate-ping opacity-30 bg-red-400" />
+        {/* Bottom content for speak mode */}
+        <div className="flex flex-col items-center gap-3 pb-8 pt-2 px-4 relative z-20 pointer-events-auto">
+          <div className="w-full max-w-sm md:hidden">
+            {latestMsg && (
+              <div className="animate-fade-in">
+                <ChatBubble
+                  role={latestMsg.role}
+                  text={latestMsg.text}
+                  lang={lang}
+                  isNew={latestMsg.role === "assistant" && latestMsg.id === latestSelaId}
+                />
+                {latestMsg.role === "assistant" && latestMsg.media && latestMsg.media.length > 0 && (
+                  <MediaCarousel media={latestMsg.media} />
+                )}
+              </div>
             )}
-            {avatarState === "speaking" && (
-              <span className="absolute inset-0 rounded-full animate-ping opacity-20 bg-emerald-400" />
+            {isWaitingAI && (
+              <ChatBubble role="assistant" text="" lang={lang} isLoading />
             )}
-            <IconMic size="lg" />
           </div>
 
-          <p className="text-xs text-gray-400 dark:text-gray-500 font-bold uppercase tracking-tighter -mt-1">
+          <p className="text-xs text-gray-400 dark:text-gray-500 font-bold uppercase tracking-tighter text-center">
             {statusLabel()}
           </p>
 
