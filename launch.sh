@@ -3,8 +3,21 @@
 # SELA Kiosk Launcher — jalankan semua sekaligus
 # ─────────────────────────────────────────────────────────────
 
+set -u
+
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 URL="http://localhost:5173?kiosk=1"
+BACKEND_PID=""
+FRONTEND_PID=""
+
+cleanup() {
+  echo
+  echo "[SELA] Menghentikan launcher..."
+  [ -n "${BACKEND_PID:-}" ] && kill "$BACKEND_PID" 2>/dev/null
+  [ -n "${FRONTEND_PID:-}" ] && kill "$FRONTEND_PID" 2>/dev/null
+}
+
+trap cleanup EXIT INT TERM
 
 # 1. Matikan proses lama supaya pakai kode terbaru
 echo "[SELA] Menghentikan proses lama..."
@@ -36,6 +49,15 @@ for i in $(seq 1 30); do
   sleep 1
 done
 
+if ! curl -s http://localhost:5173 > /dev/null 2>&1; then
+  echo "[SELA] Frontend gagal start dalam 30 detik."
+  exit 1
+fi
+
+if ! curl -s http://localhost:3001 > /dev/null 2>&1; then
+  echo "[SELA] Backend tidak merespons di http://localhost:3001."
+fi
+
 # 5. Buka browser (Chrome kiosk jika tersedia, atau fallback ke default browser)
 echo "[SELA] Membuka browser..."
 if command -v google-chrome &> /dev/null; then
@@ -65,5 +87,8 @@ else
   xdg-open "$URL"
 fi
 
-# 6. Saat Chrome ditutup, matikan backend & frontend
-kill $BACKEND_PID $FRONTEND_PID 2>/dev/null
+echo "[SELA] SELA siap di $URL"
+echo "[SELA] Tekan Ctrl+C di terminal ini untuk menghentikan backend dan frontend."
+
+# 6. Biarkan launcher tetap hidup sampai dihentikan manual
+wait "$BACKEND_PID" "$FRONTEND_PID"

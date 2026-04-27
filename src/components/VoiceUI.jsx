@@ -8,6 +8,7 @@ import {
   getChatCompletion,
   speakText,
   getTimeBasedGreeting,
+  archiveConversationSession,
 } from "../lib/ai";
 
 // ── SVG Icons ────────────────────────────────────────────────────
@@ -794,6 +795,16 @@ export default function VoiceUI({
     isProcessingRef.current = true;
     setAvatarState("speaking");
 
+    const farewellChat = currentChat
+      ? {
+          ...currentChat,
+          messages: [
+            ...(currentChat.messages || []),
+            { role: "user", text: userText, ts: new Date() },
+          ],
+        }
+      : null;
+
     const msg =
       lang === "id"
         ? "Sama-sama! Senang bisa membantu. Selamat datang kembali kapan saja ya!"
@@ -803,6 +814,11 @@ export default function VoiceUI({
 
     // Fallback jika TTS onEnd tidak terpanggil (Chrome bug)
     const farewellFallback = setTimeout(() => {
+      archiveConversationSession({
+        currentChat: farewellChat,
+        lang,
+        endedByFarewell: true,
+      });
       isProcessingRef.current = false;
       activatedRef.current = false;
       setAvatarState("idle");
@@ -815,6 +831,11 @@ export default function VoiceUI({
       null,
       () => {
         clearTimeout(farewellFallback);
+        archiveConversationSession({
+          currentChat: farewellChat,
+          lang,
+          endedByFarewell: true,
+        });
         isProcessingRef.current = false;
         activatedRef.current = false;
         setAvatarState("idle");

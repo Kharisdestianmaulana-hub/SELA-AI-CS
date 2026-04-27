@@ -180,10 +180,14 @@
       "masuk",
       "syarat",
       "cara daftar",
-      "info daftar"
+      "info daftar",
+      "registrasi pmb",
+      "daftar online",
+      "daftar offline",
+      "verifikasi pmb"
     ],
     "title": "Pendaftaran Mahasiswa Baru (PMB) UCIC",
-    "content": "Cara daftar UCIC sangat mudah! Anda bisa daftar online via pmb.cic.ac.id atau datang langsung ke Kampus 2. Syarat utamanya: Lulus SMA/SMK sederajat, fotokopi Ijazah/SKL, KTP, KK, dan pas foto. Info lebih lanjut WA: +62 895-1231-4188."
+    "content": "Pendaftaran mahasiswa baru UCIC dapat dilakukan secara online melalui https://pmb.cic.ac.id/ atau offline dengan datang langsung ke Kampus 2 UCIC. Alurnya: isi registrasi lengkap, lakukan pembayaran biaya registrasi dan tahap awal, kirim bukti transfer jika memakai rekening, tunggu verifikasi dari tim PMB, lalu upload berkas persyaratan seperti ijazah, KTP, dan dokumen pendukung lainnya. Setelah proses diverifikasi, calon mahasiswa akan mendapat informasi lanjutan dari tim PMB."
   },
   {
     "id": "biaya_kuliah",
@@ -204,10 +208,14 @@
       "ukt",
       "cicil",
       "cicilan",
-      "uang masuk"
+      "uang masuk",
+      "metode pembayaran",
+      "virtual account",
+      "e-wallet",
+      "midtrans"
     ],
     "title": "Biaya Kuliah UCIC",
-    "content": "Biaya Pendaftaran: Rp200.000\n\nEstimasi Biaya Awal per Program Studi:\n- Teknik Informatika: Rp2.800.000\n- Sistem Informasi: Rp1.800.000\n- DKV (Desain Komunikasi Visual): Rp2.500.000\n- Manajemen: Rp2.200.000\n- Akuntansi: Rp2.200.000\n- Bisnis Digital: Rp2.000.000\n- PKOR (Pendidikan Kepelatihan Olahraga): Rp2.000.000\n- D3 Manajemen Informatika: Rp1.400.000\n\nCatatan: Biaya estimasi sudah termasuk SPP awal dan administrasi. Untuk informasi biaya terbaru silakan hubungi PMB UCIC di +62 895-1231-4188.\n\nUCIC menyediakan beberapa opsi pembayaran:\n- Pembayaran penuh (full payment) dengan potongan khusus\n- Pembayaran per semester\n- Cicilan bertahap"
+    "content": "Biaya pendaftaran UCIC adalah Rp200.000.\n\nEstimasi biaya awal per program studi:\n- Teknik Informatika: Rp2.800.000\n- Sistem Informasi: Rp1.800.000\n- DKV (Desain Komunikasi Visual): Rp2.500.000\n- Manajemen: Rp2.200.000\n- Akuntansi: Rp2.200.000\n- Bisnis Digital: Rp2.000.000\n- PKOR (Pendidikan Kepelatihan Olahraga): Rp2.000.000\n- D3 Manajemen Informatika: Rp1.400.000\n\nMetode pembayaran yang tersedia meliputi transfer bank (BCA, Mandiri, BNI, BRI), Virtual Account Midtrans, e-wallet seperti OVO, GoPay, dan DANA, serta pembayaran langsung ke kampus.\n\nUCIC juga menyediakan skema pembayaran bertahap, termasuk cicilan 3 bulan, pembayaran per semester, dan pembayaran penuh dengan potongan tertentu. Rincian biaya per jalur atau program studi dapat dilihat melalui referensi resmi PMB: https://docs.google.com/spreadsheets/d/1UVnVUcAnsou6RXGkJ56izp4Uj0OZNn1o/edit?usp=sharing&ouid=107132054575481969593&rtpof=true&sd=true"
   },
   {
     "id": "beasiswa",
@@ -397,10 +405,14 @@
       "rekomendasi jurusan",
       "komputer",
       "desain",
-      "bisnis"
+      "bisnis",
+      "jurusan cocok",
+      "kelas sore",
+      "kuliah mulai kapan",
+      "bisa cicilan"
     ],
     "title": "FAQ - Pertanyaan Umum tentang UCIC",
-    "content": "Apakah UCIC bagus? UCIC adalah kampus yang fokus pada teknologi, bisnis, dan kewirausahaan dengan fasilitas laboratorium, dosen berpengalaman, dan program studi yang relevan dengan kebutuhan industri.\n\nPeluang kerja? Peluang kerja tergantung kemampuan dan pengalaman mahasiswa, lulusan UCIC memiliki peluang bekerja di berbagai bidang sesuai jurusan masing-masing.\n\nSuka komputer? Rekomendasi: Teknik Informatika atau Sistem Informasi.\nSuka desain? Rekomendasi: Desain Komunikasi Visual (DKV).\nSuka bisnis? Rekomendasi: Manajemen atau Bisnis Digital.\nSuka olahraga? Rekomendasi: Pendidikan Kepelatihan Olahraga (PKOR).\n\nFasilitas: laboratorium komputer, perpustakaan, dan WiFi kampus."
+    "content": "Apakah UCIC bagus? UCIC adalah kampus yang fokus pada teknologi, bisnis, dan kewirausahaan dengan fasilitas laboratorium, dosen berpengalaman, serta program studi yang relevan dengan kebutuhan industri.\n\nApakah ada kelas sore? Ada. UCIC menyediakan kelas sore pada pukul 18.30-21.30.\n\nApakah biaya kuliah bisa dicicil? Bisa. Tersedia skema pembayaran bertahap, termasuk cicilan 3 bulan.\n\nKapan mulai kuliah? Informasi dari data PMB menyebutkan perkuliahan dimulai sekitar bulan September, namun jadwal final tetap mengikuti pengumuman resmi kampus.\n\nKalau suka komputer, jurusan apa yang cocok? Rekomendasi utamanya Teknik Informatika atau Sistem Informasi. Kalau suka desain cocok DKV, kalau suka bisnis cocok Manajemen atau Bisnis Digital, dan kalau suka olahraga cocok PKOR.\n\nPeluang kerja lulusan UCIC terbuka sesuai bidang prodi masing-masing, ditunjang program magang dan kerja sama industri."
   },
   {
     "id": "dosen_fti",
@@ -884,10 +896,13 @@
       "pmb",
       "ktp",
       "akta",
-      "ijazah"
+      "ijazah",
+      "pas foto",
+      "format file",
+      "upload berkas"
     ],
     "title": "Syarat dan Berkas Pendaftaran UCIC",
-    "content": "Untuk mendaftar, berkas yang wajib Anda siapkan adalah KTP, Akta Kelahiran, Ijazah atau Surat Keterangan Lulus (SKL), Nilai Raport, dan Kartu Keluarga (KK)."
+    "content": "Berkas pendaftaran yang perlu disiapkan calon mahasiswa UCIC meliputi:\n- Pas foto formal background merah, pakaian bebas sopan, format JPEG, nama file: Foto_Nama\n- KTP format PDF, nama file: KTP_Nama\n- Kartu Keluarga (KK) format PDF, nama file: KK_Nama\n- Akta Kelahiran format PDF, nama file: Akta_Nama\n- Ijazah atau SKL format PDF, nama file: Ijazah_Nama\n\nBerkas diunggah melalui sistem registrasi PMB setelah calon mahasiswa menyelesaikan proses pendaftaran awal."
   },
   {
     "id": "pmb_alur_kontak",
@@ -907,10 +922,12 @@
       "no wa",
       "nomer wa",
       "kontak pmb",
-      "tanya pmb"
+      "tanya pmb",
+      "hubungi admin pmb",
+      "cs pmb"
     ],
     "title": "Cara Mendaftar dan Kontak PMB UCIC",
-    "content": "Cara daftarnya sangat mudah! Bisa Offline dengan datang langsung ke Kampus 2 UCIC (Jl. Kesambi No.58a). Atau Online via website pmb.cic.ac.id, lalu klik \"Daftar Sekarang\" dan lengkapi formulirnya. Jika butuh bantuan, hubungi Admin PMB via WhatsApp di +6281216700519."
+    "content": "Cara mendaftar di UCIC bisa dilakukan secara offline dengan datang langsung ke Kampus 2 UCIC di Jl. Kesambi No. 58A, atau secara online melalui website https://pmb.cic.ac.id lalu memilih menu pendaftaran. Jika membutuhkan bantuan terkait pendaftaran, verifikasi, atau kendala teknis PMB, calon mahasiswa dapat menghubungi Admin PMB melalui WhatsApp di +6281216700519."
   },
   {
     "id": "biaya_pmb_gelombang_1_summary",
@@ -1026,9 +1043,209 @@
       "pagi",
       "malam",
       "karyawan",
-      "kuliah malam"
+      "kuliah malam",
+      "kelas sore",
+      "rpl",
+      "kelas pagi"
     ],
     "title": "Jadwal Kuliah UCIC",
-    "content": "Jadwal kuliah di UCIC menyesuaikan dengan program yang diambil. Tersedia Kelas Reguler Pagi, Kelas Sore/Malam untuk karyawan, dan program Hybrid/Onsite. Jadwal spesifik per mata kuliah dapat dicek oleh mahasiswa melalui Portal Akademik (SIAKAD)."
+    "content": "UCIC menyediakan beberapa pilihan jadwal kuliah sesuai program yang diambil. Kelas pagi umumnya berlangsung pukul 08.00-16.00, sedangkan kelas sore berlangsung pukul 18.30-21.30. Tersedia juga jalur RPL (Rekognisi Pembelajaran Lampau) yang ditujukan khusus untuk mahasiswa yang sudah bekerja. Jadwal spesifik per mata kuliah tetap mengikuti pengumuman akademik dan dapat dicek melalui sistem kampus."
+  },
+  {
+    "id": "daftar_ulang_camaba",
+    "category": "pendaftaran",
+    "keywords": [
+      "daftar ulang",
+      "alur daftar ulang",
+      "registrasi ulang",
+      "camaba",
+      "maba",
+      "setelah daftar",
+      "sesudah diterima"
+    ],
+    "title": "Alur Daftar Ulang Calon Mahasiswa Baru UCIC",
+    "content": "Alur daftar ulang calon mahasiswa baru UCIC adalah sebagai berikut: isi registrasi lengkap di https://pmb.cic.ac.id/, lakukan pembayaran biaya registrasi, perlengkapan, dan tahap 1, kirim bukti transfer jika menggunakan rekening, tunggu verifikasi oleh tim PMB, upload berkas seperti ijazah dan KTP, masuk ke grup calon mahasiswa baru, lalu menunggu informasi lanjutan dari kampus."
+  },
+  {
+    "id": "pembayaran_pmb_verifikasi",
+    "category": "biaya",
+    "keywords": [
+      "pembayaran pmb",
+      "verifikasi pembayaran",
+      "status paid",
+      "bayar pendaftaran",
+      "tagihan pmb",
+      "menu pembayaran",
+      "bukti transfer"
+    ],
+    "title": "Alur Pembayaran dan Verifikasi PMB UCIC",
+    "content": "Setelah login ke sistem registrasi PMB, calon mahasiswa memilih menu pembayaran untuk melihat nominal tagihan, lalu melakukan transfer sesuai metode pembayaran yang dipilih. Setelah itu, bukti pembayaran dikirim ke nomor PMB untuk proses verifikasi. Jika sudah diverifikasi oleh admin PMB, status pembayaran pada sistem akan berubah menjadi \"paid\"."
+  },
+  {
+    "id": "faq_calon_mahasiswa",
+    "category": "pendaftaran",
+    "keywords": [
+      "faq calon mahasiswa",
+      "daftar online",
+      "ada kelas sore",
+      "bisa cicilan",
+      "kapan mulai kuliah",
+      "tanya pmb",
+      "faq pmb"
+    ],
+    "title": "FAQ Calon Mahasiswa UCIC",
+    "content": "Pertanyaan yang sering diajukan calon mahasiswa:\n- Apakah bisa daftar online? Ya, pendaftaran bisa dilakukan melalui website resmi UCIC atau datang langsung ke kampus.\n- Apakah ada kelas sore? Ada, tersedia kelas sore pukul 18.30-21.30.\n- Apakah biaya kuliah bisa dicicil? Bisa, tersedia skema pembayaran bertahap atau cicilan 3 bulan.\n- Kapan mulai kuliah? Informasi dari PMB menyebut perkuliahan dimulai sekitar bulan September, namun jadwal final mengikuti pengumuman resmi kampus."
+  },
+  {
+    "id": "faq_orang_tua_mahasiswa",
+    "category": "profil",
+    "keywords": [
+      "faq orang tua",
+      "orang tua mahasiswa",
+      "akreditasi kampus",
+      "peluang kerja lulusan",
+      "kampus mana",
+      "kelas reguler"
+    ],
+    "title": "FAQ Orang Tua Mahasiswa UCIC",
+    "content": "Pertanyaan yang sering diajukan orang tua calon mahasiswa:\n- Apakah kampus sudah terakreditasi? Ya, UCIC memiliki akreditasi resmi dari BAN-PT.\n- Apakah ada peluang kerja setelah lulus? Ada. UCIC memiliki program magang dan kerja sama industri yang membantu kesiapan karier mahasiswa.\n- Nanti belajarnya di kampus mana? Untuk kelas reguler, perkuliahan bisa berlangsung secara mobile di Kampus 1 maupun Kampus 2 sesuai kebutuhan jadwal dan kebijakan kampus."
+  },
+  {
+    "id": "layanan_cs_pmb",
+    "category": "pendaftaran",
+    "keywords": [
+      "layanan cs",
+      "status pendaftaran",
+      "reset akun pmb",
+      "bantuan login",
+      "promo pmb",
+      "diskon pmb",
+      "jadwal orientasi"
+    ],
+    "title": "Layanan yang Ditangani Customer Service PMB UCIC",
+    "content": "Customer Service PMB UCIC dapat membantu memberikan informasi terkait status pendaftaran calon mahasiswa, reset akun PMB, bantuan teknis login, informasi promo dan diskon, serta jadwal kuliah atau orientasi mahasiswa baru."
+  },
+  {
+    "id": "alasan_memilih_ucic",
+    "category": "profil",
+    "keywords": [
+      "kenapa pilih ucic",
+      "alasan memilih ucic",
+      "kelebihan ucic",
+      "keunggulan ucic",
+      "ucic bagus gak",
+      "why ucic"
+    ],
+    "title": "Alasan Memilih UCIC",
+    "content": "Beberapa alasan memilih UCIC antara lain: kurikulum yang disusun sesuai kebutuhan dunia kerja, peluang magang dan relasi industri, biaya kuliah yang terjangkau serta bisa dicicil, pilihan kelas yang fleksibel termasuk kelas pagi, sore, dan RPL, dosen praktisi yang berpengalaman, fasilitas pendukung pembelajaran, serta fokus kampus pada pengembangan karier dan masa depan mahasiswa."
+  },
+  {
+    "id": "identitas_promosi_prodi",
+    "category": "jurusan",
+    "keywords": [
+      "tagline prodi",
+      "identitas prodi",
+      "bahan promosi",
+      "jurusan ucic",
+      "karakter prodi",
+      "kelebihan jurusan"
+    ],
+    "title": "Identitas dan Tagline Program Studi UCIC",
+    "content": "Identitas singkat beberapa program studi UCIC:\n- Teknik Informatika: \"Jadi Developer Profesional di Era Digital\". Fokus pada programming, AI, dan pengembangan sistem.\n- Sistem Informasi: \"Penghubung Teknologi & Bisnis\". Menggabungkan IT dan manajemen bisnis untuk analisis sistem dan solusi perusahaan.\n- Manajemen Informatika: \"Ahli IT Siap Kerja Cepat\". Lebih praktis dan aplikatif dengan fokus pada database, jaringan, dan web.\n- DKV: \"Kreativitas Tanpa Batas di Dunia Visual\". Fokus pada desain grafis, branding, multimedia, dan konten digital.\n- Bisnis Digital: \"Bangun Bisnis di Era Online\". Fokus pada digital marketing, e-commerce, dan strategi bisnis berbasis teknologi.\n- Manajemen Bisnis: \"Siap Jadi Pebisnis & Profesional\". Fokus pada manajemen, marketing, SDM, dan pengembangan usaha.\n- Manajemen: \"Siap Jadi Pebisnis & Profesional di Dunia Kerja\". Mempelajari pengelolaan bisnis, tim, strategi organisasi, marketing, keuangan, dan SDM.\n- PKOR: \"Dari Hobi Jadi Profesi di Dunia Olahraga\". Fokus pada kepelatihan dan ilmu olahraga dengan peluang karier sebagai pelatih, instruktur, atau tenaga profesional olahraga.\n\nUntuk prospek kerja yang lebih lengkap per program studi, referensi promosi kampus juga mengarahkan ke katalog digital: https://s.id/Katalog-Digital-UCIC"
+  },
+  {
+    "id": "faq_awam_syarat_daftar",
+    "category": "pendaftaran",
+    "keywords": [
+      "kalau mau daftar siapin apa",
+      "harus bawa apa",
+      "dokumen anak daftar",
+      "syarat masuk kampus",
+      "berkas daftar kuliah",
+      "ijazah sementara",
+      "surat lulus"
+    ],
+    "title": "Kalau Mau Daftar ke UCIC Harus Siapin Apa Saja?",
+    "content": "Kalau mau daftar ke UCIC, biasanya yang perlu disiapkan adalah pas foto formal background merah, KTP, Kartu Keluarga, Akta Kelahiran, serta ijazah atau SKL. Berkas diunggah melalui sistem PMB, dan file umumnya diminta dalam format JPEG untuk foto serta PDF untuk dokumen."
+  },
+  {
+    "id": "faq_awam_biaya_bayar",
+    "category": "biaya",
+    "keywords": [
+      "bayarnya lewat mana",
+      "bisa transfer gak",
+      "bisa dana gak",
+      "bisa gopay gak",
+      "uang masuk berapa",
+      "bayar daftar kuliah"
+    ],
+    "title": "Kalau Bayar Kuliah atau Daftar, Bisa Lewat Mana?",
+    "content": "Pembayaran di UCIC bisa melalui transfer bank seperti BCA, Mandiri, BNI, dan BRI, Virtual Account Midtrans, e-wallet seperti OVO, GoPay, dan DANA, atau langsung ke kampus. Untuk biaya awal, nominalnya menyesuaikan program studi, sedangkan biaya pendaftaran tercatat Rp200.000."
+  },
+  {
+    "id": "faq_awam_kelas_pekerja",
+    "category": "jadwal",
+    "keywords": [
+      "kelas orang kerja",
+      "kuliah sambil kerja",
+      "kelas malam ada ga",
+      "kelas sore buat kerja",
+      "kuliah buat yang udah kerja",
+      "kelas karyawan"
+    ],
+    "title": "Kalau Sudah Kerja, Ada Kelas yang Cocok?",
+    "content": "Ada. UCIC menyediakan kelas sore sekitar pukul 18.30-21.30 dan juga jalur RPL untuk yang sudah bekerja. Jadi calon mahasiswa yang sambil kerja tetap punya opsi jadwal yang lebih fleksibel."
+  },
+  {
+    "id": "faq_awam_jurusan_rekomendasi",
+    "category": "jurusan",
+    "keywords": [
+      "anak komputer cocok jurusan apa",
+      "kalau suka desain masuk mana",
+      "jurusan buat bisnis apa",
+      "kalau bingung pilih jurusan",
+      "rekomendasi jurusan awam"
+    ],
+    "title": "Kalau Bingung Pilih Jurusan, Cocoknya ke Mana?",
+    "content": "Kalau suka komputer, biasanya cocok ke Teknik Informatika atau Sistem Informasi. Kalau suka desain, pilihannya DKV. Kalau suka bisnis, bisa pertimbangkan Manajemen atau Bisnis Digital. Kalau suka olahraga, pilihannya PKOR."
+  },
+  {
+    "id": "faq_awam_kontak_admin",
+    "category": "kontak",
+    "keywords": [
+      "nomor admin pmb",
+      "wa kampus",
+      "chat admin kampus",
+      "hubungi orang kampus",
+      "kontak daftar kuliah"
+    ],
+    "title": "Kalau Mau Hubungi Admin Kampus, Ke Mana?",
+    "content": "Kalau butuh bantuan pendaftaran atau kendala PMB, calon mahasiswa bisa menghubungi Admin PMB UCIC melalui WhatsApp di +6281216700519. Untuk kontak umum kampus, UCIC juga memiliki email info@ucic.ac.id dan alamat di Jl. Kesambi, Cirebon."
+  },
+  {
+    "id": "faq_awam_lokasi_kampus",
+    "category": "lokasi",
+    "keywords": [
+      "kampusnya dimana",
+      "alamat kampus mana",
+      "kampus 1 dimana",
+      "kampus 2 dimana",
+      "kalau mau datang ke kampus"
+    ],
+    "title": "Kalau Mau Datang ke Kampus, Lokasinya di Mana?",
+    "content": "UCIC memiliki dua lokasi kampus di Kota Cirebon. Kampus 1 berada di Jalan Kesambi No. 202, sedangkan Kampus 2 berada di Jalan Kesambi No. 58A. Untuk urusan pendaftaran, calon mahasiswa biasanya diarahkan ke Kampus 2 atau website PMB resmi."
+  },
+  {
+    "id": "faq_awam_setelah_daftar",
+    "category": "pendaftaran",
+    "keywords": [
+      "abis daftar ngapain",
+      "setelah daftar apa lagi",
+      "kalau udah daftar terus gimana",
+      "langkah sesudah daftar",
+      "habis registrasi"
+    ],
+    "title": "Kalau Sudah Daftar, Setelah Itu Apa Lagi?",
+    "content": "Setelah daftar, calon mahasiswa biasanya melanjutkan pembayaran biaya registrasi atau tahap awal, mengirim bukti transfer jika diperlukan, menunggu verifikasi dari tim PMB, lalu mengunggah berkas yang diminta. Setelah itu, calon mahasiswa akan menerima informasi lanjutan dari kampus."
   }
 ]
