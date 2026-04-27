@@ -1,5 +1,6 @@
 import Fuse from 'fuse.js';
 import dataset from '../data/ucic_dataset.json';
+import ragGoldens from '../data/rag_goldens.json';
 
 // ── RAG Setup ────────────────────────────────────────────────────────────────
 
@@ -157,8 +158,10 @@ const CANONICAL_REWRITE_MAP = {
 const RAG_FAILURE_LOG_KEY = 'sela_rag_failure_log';
 const SESSION_ARCHIVE_KEY = 'sela_session_archive_v1';
 const LEARNED_ARTIFACTS_KEY = 'sela_learned_artifacts_v1';
+const RAG_EVALUATION_KEY = 'sela_rag_evaluation_v1';
 const SESSION_RETENTION_LIMIT = 20;
 const SESSION_RETENTION_MS = 1000 * 60 * 60 * 24 * 14;
+const SHADOW_REVIEW_MIN_SOURCE_COUNT = 2;
 
 const SLOT_PATTERNS = {
   biaya: {
@@ -244,10 +247,12 @@ function getKnownVocabulary() {
     ...Object.keys(TYPO_TOKEN_MAP),
     ...Object.keys(CANONICAL_REWRITE_MAP),
   ]);
+  const intentBank = getIntentSynonymBank();
 
   for (const values of Object.values(RAG_SYNONYMS)) values.forEach(v => vocab.add(v));
   for (const values of Object.values(TOPIC_HINTS)) values.forEach(v => vocab.add(v));
   for (const values of Object.values(AWAM_TOPIC_ALIASES)) values.forEach(v => normalizeText(v).split(' ').forEach(token => vocab.add(token)));
+  for (const values of Object.values(intentBank)) values.forEach(v => normalizeText(v).split(' ').forEach(token => vocab.add(token)));
   for (const groups of Object.values(SLOT_PATTERNS)) {
     Object.values(groups).forEach(values => values.forEach(v => normalizeText(v).split(' ').forEach(token => vocab.add(token))));
   }
@@ -275,6 +280,11 @@ function createEmptyArtifacts() {
     learned_awam_aliases: {},
     learned_topic_patterns: {},
     shadow_faq_candidates: [],
+    shadow_faq_reviews: {
+      approved_topics: {},
+      rejected_topics: {},
+      last_reviewed_at: null,
+    },
     session_stats: {
       total_sessions: 0,
       total_turns: 0,
@@ -313,6 +323,35 @@ function getLearnedArtifacts() {
 
 function setLearnedArtifacts(artifacts) {
   setStoredJson(LEARNED_ARTIFACTS_KEY, artifacts);
+}
+
+function getIntentSynonymBank() {
+  const learnedArtifacts = getLearnedArtifacts();
+  const approvedTopics = learnedArtifacts.shadow_faq_reviews?.approved_topics || {};
+  const bank = {};
+
+  for (const intent of new Set([
+    ...Object.keys(INTENT_PATTERNS),
+    ...Object.keys(TOPIC_HINTS),
+    ...Object.keys(AWAM_TOPIC_ALIASES),
+    ...Object.keys(learnedArtifacts.learned_awam_aliases || {}),
+    ...Object.keys(approvedTopics),
+  ])) {
+    bank[intent] = mergeUniqueStrings(
+      [],
+      [
+        intent,
+        ...(INTENT_PATTERNS[intent] || []),
+        ...(TOPIC_HINTS[intent] || []),
+        ...(AWAM_TOPIC_ALIASES[intent] || []),
+        ...(learnedArtifacts.learned_awam_aliases?.[intent] || []),
+        ...(approvedTopics[intent]?.query_forms || []),
+      ],
+      120,
+    ).map(normalizeText).filter(Boolean);
+  }
+
+  return bank;
 }
 
 function getBaseTokensForLearning(text = '') {
@@ -415,16 +454,10 @@ function detectTopicHints(text = '') {
   const normalized = normalizeText(text);
   const tokens = getBaseSearchTokens(text);
   const hints = new Set();
+  const intentBank = getIntentSynonymBank();
 
-  for (const [topic, aliases] of Object.entries(TOPIC_HINTS)) {
+  for (const [topic, aliases] of Object.entries(intentBank)) {
     if (aliases.some(alias => normalized.includes(alias) || tokens.includes(alias))) {
-      hints.add(topic);
-    }
-  }
-
-  const learnedAliases = getLearnedArtifacts().learned_awam_aliases || {};
-  for (const [topic, aliases] of Object.entries(learnedAliases)) {
-    if ((aliases || []).some(alias => normalized.includes(normalizeText(alias)))) {
       hints.add(topic);
     }
   }
@@ -434,7 +467,7 @@ function detectTopicHints(text = '') {
 
 function classifyCampusIntent(text = '') {
   const normalized = normalizeText(text);
-  const hits = Object.entries(INTENT_PATTERNS)
+  const hits = Object.entries(getIntentSynonymBank())
     .map(([intent, patterns]) => ({
       intent,
       score: patterns.reduce((sum, pattern) => (
@@ -560,11 +593,7 @@ function extractSessionSignals(messages = []) {
 function getAliasBoostTopics(text = '') {
   const normalized = normalizeText(text);
   const topics = new Set();
-  for (const [topic, aliases] of Object.entries(AWAM_TOPIC_ALIASES)) {
-    if (aliases.some(alias => normalized.includes(alias))) topics.add(topic);
-  }
-  const learnedAliases = getLearnedArtifacts().learned_awam_aliases || {};
-  for (const [topic, aliases] of Object.entries(learnedAliases)) {
+  for (const [topic, aliases] of Object.entries(getIntentSynonymBank())) {
     if ((aliases || []).some(alias => normalized.includes(normalizeText(alias)))) topics.add(topic);
   }
   return [...topics];
@@ -830,6 +859,33 @@ function buildClarificationHint(answerability, decomposedQueries, topicState) {
   return `Maksud user masih samar. Ajukan satu pertanyaan klarifikasi yang sangat singkat dan ramah, fokus pada topik ${answerability.detectedTopic || topicState?.activeTopic || 'yang paling mungkin dimaksud'}.`;
 }
 
+function buildConfidenceRouting(answerability, decomposedQueries, topicState) {
+  const intents = [...new Set(decomposedQueries.map(part => part.intent).filter(Boolean))];
+  const primaryTopic = answerability.detectedTopic || topicState?.activeTopic || intents[0] || 'kampus';
+
+  if (answerability.level === 'high') {
+    return {
+      route: 'answer_direct',
+      label: 'tinggi',
+      instruction: `Confidence tinggi. Jawab langsung dengan fokus utama pada topik ${primaryTopic}.`,
+    };
+  }
+
+  if (answerability.level === 'partial') {
+    return {
+      route: 'answer_then_clarify',
+      label: 'sedang',
+      instruction: `Confidence sedang. Jawab dulu bagian yang paling jelas dari topik ${primaryTopic}, lalu akhiri dengan satu klarifikasi singkat jika masih ada detail yang belum pasti.`,
+    };
+  }
+
+  return {
+    route: 'clarify_first',
+    label: 'rendah',
+    instruction: `Confidence rendah. Jangan menebak. Ajukan satu pertanyaan klarifikasi yang pendek, ramah, dan spesifik ke topik ${primaryTopic}.`,
+  };
+}
+
 function applySessionLearningToArtifacts(artifacts, session) {
   const next = typeof structuredClone !== 'undefined'
     ? structuredClone(artifacts)
@@ -899,6 +955,7 @@ export function archiveConversationSession({
   currentChat,
   lang = 'id',
   endedByFarewell = true,
+  endReason = endedByFarewell ? 'farewell' : 'session_end',
 } = {}) {
   if (!currentChat?.messages?.length || typeof window === 'undefined' || !window.localStorage) {
     return null;
@@ -919,6 +976,7 @@ export function archiveConversationSession({
     turns: sanitizedMessages.length,
     messages: sanitizedMessages,
     ended_by_farewell: endedByFarewell,
+    end_reason: endReason,
   };
 
   const sessions = pruneArchivedSessions([...getArchivedSessions(), session]);
@@ -948,6 +1006,14 @@ function logRetrievalFailure(payload) {
   }
 }
 
+function setLatestRetrievalEvaluation(report) {
+  setStoredJson(RAG_EVALUATION_KEY, report);
+}
+
+export function getLatestRetrievalEvaluation() {
+  return getStoredJson(RAG_EVALUATION_KEY, null);
+}
+
 async function getFuse() {
   if (fuse) return fuse;
   try {
@@ -966,6 +1032,161 @@ async function getFuse() {
     console.error('Gagal inisialisasi RAG dataset:', e);
   }
   return fuse;
+}
+
+async function resolveRetrievalState(messageHistory = [], userQuery = '') {
+  const cappedHistory = messageHistory.slice(-10);
+  const topicState = deriveConversationTopicState(cappedHistory);
+  const decomposedQueries = decomposeUserQuery(userQuery, topicState);
+  const retrievalQuery = buildRetrievalQuery(cappedHistory, userQuery, topicState);
+  const canonicalRewrite = buildCanonicalRewrite(userQuery, topicState);
+  const f = await getFuse();
+
+  let matches = [];
+  let finalMatches = [];
+  let topicHints = [];
+  let intent = null;
+  let ragScore = 1;
+  let contextStr = '';
+  let mediaResults = [];
+  let answerability = { level: 'none', reason: 'no_match', detectedTopic: topicState.activeTopic || null };
+
+  if (f && userQuery) {
+    const fuseResults = f.search(retrievalQuery);
+    const retrieval = retrieveCampusContext(retrievalQuery, fuseResults, topicState);
+    matches = retrieval.matches;
+    topicHints = retrieval.topicHints;
+    intent = retrieval.intent;
+    finalMatches = matches.length > 0 ? matches : getTopicFallbackMatches(intent, topicHints);
+    answerability = computeAnswerability(finalMatches, userQuery, topicState);
+
+    if (finalMatches.length > 0) {
+      ragScore = finalMatches[0].fuseScore ?? Math.max(0, 1 - (finalMatches[0].score / 20));
+      contextStr = finalMatches.slice(0, 4)
+        .map(r => `Topik: ${r.item.title}\nKategori: ${r.item.category}\nInfo: ${r.item.content}`)
+        .join('\n\n');
+      mediaResults = finalMatches
+        .flatMap(r => r.item.media || [])
+        .filter(m => m?.url);
+    }
+  }
+
+  return {
+    cappedHistory,
+    topicState,
+    decomposedQueries,
+    retrievalQuery,
+    canonicalRewrite,
+    matches,
+    finalMatches,
+    topicHints,
+    intent,
+    ragScore,
+    contextStr,
+    mediaResults,
+    answerability,
+    confidenceRouting: buildConfidenceRouting(answerability, decomposedQueries, topicState),
+    clarificationHint: buildClarificationHint(answerability, decomposedQueries, topicState),
+  };
+}
+
+export async function evaluateRetrievalGoldens() {
+  const cases = [];
+  let passed = 0;
+
+  for (const golden of ragGoldens) {
+    const state = await resolveRetrievalState([{ role: 'user', content: golden.query }], golden.query);
+    const topIds = state.finalMatches.map(match => match.item.id);
+    const retrievedIntents = [...new Set([
+      state.intent,
+      state.answerability.detectedTopic,
+      ...state.topicHints,
+      ...state.decomposedQueries.map(part => part.intent),
+    ].filter(Boolean))];
+    const idHit = (golden.expected_ids || []).some(id => topIds.includes(id));
+    const intentHit = (golden.expected_intents || []).some(intentName => retrievedIntents.includes(intentName));
+    const ok = idHit || intentHit;
+
+    cases.push({
+      id: golden.id,
+      query: golden.query,
+      ok,
+      answerability: state.answerability.level,
+      confidence_route: state.confidenceRouting.route,
+      expected_ids: golden.expected_ids || [],
+      expected_intents: golden.expected_intents || [],
+      top_ids: topIds.slice(0, 5),
+      retrieved_intents: retrievedIntents,
+    });
+
+    if (ok) passed += 1;
+  }
+
+  const report = {
+    evaluated_at: new Date().toISOString(),
+    total: ragGoldens.length,
+    passed,
+    failed: ragGoldens.length - passed,
+    pass_rate: ragGoldens.length > 0 ? Number(((passed / ragGoldens.length) * 100).toFixed(1)) : 0,
+    cases,
+  };
+
+  setLatestRetrievalEvaluation(report);
+  return report;
+}
+
+export function getShadowFaqReviewQueue(minSourceCount = SHADOW_REVIEW_MIN_SOURCE_COUNT) {
+  const artifacts = getLearnedArtifacts();
+  const approvedTopics = artifacts.shadow_faq_reviews?.approved_topics || {};
+  const rejectedTopics = artifacts.shadow_faq_reviews?.rejected_topics || {};
+
+  return (artifacts.shadow_faq_candidates || [])
+    .filter(candidate => (candidate.source_count || 0) >= minSourceCount)
+    .filter(candidate => !approvedTopics[candidate.suggested_topic] && !rejectedTopics[candidate.suggested_topic])
+    .sort((a, b) => (b.source_count || 0) - (a.source_count || 0));
+}
+
+export function reviewShadowFaqCandidate(topic, action = 'approve') {
+  if (!topic) return null;
+
+  const artifacts = getLearnedArtifacts();
+  const candidate = (artifacts.shadow_faq_candidates || []).find(item => item.suggested_topic === topic);
+  if (!candidate) return null;
+
+  const next = typeof structuredClone !== 'undefined'
+    ? structuredClone(artifacts)
+    : JSON.parse(JSON.stringify(artifacts));
+
+  next.shadow_faq_reviews = next.shadow_faq_reviews || {
+    approved_topics: {},
+    rejected_topics: {},
+    last_reviewed_at: null,
+  };
+
+  if (action === 'approve') {
+    next.shadow_faq_reviews.approved_topics[topic] = {
+      ...candidate,
+      reviewed_at: new Date().toISOString(),
+    };
+    delete next.shadow_faq_reviews.rejected_topics[topic];
+    next.learned_awam_aliases[topic] = mergeUniqueStrings(
+      next.learned_awam_aliases[topic],
+      candidate.query_forms || [],
+      60,
+    );
+  } else {
+    next.shadow_faq_reviews.rejected_topics[topic] = {
+      topic,
+      reviewed_at: new Date().toISOString(),
+    };
+    delete next.shadow_faq_reviews.approved_topics[topic];
+  }
+
+  next.shadow_faq_reviews.last_reviewed_at = new Date().toISOString();
+  setLearnedArtifacts(next);
+  learnedTypoCache = null;
+
+  return next.shadow_faq_reviews;
 }
 
 // ── Language Auto-Detection ──────────────────────────────────────────────────
@@ -1032,18 +1253,27 @@ export async function transcribeAudio(audioBlob, lang = 'id') {
  * @returns {Promise<{ text: string, detectedLang: string }>}
  */
 export async function getChatCompletion(messageHistory, lang = 'id') {
-  // Conversation memory: cap ke 10 pesan terakhir (5 giliran) agar tidak overflow token
-  // tapi tetap punya konteks percakapan yang cukup
-  const cappedHistory = messageHistory.slice(-10);
-  const topicState = deriveConversationTopicState(cappedHistory);
-
-  const userQuery = cappedHistory.length > 0
-    ? cappedHistory[cappedHistory.length - 1].content
+  const userQuery = messageHistory.length > 0
+    ? messageHistory[messageHistory.length - 1].content
     : '';
-  const decomposedQueries = decomposeUserQuery(userQuery, topicState);
-  const retrievalQuery = buildRetrievalQuery(cappedHistory, userQuery, topicState);
-  const canonicalRewrite = buildCanonicalRewrite(userQuery, topicState);
-  let clarificationHint = '';
+  const retrievalState = await resolveRetrievalState(messageHistory, userQuery);
+  const {
+    cappedHistory,
+    topicState,
+    decomposedQueries,
+    retrievalQuery,
+    canonicalRewrite,
+    matches,
+    finalMatches,
+    topicHints,
+    intent,
+    ragScore,
+    contextStr,
+    mediaResults,
+    answerability,
+    confidenceRouting,
+    clarificationHint,
+  } = retrievalState;
 
   // Auto-detect bahasa dari query user — override lang kalau deteksi yakin
   const autoLang = detectLang(userQuery);
@@ -1051,61 +1281,45 @@ export async function getChatCompletion(messageHistory, lang = 'id') {
   if (autoLang && autoLang !== lang) {
     console.log(`[SELA Lang] Auto-detect: "${autoLang}" (prop: "${lang}")`);
   }
-
-  // 1. Local RAG Retrieval via Fuse.js
-  const f = await getFuse();
-  let contextStr = '';
-  let ragScore = 1; // default: tidak ada match (Fuse: 0=sempurna, 1=tidak relevan)
-  let mediaResults = []; // media items dari RAG
-
-  if (f && userQuery) {
-    const results = f.search(retrievalQuery);
-    console.log('RAG Match Score (Top 1):', results[0]?.score, 'Query:', userQuery, 'RetrievalQuery:', retrievalQuery, 'CanonicalRewrite:', canonicalRewrite);
-    const { matches, tokens, topicHints, intent } = retrieveCampusContext(retrievalQuery, results, topicState);
-    console.log('RAG Ranked Matches:', matches.map(r => ({
+  console.log('RAG Retrieval State:', {
+    query: userQuery,
+    retrievalQuery,
+    canonicalRewrite,
+    answerability: answerability.level,
+    route: confidenceRouting.route,
+    intent,
+    topicHints,
+    topicState,
+    matches: matches.map(r => ({
       id: r.item.id,
       score: Number(r.score.toFixed(2)),
       fuseScore: r.fuseScore,
-    })), 'Tokens:', tokens, 'Intent:', intent, 'TopicHints:', topicHints, 'TopicState:', topicState);
+    })),
+  });
 
-    const finalMatches = matches.length > 0 ? matches : getTopicFallbackMatches(intent, topicHints);
-    const answerability = computeAnswerability(finalMatches, userQuery, topicState);
-    clarificationHint = buildClarificationHint(answerability, decomposedQueries, topicState);
+  if (matches.length === 0 && finalMatches.length > 0) {
+    console.log('RAG Fallback activated with topic-based matches:', finalMatches.map(r => r.item.id));
+  }
 
-    if (matches.length === 0 && finalMatches.length > 0) {
-      console.log('RAG Fallback activated with topic-based matches:', finalMatches.map(r => r.item.id));
-    }
+  if (finalMatches.length === 0) {
+    console.log('RAG no relevant context found for query:', userQuery);
+  }
 
-    if (finalMatches.length > 0) {
-      ragScore = finalMatches[0].fuseScore ?? Math.max(0, 1 - (finalMatches[0].score / 20));
-      contextStr = finalMatches.slice(0, 4)
-        .map(r => `Topik: ${r.item.title}\nKategori: ${r.item.category}\nInfo: ${r.item.content}`)
-        .join('\n\n');
-    } else {
-      console.log('RAG no relevant context found for query:', userQuery);
-    }
-
-    if (answerability.level === 'none' || answerability.level === 'weak') {
-      logRetrievalFailure({
-        userQuery,
-        retrievalQuery,
-        canonicalRewrite,
-        topicState,
-        decomposedQueries,
-        answerability,
-        topMatches: finalMatches.map(match => ({
-          id: match.item.id,
-          title: match.item.title,
-          score: Number((match.score || 0).toFixed(2)),
-        })),
-      });
-    }
-
-    if (finalMatches?.length > 0) {
-      mediaResults = finalMatches
-        .flatMap(r => r.item.media || [])
-        .filter(m => m?.url);
-    }
+  if (answerability.level === 'none' || answerability.level === 'weak') {
+    logRetrievalFailure({
+      userQuery,
+      retrievalQuery,
+      canonicalRewrite,
+      topicState,
+      decomposedQueries,
+      answerability,
+      confidenceRouting,
+      topMatches: finalMatches.map(match => ({
+        id: match.item.id,
+        title: match.item.title,
+        score: Number((match.score || 0).toFixed(2)),
+      })),
+    });
   }
 
   // 2. System prompt bilingual + konteks RAG
@@ -1149,6 +1363,9 @@ ${contextStr || 'Kosong'}
 [ARAH KLARIFIKASI]:
 ${clarificationHint || 'Kosong'}
 
+[ROUTING KEPERCAYAAN]:
+${confidenceRouting.instruction}
+
 [PERTANYAAN LANJUTAN]:
 Setelah menjawab pertanyaan SEPUTAR UCIC, SELALU berikan 2 saran pertanyaan lanjutan yang BISA DITANYAKAN OLEH USER.
 Saran ini HARUS DITULIS DARI SUDUT PANDANG USER (seolah-olah user yang sedang bertanya), BUKAN AI yang bertanya kepada user.
@@ -1188,6 +1405,9 @@ ${contextStr || 'Empty'}
 
 [CLARIFICATION DIRECTION]:
 ${clarificationHint || 'Empty'}
+
+[CONFIDENCE ROUTING]:
+${confidenceRouting.instruction}
 
 [FOLLOW-UP QUESTIONS]:
 After answering a UCIC-RELATED question, ALWAYS add 2 relevant follow-up questions at the END of your answer that the USER CAN ASK NEXT.

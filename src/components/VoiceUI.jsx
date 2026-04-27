@@ -121,6 +121,8 @@ const MIN_BLOB_SIZE = 30000; // bytes minimum audio — audio terlalu kecil = pa
 const MAX_RECORD_MS = 20000; // 20 detik maksimal recording sebagai failsafe
 const THRESHOLD_MULTIPLIER = 2.5; // baseline * 2.5 = dynamic threshold (lebih ketat untuk noise)
 const BASELINE_SAMPLE_MS = 500; // ms untuk sample baseline noise
+const IDLE_SESSION_MS = 90 * 1000; // 90 detik tanpa interaksi -> reset sesi
+const FACE_LOST_END_MS = 12 * 1000; // 12 detik wajah hilang saat sesi aktif -> reset
 
 // Farewell detection
 const FAREWELL_KEYWORDS = [
@@ -177,6 +179,11 @@ export default function VoiceUI({
   const speechStartRef = useRef(null);
   const modeRef = useRef(mode);
   const dynamicThresholdRef = useRef(10); // fallback fallback jika baseline gagal
+  const suppressRecorderOnStopRef = useRef(false);
+  const lastInteractionTimeRef = useRef(Date.now());
+  const sessionEndingRef = useRef(false);
+  const currentChatRef = useRef(currentChat);
+  const langRef = useRef(lang);
 
   // Face detection refs
   const audioUnlockedRef = useRef(false); // true setelah tap pertama, tidak pernah reset
@@ -198,6 +205,12 @@ export default function VoiceUI({
   useEffect(() => {
     activatedRef.current = activated;
   }, [activated]);
+  useEffect(() => {
+    currentChatRef.current = currentChat;
+  }, [currentChat]);
+  useEffect(() => {
+    langRef.current = lang;
+  }, [lang]);
 
   // Kiosk mode — jika URL mengandung ?kiosk=1, langsung unlock audio tanpa tap
   useEffect(() => {
@@ -235,6 +248,46 @@ export default function VoiceUI({
     setIsAtBottom(true);
   };
 
+  const markSessionInteraction = () => {
+    lastInteractionTimeRef.current = Date.now();
+  };
+
+  const endSessionRef = useRef(null);
+  endSessionRef.current = (endReason = "session_end") => {
+    if (sessionEndingRef.current) return;
+    sessionEndingRef.current = true;
+    suppressRecorderOnStopRef.current = true;
+    stopListening();
+    window.speechSynthesis?.cancel();
+
+    const chatSnapshot = currentChatRef.current;
+    if (chatSnapshot?.messages?.length) {
+      archiveConversationSession({
+        currentChat: chatSnapshot,
+        lang: langRef.current,
+        endedByFarewell: false,
+        endReason,
+      });
+    }
+
+    isProcessingRef.current = false;
+    activatedRef.current = false;
+    setActivated(false);
+    setAvatarState("idle");
+    setLangSelected(false);
+    setAwaitingLangSelect(false);
+    setFaceDetected(false);
+    properFaceTimeRef.current = null;
+    lastFaceTimeRef.current = 0;
+    if (onReset) onReset();
+
+    setTimeout(() => {
+      sessionEndingRef.current = false;
+      suppressRecorderOnStopRef.current = false;
+      markSessionInteraction();
+    }, 250);
+  };
+
   // Track ID pesan SELA terbaru → untuk typewriter effect
   useEffect(() => {
     const msgs = currentChat?.messages ?? [];
@@ -250,6 +303,7 @@ export default function VoiceUI({
     if (activatedRef.current || isProcessingRef.current) return;
     activatedRef.current = true;
     isProcessingRef.current = true;
+    markSessionInteraction();
     setActivated(true);
     setLangSelected(false);
     setAvatarState("speaking");
@@ -439,7 +493,8 @@ export default function VoiceUI({
                 confirmedDuration >= PROPER_FACE_CONFIRMATION_MS &&
                 audioUnlockedRef.current &&
                 !activatedRef.current &&
-                !isProcessingRef.current
+                !isProcessingRef.current &&
+                !sessionEndingRef.current
               ) {
                 console.log(
                   "[SELA Cam] ✅ Auto-activate! (face confirmed for",
@@ -454,7 +509,16 @@ export default function VoiceUI({
             // Wajah ada tapi miring, atau tidak ada wajah
             properFaceTimeRef.current = null; // reset confirmation timer
 
-            if (!hasFace && now - lastFaceTimeRef.current > 3000) {
+            if (
+              activatedRef.current &&
+              !sessionEndingRef.current &&
+              lastFaceTimeRef.current > 0 &&
+              !hasFace &&
+              now - lastFaceTimeRef.current > FACE_LOST_END_MS
+            ) {
+              console.log("[SELA Cam] Sesi diakhiri karena wajah hilang terlalu lama");
+              endSessionRef.current?.("face_lost");
+            } else if (!hasFace && now - lastFaceTimeRef.current > 3000) {
               setFaceDetected((prev) => {
                 if (prev) console.log("[SELA Cam] Wajah hilang");
                 return false;
@@ -543,6 +607,12 @@ export default function VoiceUI({
       };
 
       recorder.onstop = () => {
+        if (suppressRecorderOnStopRef.current) {
+          chunks = [];
+          stopListening();
+          suppressRecorderOnStopRef.current = false;
+          return;
+        }
         const speechDuration = speechStartRef.current
           ? Date.now() - speechStartRef.current
           : 0;
@@ -705,6 +775,7 @@ export default function VoiceUI({
         return;
       }
 
+      markSessionInteraction();
       if (isFarewell(text)) {
         handleFarewell(text);
         return;
@@ -731,6 +802,7 @@ export default function VoiceUI({
       }
 
       if (onReceive) onReceive(response);
+      markSessionInteraction();
 
       setAvatarState("speaking");
 
@@ -787,8 +859,22 @@ export default function VoiceUI({
     };
   }, [mode, activated]);
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (!activatedRef.current || sessionEndingRef.current) return;
+      if (isListeningRef.current || isProcessingRef.current) return;
+      if (Date.now() - lastInteractionTimeRef.current > IDLE_SESSION_MS) {
+        console.log("[SELA Session] Sesi diakhiri karena idle timeout");
+        endSessionRef.current?.("idle_timeout");
+      }
+    }, 3000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   // ── Farewell handler ──────────────────────────────────────────
   const handleFarewell = (userText) => {
+    markSessionInteraction();
     onSend(userText);
     stopListening();
     window.speechSynthesis?.cancel();
@@ -818,6 +904,7 @@ export default function VoiceUI({
         currentChat: farewellChat,
         lang,
         endedByFarewell: true,
+        endReason: "farewell",
       });
       isProcessingRef.current = false;
       activatedRef.current = false;
@@ -835,6 +922,7 @@ export default function VoiceUI({
           currentChat: farewellChat,
           lang,
           endedByFarewell: true,
+          endReason: "farewell",
         });
         isProcessingRef.current = false;
         activatedRef.current = false;
@@ -864,6 +952,7 @@ export default function VoiceUI({
 
     if (!textToSubmit.trim()) return;
     const userText = textToSubmit.trim();
+    markSessionInteraction();
     setValue("");
     setIsAtBottom(true);
     if (isFarewell(userText)) {
@@ -915,6 +1004,7 @@ export default function VoiceUI({
       const response = await getChatCompletion(history, lang);
       setIsWaitingAI(false);
       if (onReceive) onReceive(response);
+      markSessionInteraction();
       setAvatarState("speaking");
       speakText(
         response.text,
@@ -931,6 +1021,7 @@ export default function VoiceUI({
 
   // ── Pilih bahasa saat greeting ────────────────────────────────
   const handleLangSelect = (chosen) => {
+    markSessionInteraction();
     if (setLang) setLang(chosen);
     setLangSelected(true);
     setAwaitingLangSelect(false);
