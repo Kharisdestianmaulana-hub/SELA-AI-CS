@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import ChatBubble from "./ChatBubble";
+import LiveCaption from "./LiveCaption";
 import AvatarPlaceholder from "./AvatarPlaceholder";
 import SuggestionButtons from "./SuggestionButtons";
 import MediaCarousel from "./MediaCarousel";
@@ -1259,7 +1260,22 @@ export default function VoiceUI({
         {/* Bottom content for speak mode */}
         <div className="flex flex-col items-center gap-3 pb-8 pt-2 px-4 relative z-20 pointer-events-auto">
           <div className="w-full max-w-sm md:hidden">
-            {latestMsg && (
+            {/* Portrait mode: Show LiveCaption when SELA is speaking */}
+            {avatarState === 'speaking' && latestMsg?.role === 'assistant' && (
+              <LiveCaption
+                role={latestMsg.role}
+                text={latestMsg.text}
+                lang={lang}
+                isLoading={false}
+                avatarState={avatarState}
+              />
+            )}
+            {/* Show loading when waiting for AI response */}
+            {isWaitingAI && avatarState !== 'speaking' && (
+              <ChatBubble role="assistant" text="" lang={lang} isLoading />
+            )}
+            {/* Show latest message when not speaking and not waiting */}
+            {avatarState !== 'speaking' && !isWaitingAI && latestMsg && (
               <div className="animate-fade-in">
                 <ChatBubble
                   role={latestMsg.role}
@@ -1271,9 +1287,6 @@ export default function VoiceUI({
                   <MediaCarousel media={latestMsg.media} />
                 )}
               </div>
-            )}
-            {isWaitingAI && (
-              <ChatBubble role="assistant" text="" lang={lang} isLoading />
             )}
           </div>
 
