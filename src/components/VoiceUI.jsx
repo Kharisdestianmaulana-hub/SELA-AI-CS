@@ -525,7 +525,9 @@ export default function VoiceUI({
               !hasFace &&
               now - lastFaceTimeRef.current > FACE_LOST_END_MS
             ) {
-              console.log("[SELA Cam] Sesi diakhiri karena wajah hilang terlalu lama");
+              console.log(
+                "[SELA Cam] Sesi diakhiri karena wajah hilang terlalu lama",
+              );
               endSessionRef.current?.("face_lost");
             } else if (!hasFace && now - lastFaceTimeRef.current > 3000) {
               setFaceDetected((prev) => {
@@ -686,7 +688,8 @@ export default function VoiceUI({
         );
         baselineRmsValues.push(rms);
         const avgSoFar =
-          baselineRmsValues.reduce((a, b) => a + b, 0) / baselineRmsValues.length;
+          baselineRmsValues.reduce((a, b) => a + b, 0) /
+          baselineRmsValues.length;
         const provisionalThreshold = Math.max(
           7,
           avgSoFar * EARLY_SPEECH_THRESHOLD_MULTIPLIER,
@@ -700,13 +703,10 @@ export default function VoiceUI({
             provisionalThreshold,
             avgSoFar * THRESHOLD_MULTIPLIER,
           );
-          console.log(
-            "[SELA VAD] Early speech detected during baseline",
-            {
-              rms: Number(rms.toFixed(2)),
-              provisionalThreshold: Number(provisionalThreshold.toFixed(2)),
-            },
-          );
+          console.log("[SELA VAD] Early speech detected during baseline", {
+            rms: Number(rms.toFixed(2)),
+            provisionalThreshold: Number(provisionalThreshold.toFixed(2)),
+          });
           startActualVAD();
           return;
         }
@@ -774,12 +774,10 @@ export default function VoiceUI({
               console.log("[SELA VAD] Silence window started");
             } else if (
               Date.now() - silenceStartRef.current >
-              (
-                speechStartRef.current
-                && Date.now() - speechStartRef.current >= QUICK_COMMIT_MIN_SPEECH_MS
-                  ? QUICK_COMMIT_SILENCE_MS
-                  : SILENCE_DURATION
-              )
+              (speechStartRef.current &&
+              Date.now() - speechStartRef.current >= QUICK_COMMIT_MIN_SPEECH_MS
+                ? QUICK_COMMIT_SILENCE_MS
+                : SILENCE_DURATION)
             ) {
               // Diam cukup lama → stop otomatis
               console.log("[SELA VAD] Auto-stop commit", {
@@ -827,12 +825,11 @@ export default function VoiceUI({
       // 1. Filter Client-Side: Buang ucapan terlalu pendek/obrolan acak
       const words = text?.trim().split(/\s+/) || [];
       const isNoise =
-        (!text?.trim() || text.trim().length < MIN_TRANSCRIPT_CHARS)
-        || (
-          words.length <= 2
-          && text.length < 18
-          && !looksLikeShortValidQuery(text)
-        );
+        !text?.trim() ||
+        text.trim().length < MIN_TRANSCRIPT_CHARS ||
+        (words.length <= 2 &&
+          text.length < 18 &&
+          !looksLikeShortValidQuery(text));
 
       if (isNoise) {
         console.log("[SELA] Diabaikan (terlalu pendek/noise):", text);
@@ -866,7 +863,9 @@ export default function VoiceUI({
 
       // 2. Filter LLM-Side: SELA mendeteksi obrolan orang lewat
       if (response.text?.includes("[IGNORE_NOISE]")) {
-        console.log("[SELA] AI mendeteksi noise/obrolan acak, mengabaikan input.");
+        console.log(
+          "[SELA] AI mendeteksi noise/obrolan acak, mengabaikan input.",
+        );
         isProcessingRef.current = false;
         setAvatarState("idle");
         setTimeout(() => startListeningRef.current?.(), 300);
@@ -1230,9 +1229,9 @@ export default function VoiceUI({
                     lang={lang}
                     isNew={msg.role === "assistant" && msg.id === latestSelaId}
                   />
-                  {msg.role === "assistant" && msg.media && msg.media.length > 0 && (
-                    <MediaCarousel media={msg.media} />
-                  )}
+                  {msg.role === "assistant" &&
+                    msg.media &&
+                    msg.media.length > 0 && <MediaCarousel media={msg.media} />}
                 </div>
               ))}
               {isWaitingAI && (
@@ -1261,7 +1260,7 @@ export default function VoiceUI({
         <div className="flex flex-col items-center gap-3 pb-8 pt-2 px-4 relative z-20 pointer-events-auto">
           <div className="w-full max-w-sm md:hidden">
             {/* Portrait mode: Show LiveCaption when SELA is speaking */}
-            {avatarState === 'speaking' && latestMsg?.role === 'assistant' && (
+            {avatarState === "speaking" && latestMsg?.role === "assistant" && (
               <LiveCaption
                 role={latestMsg.role}
                 text={latestMsg.text}
@@ -1271,21 +1270,26 @@ export default function VoiceUI({
               />
             )}
             {/* Show loading when waiting for AI response */}
-            {isWaitingAI && avatarState !== 'speaking' && (
+            {isWaitingAI && avatarState !== "speaking" && (
               <ChatBubble role="assistant" text="" lang={lang} isLoading />
             )}
             {/* Show latest message when not speaking and not waiting */}
-            {avatarState !== 'speaking' && !isWaitingAI && latestMsg && (
+            {avatarState !== "speaking" && !isWaitingAI && latestMsg && (
               <div className="animate-fade-in">
                 <ChatBubble
                   role={latestMsg.role}
                   text={latestMsg.text}
                   lang={lang}
-                  isNew={latestMsg.role === "assistant" && latestMsg.id === latestSelaId}
+                  isNew={
+                    latestMsg.role === "assistant" &&
+                    latestMsg.id === latestSelaId
+                  }
                 />
-                {latestMsg.role === "assistant" && latestMsg.media && latestMsg.media.length > 0 && (
-                  <MediaCarousel media={latestMsg.media} />
-                )}
+                {latestMsg.role === "assistant" &&
+                  latestMsg.media &&
+                  latestMsg.media.length > 0 && (
+                    <MediaCarousel media={latestMsg.media} />
+                  )}
               </div>
             )}
           </div>
@@ -1393,9 +1397,9 @@ export default function VoiceUI({
                       isVisible
                     />
                   )}
-                {msg.role === "assistant" && msg.media && msg.media.length > 0 && (
-                  <MediaCarousel media={msg.media} />
-                )}
+                {msg.role === "assistant" &&
+                  msg.media &&
+                  msg.media.length > 0 && <MediaCarousel media={msg.media} />}
               </div>
             ))}
             {isWaitingAI && (
