@@ -130,10 +130,34 @@ app.post("/api/transcribe", upload.single("file"), async (req, res) => {
       prompt: lang === "en" ? promptEN : promptID,
     });
 
-    console.log(
-      `[transcribe] Success: "${transcription.text.slice(0, 50)}..."`,
-    );
-    res.json({ text: transcription.text });
+    // ── Post-transcription validation ────────────────────────────────────
+    const transcribedText = transcription.text || "";
+
+    // Filter out typical background audio patterns
+    const isBackgroundAudio = detectBackgroundAudio(transcribedText, lang);
+
+    if (isBackgroundAudio) {
+      console.log(
+        `[transcribe] ⚠ FILTERED: Background audio detected: "${transcribedText.slice(0, 50)}..."`,
+      );
+      return res.json({
+        text: "",
+        reason: "Background audio detected - likely not a real question",
+        originalTranscript: transcribedText,
+      });
+    }
+
+    // Filter extremely short transcriptions that are likely noise
+    if (transcribedText.trim().length < 5) {
+      console.log(`[transcribe] ⚠ FILTERED: Too short: "${transcribedText}"`);
+      return res.json({
+        text: "",
+        reason: "Transcription too short - likely noise",
+      });
+    }
+
+    console.log(`[transcribe] Success: "${transcribedText.slice(0, 60)}..."`);
+    res.json({ text: transcribedText });
   } catch (err) {
     console.error("[transcribe] Full error:", {
       message: err?.message,
@@ -151,6 +175,58 @@ app.post("/api/transcribe", upload.single("file"), async (req, res) => {
     });
   }
 });
+
+/**
+ * Deteksi pola background audio yang umum
+ * Cegah transcriptions yang seperti iklan, musik, atau broadcast
+ */
+function detectBackgroundAudio(text, lang) {
+  if (!text) return false;
+
+  const lower = text.toLowerCase().trim();
+
+  // Common background audio patterns (ads, intros, outros, etc)
+  const bgPatterns = [
+    // Perkenalan/intro
+    /^(terima kasih telah|thanks for|welcome to|selamat datang)/i,
+    /^(subscribe|subscrib|subscribe now|like and share)/i,
+    /^(don't forget to|jangan lupa)/i,
+    // Penutupan/outro
+    /(goodbye|goodbye|farewell|goodbye|see you|cepatnya|sampai jumpa)/i,
+    // Music/ambient
+    /^(♪|music|lagu|nyanyian|instrumental)/i,
+    // Iklan panjang > 50 chars dari brand atau tawaran
+    /^(promo|promosi|diskon|special offer|gratis)/i,
+  ];
+
+  for (const pattern of bgPatterns) {
+    if (pattern.test(lower)) {
+      console.log(`[transcribe] BG Pattern matched: ${pattern}`);
+      return true;
+    }
+  }
+
+  // Deteksi jika teks tidak terlihat seperti pertanyaan atau statement valid
+  // Background audio biasanya sangat singkat atau sangat spesifik
+  const words = lower.split(/\s+/);
+
+  // Jika hanya 1-2 kata dan bukan common phrases → likely background
+  if (words.length <= 2 && lower.length < 15) {
+    // Tapi allow short valid questions
+    const shortQuestionPatterns = [
+      /^(apa|berapa|siapa|kapan|dimana|gimana|kenapa|bagaimana)/,
+      /^(yes|no|ya|tidak)/,
+    ];
+    const isValidShortQuestion = shortQuestionPatterns.some((p) =>
+      p.test(lower),
+    );
+    if (!isValidShortQuestion) {
+      return true; // Likely noise
+    }
+  }
+
+  return false;
+}
 
 // ── POST /api/chat ────────────────────────────────────────────────────────────
 // Terima { messages }, panggil LLM secara langsung tanpa web search tambahan
