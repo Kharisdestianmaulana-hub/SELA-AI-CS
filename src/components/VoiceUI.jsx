@@ -122,12 +122,13 @@ const SILENCE_DURATION = 850; // ms diam setelah ada suara → auto-stop lebih c
 const MIN_SPEECH_MS = 500; // ms minimum bicara — tetap tahan noise tapi lebih ramah pertanyaan pendek
 const MIN_BLOB_SIZE = 30000; // bytes minimum audio — audio terlalu kecil = pasti noise
 const MAX_RECORD_MS = 20000; // 20 detik maksimal recording sebagai failsafe
-const THRESHOLD_MULTIPLIER = 2.0; // baseline * 2.0 = lebih ramah untuk ucapan pertama
+const THRESHOLD_MULTIPLIER = 2.8; // Increased from 2.0 → lebih strict untuk noise filtering
 const BASELINE_SAMPLE_MS = 500; // ms untuk sample baseline noise
-const EARLY_SPEECH_THRESHOLD_MULTIPLIER = 1.35;
+const EARLY_SPEECH_THRESHOLD_MULTIPLIER = 1.6; // Increased from 1.35 → lebih strict saat baseline
 const MIN_TRANSCRIPT_CHARS = 6;
 const QUICK_COMMIT_SILENCE_MS = 550; // commit cepat setelah speech valid
 const QUICK_COMMIT_MIN_SPEECH_MS = 500;
+const MIN_RMS_FOR_VALID_SPEECH = 8; // Minimum RMS level untuk dianggap speech, bukan noise
 const IDLE_SESSION_MS = 90 * 1000; // 90 detik tanpa interaksi -> reset sesi
 const FACE_LOST_END_MS = 12 * 1000; // 12 detik wajah hilang saat sesi aktif -> reset
 
@@ -590,11 +591,16 @@ export default function VoiceUI({
     if (modeRef.current !== "speak") return;
 
     try {
+      // ── Aggressive audio constraints untuk noisy environments ──
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: true,
+          echoCancellation: { ideal: true },
+          noiseSuppression: { ideal: true },
+          autoGainControl: { ideal: true },
+          channelCount: { ideal: 1 }, // Mono untuk lebih fokus
+          sampleRate: { ideal: 16000 }, // Optimal untuk speech recognition
+          sampleSize: { ideal: 16 },
+          latency: { ideal: 0.01 },
         },
       });
       streamRef.current = stream;
@@ -691,7 +697,7 @@ export default function VoiceUI({
           baselineRmsValues.reduce((a, b) => a + b, 0) /
           baselineRmsValues.length;
         const provisionalThreshold = Math.max(
-          7,
+          MIN_RMS_FOR_VALID_SPEECH,
           avgSoFar * EARLY_SPEECH_THRESHOLD_MULTIPLIER,
         );
 
@@ -700,12 +706,13 @@ export default function VoiceUI({
           speechStartRef.current = Date.now();
           firstSpeechDetectedAtRef.current = speechStartRef.current;
           dynamicThresholdRef.current = Math.max(
-            provisionalThreshold,
+            MIN_RMS_FOR_VALID_SPEECH,
             avgSoFar * THRESHOLD_MULTIPLIER,
           );
           console.log("[SELA VAD] Early speech detected during baseline", {
             rms: Number(rms.toFixed(2)),
             provisionalThreshold: Number(provisionalThreshold.toFixed(2)),
+            threshold: Number(dynamicThresholdRef.current.toFixed(2)),
           });
           startActualVAD();
           return;
@@ -717,13 +724,23 @@ export default function VoiceUI({
           const avgBaseline =
             baselineRmsValues.reduce((a, b) => a + b, 0) /
             baselineRmsValues.length;
+
+          // Calculate baseline variance — stable/low variance = noise floor
+          const variance =
+            baselineRmsValues.reduce(
+              (sq, x) => sq + (x - avgBaseline) * (x - avgBaseline),
+              0,
+            ) / baselineRmsValues.length;
+
           dynamicThresholdRef.current = Math.max(
-            7,
+            MIN_RMS_FOR_VALID_SPEECH,
             avgBaseline * THRESHOLD_MULTIPLIER,
           );
           console.log(
             "[SELA VAD] Baseline:",
             avgBaseline.toFixed(2),
+            "| Variance:",
+            variance.toFixed(2),
             "→ Dynamic Threshold:",
             dynamicThresholdRef.current.toFixed(2),
           );
@@ -813,6 +830,16 @@ export default function VoiceUI({
     setAvatarState("thinking");
     try {
       const rawText = await transcribeAudio(audioBlob, lang);
+
+      // Check if server filtered out background audio
+      if (!rawText || rawText.trim().length === 0) {
+        console.log("[SELA] Server filtered out background audio → retrying");
+        isProcessingRef.current = false;
+        setAvatarState("idle");
+        setTimeout(() => startListeningRef.current?.(), 300);
+        return;
+      }
+
       const preparedTranscript = prepareTranscriptForRag(rawText);
       const text = preparedTranscript.cleanedText;
       console.log("[SELA Voice] Transcript pipeline:", {
