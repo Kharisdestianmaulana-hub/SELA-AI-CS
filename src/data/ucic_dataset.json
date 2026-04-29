@@ -1247,5 +1247,830 @@
     ],
     "title": "Kalau Sudah Daftar, Setelah Itu Apa Lagi?",
     "content": "Setelah daftar, calon mahasiswa biasanya melanjutkan pembayaran biaya registrasi atau tahap awal, mengirim bukti transfer jika diperlukan, menunggu verifikasi dari tim PMB, lalu mengunggah berkas yang diminta. Setelah itu, calon mahasiswa akan menerima informasi lanjutan dari kampus."
+  },
+  {
+    "id": "baak_kalender_akademik",
+    "category": "akademik",
+    "keywords": [
+      "baak",
+      "kalender akademik",
+      "jadwal akademik",
+      "awal kuliah",
+      "periode uts",
+      "periode uas",
+      "jadwal sidang",
+      "jadwal seminar"
+    ],
+    "title": "Kalender Akademik UCIC",
+    "content": "Kalender akademik UCIC berisi jadwal kegiatan pendidikan dalam dua semester, termasuk pendaftaran mahasiswa baru, heregistrasi atau daftar ulang, perkuliahan, perkuliahan pengganti, UTS, UAS, seminar proyek, seminar tugas akhir atau skripsi, sidang tugas akhir atau skripsi, dan wisuda. Kalender akademik disusun dengan memperhatikan kalender nasional dan kebutuhan kegiatan akademik kampus."
+  },
+  {
+    "id": "baak_beban_studi_sks",
+    "category": "akademik",
+    "keywords": [
+      "sks",
+      "beban studi",
+      "berapa sks",
+      "batas studi",
+      "masa studi",
+      "program s1",
+      "program d3"
+    ],
+    "title": "Beban Studi dan Masa Studi UCIC",
+    "content": "UCIC menggunakan Sistem Kredit Semester (SKS). Program S1 memiliki beban studi sekurang-kurangnya 144 SKS dan sebanyak-banyaknya 148 SKS, dijadwalkan 8 semester, dengan batas masa studi maksimal 14 semester. Program D3 memiliki beban studi sekurang-kurangnya 108 SKS dan sebanyak-banyaknya 118 SKS, dijadwalkan 6 semester. Pada pedoman akademik, batas studi D3 dijelaskan mengikuti ketentuan masing-masing program."
+  },
+  {
+    "id": "baak_jadwal_perkuliahan",
+    "category": "jadwal",
+    "keywords": [
+      "jadwal kuliah",
+      "jam kuliah",
+      "sesi kuliah",
+      "semester gasal",
+      "semester genap",
+      "perkuliahan",
+      "kontrak belajar"
+    ],
+    "title": "Jadwal dan Ketentuan Perkuliahan UCIC",
+    "content": "Perkuliahan UCIC dilaksanakan berdasarkan jadwal dari fakultas dan kalender akademik. Semester gasal umumnya berlangsung September sampai Februari, sedangkan semester genap Maret sampai Agustus. Hari kuliah diatur dalam sesi mulai sekitar pukul 07.00 sampai 21.00. Setiap semester memiliki 14 kali tatap muka; mata kuliah 2 SKS sekitar 100 menit dan mata kuliah 3 SKS sekitar 150 menit. Sebelum perkuliahan dimulai, dosen dan perwakilan kelas membuat kontrak belajar."
+  },
+  {
+    "id": "baak_kehadiran_perkuliahan",
+    "category": "akademik",
+    "keywords": [
+      "absensi kuliah",
+      "kehadiran kuliah",
+      "minimal hadir",
+      "telat kuliah",
+      "alpa",
+      "tidak masuk kuliah",
+      "praktikum"
+    ],
+    "title": "Aturan Kehadiran Perkuliahan UCIC",
+    "content": "Mahasiswa wajib mengikuti kuliah dan kegiatan terjadwal minimal 75%, sedangkan praktikum wajib diikuti 100% sesuai jadwal. Mahasiswa yang berhalangan hadir karena alasan penting harus menyampaikan pemberitahuan tertulis kepada dosen paling lambat pada hari perkuliahan. Mahasiswa yang terlambat lebih dari 15 menit setelah kuliah dimulai tidak diperkenankan masuk dan dianggap alpa. Mahasiswa juga wajib mengisi daftar hadir; jika lalai mengisi daftar hadir, kehadirannya dapat dianggap alpa."
+  },
+  {
+    "id": "baak_uts_uas_kpu",
+    "category": "akademik",
+    "keywords": [
+      "uts",
+      "uas",
+      "kpu",
+      "kartu ujian",
+      "syarat ujian",
+      "ujian susulan",
+      "remedial",
+      "ulang mata kuliah"
+    ],
+    "title": "Syarat UTS, UAS, KPU, dan Ujian Susulan",
+    "content": "Evaluasi perkuliahan UCIC meliputi minimal UTS, UAS, presensi, tugas, dan/atau praktikum. Untuk mengikuti UTS, mahasiswa wajib memenuhi persyaratan administrasi keuangan yang ditentukan dan mencetak KPU dari My CIC. Untuk UAS, mahasiswa wajib melunasi sisa biaya studi dan memenuhi kehadiran minimal 10 dari 14 tatap muka atau 20 dari 28 tatap muka. Ujian susulan dilakukan sesuai jadwal kalender akademik dengan pendaftaran melalui BAAK dan pelunasan biaya ujian susulan sesuai ketentuan, kecuali alasan tertentu seperti sakit rawat inap atau kedukaan keluarga dengan bukti dokumen."
+  },
+  {
+    "id": "baak_krs_heregistrasi",
+    "category": "akademik",
+    "keywords": [
+      "krs",
+      "isi krs",
+      "pengisian krs",
+      "herregistrasi",
+      "daftar ulang",
+      "registrasi ulang",
+      "siakad",
+      "dosen wali"
+    ],
+    "title": "Alur Herregistrasi dan Pengisian KRS",
+    "content": "Alur herregistrasi dan KRS UCIC: mahasiswa melakukan pembayaran biaya studi atau UKT/semester sesuai jadwal melalui bank mitra, lalu melakukan aktivasi atau registrasi online melalui portal kampus. Setelah status aktif, mahasiswa login ke SIAKAD atau My CIC, berkonsultasi dengan dosen wali, menginput mata kuliah sesuai hasil konsultasi, dan memastikan KRS sudah divalidasi atau disetujui. Mahasiswa lama mendapat akses KRS setelah melunasi administrasi kemahasiswaan dan BPP. Jumlah SKS mahasiswa lama disesuaikan dengan IPS dan aturan program studi."
+  },
+  {
+    "id": "baak_pedoman_pengambilan_sks",
+    "category": "akademik",
+    "keywords": [
+      "ips",
+      "ip semester",
+      "ambil sks",
+      "jumlah sks",
+      "maksimal sks",
+      "pengambilan krs"
+    ],
+    "title": "Pedoman Pengambilan Jumlah SKS",
+    "content": "Pedoman jumlah SKS program D3 dan S1 berdasarkan IPS: IPS lebih dari 3,00 dapat mengambil 21-24 SKS; IPS 2,50-2,99 dapat mengambil 18-20 SKS; IPS 2,00-2,49 dapat mengambil 15-17 SKS; dan IPS di bawah 2,00 dapat mengambil 14 SKS. Ketentuan akhir tetap mengikuti persyaratan mata kuliah, prasyarat, dan kebijakan program studi."
+  },
+  {
+    "id": "baak_cuti_akademik",
+    "category": "akademik",
+    "keywords": [
+      "cuti kuliah",
+      "cuti akademik",
+      "mengajukan cuti",
+      "form cuti",
+      "semester cuti",
+      "biaya cuti"
+    ],
+    "title": "Alur Pengajuan Cuti Akademik",
+    "content": "Mahasiswa yang ingin cuti akademik mengajukan permohonan ke BAAK dan mengisi formulir cuti. Cuti akademik dapat diajukan setelah mahasiswa memasuki minimal semester 3 dan hanya disetujui jika tidak mengganggu batas masa studi. Hak cuti maksimal 2 semester. Form cuti harus mendapat persetujuan Kaprodi, Dekan, dan Kepala BAAK atau pejabat akademik terkait, lalu mahasiswa menyelesaikan biaya administrasi cuti di bagian keuangan. Salinan form yang sudah disetujui dapat dipegang mahasiswa sebagai bukti cuti."
+  },
+  {
+    "id": "baak_aktif_kembali_nonaktif",
+    "category": "akademik",
+    "keywords": [
+      "aktif kembali",
+      "nonaktif",
+      "dicuti kan",
+      "mahasiswa non aktif",
+      "tidak isi krs",
+      "drop out",
+      "do"
+    ],
+    "title": "Aktif Kembali Setelah Cuti atau Nonaktif",
+    "content": "Mahasiswa yang tidak mengisi KRS dan tidak mengajukan cuti akademik dapat tercatat sebagai mahasiswa dicutikan atau nonaktif. Mahasiswa dapat mengajukan aktif kembali ke BAAK dengan mengisi form persetujuan aktif kembali, selama sisa masa studi masih memungkinkan. Mahasiswa perlu melakukan daftar ulang, melunasi biaya nonaktif atau dicutikan sesuai ketentuan, membayar BPP semester berjalan, lalu mengisi KRS dengan berkonsultasi kepada Kaprodi. Mahasiswa dapat dikenakan drop out jika tidak daftar ulang selama 3 semester berturut-turut atau tidak berturut-turut, tidak memenuhi syarat akademik minimum, melewati batas masa studi, atau melanggar tata tertib berat."
+  },
+  {
+    "id": "baak_pindah_kelas_jadwal",
+    "category": "akademik",
+    "keywords": [
+      "pindah kelas",
+      "pindah jadwal",
+      "ubah kelas",
+      "ubah jadwal",
+      "jadwal bentrok",
+      "baak pindah kelas"
+    ],
+    "title": "Alur Pindah Kelas atau Jadwal",
+    "content": "Alur pindah kelas atau jadwal: mahasiswa melapor langsung ke staff BAAK, lalu BAAK mengecek ketersediaan kelas atau jadwal. Jika memungkinkan dan sesuai ketentuan akademik, BAAK memindahkan jadwal secara digital. Setelah perubahan selesai, mahasiswa melanjutkan perkuliahan sesuai kelas atau jadwal terbaru."
+  },
+  {
+    "id": "baak_pindah_prodi",
+    "category": "akademik",
+    "keywords": [
+      "pindah prodi",
+      "pindah jurusan",
+      "ganti prodi",
+      "ganti jurusan",
+      "form pindah prodi",
+      "perpindahan mahasiswa"
+    ],
+    "title": "Alur Pindah Program Studi",
+    "content": "Mahasiswa yang ingin pindah program studi mengajukan perpindahan ke Kaprodi awal, mengisi form perpindahan program studi untuk prodi awal dan prodi tujuan, lalu menyerahkan form ke BAAK. BAAK bersama operator PDDIKTI memproses perpindahan mahasiswa. Berdasarkan pedoman akademik, pindah program studi memerlukan persetujuan Dekan yang ditinggalkan dan persetujuan Kaprodi serta Dekan prodi tujuan untuk pengakuan mata kuliah. Umumnya perpindahan hanya dapat dilakukan satu kali, berlaku untuk mahasiswa aktif semester 1 atau 2, dan dilakukan paling lambat batas akhir batal tambah semester berjalan."
+  },
+  {
+    "id": "baak_layanan_dokumen_akademik",
+    "category": "akademik",
+    "keywords": [
+      "dokumen akademik",
+      "surat keterangan",
+      "surat pengantar",
+      "transkrip sementara",
+      "kartu mahasiswa",
+      "ktm",
+      "baak dokumen"
+    ],
+    "title": "Layanan Dokumen Akademik di BAAK",
+    "content": "Mahasiswa dapat mengajukan pembuatan dokumen akademik seperti surat keterangan, surat pengantar, dan transkrip nilai sementara melalui BAAK dengan mengisi formulir permohonan dan membayar biaya permohonan sesuai ketentuan. Surat pengantar riset dapat dibuat untuk mahasiswa yang akan atau sedang mengambil tugas akhir/skripsi. Untuk pencetakan ulang kartu mahasiswa karena hilang, rusak, pindah program studi, atau ganti nama, mahasiswa melapor ke BAAK, mengisi formulir baru, membayar biaya cetak ulang, dan menyerahkan kartu lama jika masih ada."
+  },
+  {
+    "id": "baak_surat_kegiatan_mahasiswa",
+    "category": "akademik",
+    "keywords": [
+      "surat kegiatan mahasiswa",
+      "surat rencana kegiatan",
+      "izin kegiatan",
+      "kegiatan mahasiswa",
+      "fasilitas kampus",
+      "baak kegiatan"
+    ],
+    "title": "Alur Surat Keterangan atau Rencana Kegiatan Mahasiswa",
+    "content": "Untuk surat terkait kegiatan mahasiswa, mahasiswa mengajukan surat rencana kegiatan ke BAAK. BAAK meninjau jenis kegiatan dan menyesuaikannya dengan kondisi serta fasilitas kampus. Setelah ditinjau, BAAK dapat menyetujui atau tidak menyetujui pengajuan tersebut sesuai ketentuan dan kesiapan kampus."
+  },
+  {
+    "id": "baak_khs_transkrip_kartu_ujian",
+    "category": "akademik",
+    "keywords": [
+      "khs",
+      "transkrip",
+      "kartu ujian",
+      "cetak khs",
+      "cetak transkrip",
+      "cap baak",
+      "tanda tangan baak"
+    ],
+    "title": "KHS, Transkrip, dan Kartu Ujian",
+    "content": "Mahasiswa dapat mencetak sendiri KHS, transkrip, atau kartu ujian melalui sistem kampus seperti My CIC sesuai jadwal dan akses yang berlaku. Jika dokumen membutuhkan tanda tangan atau cap resmi, mahasiswa dapat meminta bantuan ke bagian BAAK. KHS berisi nilai mata kuliah, IPS, dan IPK, serta dapat diperoleh setelah ujian sesuai jadwal kalender akademik."
+  },
+  {
+    "id": "baak_protes_nilai",
+    "category": "akademik",
+    "keywords": [
+      "protes nilai",
+      "keberatan nilai",
+      "nilai salah",
+      "revisi nilai",
+      "peninjauan nilai",
+      "khs salah"
+    ],
+    "title": "Pengajuan Keberatan atau Protes Nilai",
+    "content": "Jika mahasiswa merasa nilai yang diumumkan tidak sesuai, mahasiswa dapat mengajukan peninjauan ulang nilai dengan mengambil dan mengisi Formulir Peninjauan Ulang Nilai di BAAK. Pengajuan dilayani paling lambat 1 minggu setelah KHS dikeluarkan. Jika ada kesalahan pada KHS atau transkrip, mahasiswa harus segera melapor ke BAAK. Perubahan nilai hanya dapat dilakukan jika ada bukti tertulis berupa koreksi nilai dari dosen terkait."
+  },
+  {
+    "id": "baak_legalisir_ijazah_transkrip",
+    "category": "akademik",
+    "keywords": [
+      "legalisir",
+      "legalisir ijazah",
+      "legalisir transkrip",
+      "alumni legalisir",
+      "cap ijazah",
+      "forlap",
+      "pddikti"
+    ],
+    "title": "Alur Legalisir Ijazah dan Transkrip",
+    "content": "Alur legalisir untuk alumni: alumni membawa fotokopi ijazah atau transkrip yang akan dilegalisir, menunjukkan ijazah atau transkrip asli kepada staff BAAK, lalu BAAK mengecek data di database akademik/PDDIKTI. Berdasarkan data alur layanan, proses legalisir dapat memerlukan sekitar 1 x 24 jam, sedangkan pedoman akademik menyebut permohonan legalisir masuk proses verifikasi sebelum 10 hari kerja. Legalisir hanya dapat dilakukan jika lulusan terdaftar di FORLAP/PDDIKTI dengan status lulus dan menunjukkan dokumen asli."
+  },
+  {
+    "id": "baak_skripsi_tugas_akhir",
+    "category": "akademik",
+    "keywords": [
+      "skripsi",
+      "tugas akhir",
+      "ta",
+      "pengajuan skripsi",
+      "proposal skripsi",
+      "dosen pembimbing",
+      "bimbingan skripsi"
+    ],
+    "title": "Alur Skripsi atau Tugas Akhir",
+    "content": "Alur skripsi atau tugas akhir: mahasiswa membayar biaya skripsi/tugas akhir, mengambil mata kuliah skripsi atau tugas akhir saat KRS, lalu mengajukan proposal ke Kaprodi. Kaprodi memvalidasi proposal dan membagi dosen pembimbing. Setelah validasi, BAAK menginput dosen pembimbing. Mahasiswa melanjutkan bimbingan dengan dosen pembimbing dan mencatat proses bimbingan. Pedoman akademik menyebut pengajuan skripsi mensyaratkan mahasiswa sudah menyelesaikan sekitar 132 SKS, IPK minimal 2, dan tidak memiliki nilai D. Setelah memenuhi syarat, mahasiswa dapat mengikuti seminar proposal, seminar hasil, dan sidang akhir sesuai jadwal."
+  },
+  {
+    "id": "baak_syarat_sidang_skripsi",
+    "category": "akademik",
+    "keywords": [
+      "syarat sidang",
+      "sidang skripsi",
+      "sidang tugas akhir",
+      "daftar sidang",
+      "bebas pustaka",
+      "bebas keuangan",
+      "toefl"
+    ],
+    "title": "Syarat Sidang Skripsi atau Tugas Akhir",
+    "content": "Syarat sidang skripsi atau tugas akhir meliputi persyaratan akademik dan administrasi. Mahasiswa harus telah menempuh SKS minimal sesuai jenjang, tidak memiliki nilai E, memiliki nilai D dalam batas aturan prodi, telah melaksanakan seminar skripsi/tugas akhir, memenuhi minimal bimbingan dengan bukti ACC di portal atau form bimbingan, serta memiliki bukti bebas pustaka dan bebas administrasi keuangan. Persyaratan lain yang tercantum pada pedoman meliputi pelunasan biaya sidang, biaya perpustakaan/laboratorium/SKS, biaya wisuda, transkrip nilai, foto sesuai ketentuan, naskah skripsi, draft publikasi ilmiah, dan sertifikat TOEFL Bahasa Inggris 450 jika diwajibkan. Kaprodi memberikan jadwal sidang, BAAK mengatur jadwal, lalu mahasiswa melaksanakan sidang."
+  },
+  {
+    "id": "baak_yudisium",
+    "category": "akademik",
+    "keywords": [
+      "yudisium",
+      "form yudisium",
+      "lembar yudisium",
+      "syarat yudisium",
+      "validasi data lulusan",
+      "ll dikti",
+      "lldikti"
+    ],
+    "title": "Syarat dan Alur Yudisium",
+    "content": "Syarat yudisium: mahasiswa sudah menyelesaikan tugas akhir atau skripsi, sudah disidangkan, direvisi, dan ditandatangani oleh dosen pembimbing serta penguji. Mahasiswa juga harus melunasi seluruh kewajiban keuangan termasuk semester berjalan. Alurnya: mahasiswa mengisi form lembar yudisium, memvalidasi data pada form dengan melampirkan dokumen seperti fotokopi akta kelahiran, kartu keluarga, dan ijazah terakhir, lalu menandatangani di atas materai. Kaprodi memvalidasi form yudisium, mahasiswa menyerahkan form dan lampiran ke BAAK, BAAK mengecek data di portal BAAK, kemudian operator LLDIKTI menyinkronkan data ke portal LLDIKTI."
+  },
+  {
+    "id": "baak_wisuda_ijazah_alumni",
+    "category": "akademik",
+    "keywords": [
+      "wisuda",
+      "syarat wisuda",
+      "ijazah",
+      "ambil ijazah",
+      "pendataan alumni",
+      "career center",
+      "tracer study"
+    ],
+    "title": "Wisuda, Pengambilan Ijazah, dan Pendataan Alumni",
+    "content": "Mahasiswa dapat mengikuti wisuda setelah dinyatakan lulus semua mata kuliah, menyerahkan perbaikan tugas akhir atau skripsi yang sudah ditandatangani penguji dan pembimbing, bebas kewajiban keuangan, bebas pinjaman perpustakaan, dan menyerahkan jurnal ilmiah yang disetujui fakultas jika diwajibkan. Wisuda dilaksanakan sesuai kalender akademik. Ijazah dan transkrip dibagikan saat wisuda. Jika mahasiswa tidak mengikuti wisuda dan belum menerima ijazah, pengambilan ijazah diberi batas waktu sampai 1 tahun dari tanggal wisuda. Pendataan alumni dikelola Career Center; lulusan wajib mengisi formulir alumni dan dapat mengikuti tracer study, survei pengguna alumni, serta pendampingan karier."
+  },
+  {
+    "id": "baak_pengunduran_diri",
+    "category": "akademik",
+    "keywords": [
+      "pengunduran diri",
+      "mengundurkan diri",
+      "keluar kuliah",
+      "mutasi mahasiswa",
+      "berhenti kuliah",
+      "surat pengunduran diri"
+    ],
+    "title": "Alur Pengunduran Diri Mahasiswa",
+    "content": "Alur pengunduran diri mahasiswa: mahasiswa mengajukan surat permohonan pengunduran diri ke BAAK dengan mencantumkan alasan dan diketahui oleh wali atau orang tua. Mahasiswa menyerahkan bukti bebas pustaka dan bebas administrasi keuangan. BAAK memproses pengunduran diri dengan menerbitkan surat keterangan mutasi mahasiswa dan transkrip berdasarkan surat pengunduran diri, lalu meneruskan proses ke operator LLDIKTI sesuai ketentuan."
+  },
+  {
+    "id": "baak_pmb_pindahan",
+    "category": "pendaftaran",
+    "keywords": [
+      "mahasiswa pindahan",
+      "transfer kampus",
+      "pindahan ucic",
+      "penyetaraan sks",
+      "konversi nilai",
+      "pindah dari kampus lain"
+    ],
+    "title": "Pendaftaran Mahasiswa Baru Pindahan",
+    "content": "UCIC menerima mahasiswa pindahan dari UCIC atau perguruan tinggi lain yang terakreditasi. Pengakuan SKS atau mata kuliah yang disetarakan ditentukan oleh Kaprodi terkait, diketahui Dekan, dan disetujui pejabat akademik sesuai ketentuan. Mata kuliah dari perguruan tinggi asal yang disetarakan tidak perlu diulang jika memiliki nilai minimal C. Penyetaraan mata kuliah dapat diakui jika tahun kelulusan mata kuliah tidak lebih dari 5 tahun, dan perubahan penyetaraan nilai atau mata kuliah hanya dapat dilakukan selama 1 semester."
+  },
+  {
+    "id": "baak_tata_tertib_mahasiswa",
+    "category": "akademik",
+    "keywords": [
+      "tata tertib",
+      "aturan mahasiswa",
+      "sanksi mahasiswa",
+      "kode etik",
+      "pakaian kuliah",
+      "sandal",
+      "plagiat"
+    ],
+    "title": "Tata Tertib Umum Mahasiswa UCIC",
+    "content": "Mahasiswa UCIC wajib menaati tata tertib kampus, menjaga nama baik sivitas akademika, berpakaian rapi dan sopan, hadir tepat waktu, membawa kartu mahasiswa, menjaga ketenangan dan ketertiban, menjaga kejujuran serta etika, merawat fasilitas kampus, dan mematuhi aturan administrasi. Pelanggaran seperti tidak menjaga kebersihan, merokok, berbicara tidak sopan, berbusana tidak rapi, mengganggu perkuliahan, memakai sandal jepit, kecurangan ujian, manipulasi absensi, pelecehan, plagiat, kekerasan, penyalahgunaan narkoba, dan pelanggaran berat lain dapat dikenai sanksi mulai dari teguran, surat peringatan, nilai digugurkan, skorsing, hingga diberhentikan sebagai mahasiswa."
+  },
+  {
+    "id": "pedoman_sejarah_ucic_lengkap",
+    "category": "profil",
+    "keywords": [
+      "sejarah lengkap ucic",
+      "cirebon institute of computer",
+      "stmik cic",
+      "ap cic",
+      "apwd",
+      "yayasan cic",
+      "tahun 1984",
+      "tahun 1999",
+      "tahun 2019"
+    ],
+    "title": "Sejarah Lengkap UCIC dari Pedoman Akademik",
+    "content": "Sejarah UCIC dimulai dari lembaga kursus komputer Cirebon Institute of Computer pada tahun 1984. Pada tahun 1994 berdiri Akademi Perdagangan Widya Dharma (APWD) berdasarkan SK Mendikbud Nomor 085/U/O/1994. Yayasan Catur Insan Cendekia berdiri pada 13 Januari 1999, kemudian STMIK CIC memperoleh izin pendirian berdasarkan SK Mendikbud RI Nomor 123/D/O/1999 tanggal 15 Juli 1999 untuk Program Studi S1 Teknik Informatika dan D3 Manajemen Informatika. Tahun 2001 dibuka S1 Sistem Informasi dan D3 Komputerisasi Akuntansi. Tahun 2006 APWD berubah menjadi Akademi Perdagangan CIC. Tahun 2017 STMIK CIC membuka Program Studi Desain Komunikasi Visual. Tahun 2019 STMIK CIC dan AP CIC bergabung menjadi Universitas Catur Insan Cendekia berdasarkan SK Kemenristekdikti Nomor 952/KPT/I/2019."
+  },
+  {
+    "id": "pedoman_nilai_cic",
+    "category": "nilai",
+    "keywords": [
+      "commitment",
+      "integrity",
+      "caring",
+      "nilai cic",
+      "budaya cic",
+      "nilai universitas cic"
+    ],
+    "title": "Nilai Budaya CIC: Commitment, Integrity, Caring",
+    "content": "Dalam pedoman akademik, Universitas CIC memiliki nilai budaya yang dikenal dengan CIC: Commitment, Integrity, dan Caring. Commitment berarti dedikasi universitas, fakultas, dan setiap unit dalam menjalankan aktivitas serta kemampuan bertindak melebihi tuntutan pekerjaan. Integrity berarti konsistensi dan keteguhan dalam menjalankan kebijakan akademik serta kesungguhan melayani pemangku kepentingan. Caring berarti sikap bertanggung jawab dan peduli terhadap kepentingan bersama serta keberlangsungan kehidupan khalayak."
+  },
+  {
+    "id": "pedoman_visi_misi_2030",
+    "category": "visi_misi",
+    "keywords": [
+      "visi 2030",
+      "misi pedoman akademik",
+      "technopreneur",
+      "berbasis teknologi informasi",
+      "tujuan universitas cic"
+    ],
+    "title": "Visi, Misi, dan Tujuan UCIC Menurut Pedoman Akademik",
+    "content": "Visi UCIC dalam pedoman akademik adalah menjadi universitas yang unggul dan berprestasi di tingkat nasional berbasis teknologi informasi dan berjiwa technopreneur pada tahun 2030. Misinya meliputi penyelenggaraan pendidikan berbasis teknologi informasi yang bermutu dan unggul, penelitian berbasis teknologi informasi yang berkualitas, pengabdian masyarakat berbasis teknologi informasi yang bermanfaat, serta kerja sama dengan industri dan UMKM untuk mengembangkan bakat dan keterampilan technopreneur sivitas akademika. Tujuannya antara lain menghasilkan mahasiswa unggul, sistem pembelajaran bermutu, penelitian berkualitas, suasana akademik kondusif, kontribusi pengabdian masyarakat, kerja sama bermanfaat, dan sivitas akademika yang mampu mengembangkan technopreneurship."
+  },
+  {
+    "id": "pedoman_pimpinan_ucic_2020",
+    "category": "profil",
+    "keywords": [
+      "pimpinan ucic 2020",
+      "ketua yayasan",
+      "warek",
+      "dekan",
+      "kaprodi",
+      "kepala baak",
+      "kepala perpustakaan"
+    ],
+    "title": "Profil Pimpinan UCIC dalam Pedoman Akademik 2020",
+    "content": "Pedoman Akademik 2020 mencatat beberapa pimpinan UCIC saat itu: Ketua Yayasan Catur Insan Cendekia Magdalena Amperani; Rektor Dr. Chandra Lukita, MM; Warek II Bidang Keuangan Aditya Kurniawan Chandra, B.Com (Fin&Acc). M.M; Ketua Badan Pengendalian Mutu Sudadi Pranata, SE., M.Si; Dekan FEB Ingrid Panjaitan, SE., M.Sc., Ak., CA; Kaprodi Akuntansi Dewi Anggun Puspitarini, SE., M.Ak; Kaprodi Manajemen Isti Riana Dewi, SE., MM; Kaprodi Manajemen Bisnis Sitta Nur Hajjiah, S.Ab., M.Si; Dekan Fakultas Teknologi dan Informatika Marsani Asfi., M.Si; Kaprodi Teknik Informatika Kusnadi., M.Kom; Kaprodi Sistem Informasi Rifqi Fahruddin, M.Kom; Kaprodi DKV Ine Rahmawati, M.Sn; Ketua Program Manajemen Informatika Chairun Naas, M.Kom; Ketua Program Studi Komputer Akuntansi Suwandi, SE., MM; Kepala Pusdatin Muh. Hatta, M.Kom; Kepala Bidang Kemahasiswaan Amroni, SE., MM; Ketua LPPM Lena Magdalena, M.MSI; Kepala BAAK Febryan Ervan, S.Kom; Kepala HRD dan GA Kristian Cahyo Kurnia, S.Psi; Kepala Perpustakaan Muthia Fariza, M.M. Data ini berasal dari pedoman lama sehingga posisi terbaru perlu dikonfirmasi ke kampus."
+  },
+  {
+    "id": "pedoman_pmb_layanan_jam",
+    "category": "pendaftaran",
+    "keywords": [
+      "pmb pedoman",
+      "jam pmb",
+      "lokasi pmb",
+      "gedung pmb",
+      "kunjungan sekolah",
+      "pameran"
+    ],
+    "title": "Layanan dan Jam Operasional PMB UCIC dalam Pedoman",
+    "content": "Dalam Pedoman Akademik UCIC, PMB atau Penerimaan Mahasiswa Baru berada di gedung depan gedung Farmasi. Jam layanan PMB tercatat Senin-Jumat pukul 09.00-18.30 WIB dan Sabtu pukul 09.00-17.00 WIB. Layanan PMB meliputi informasi cara pendaftaran mahasiswa baru serta informasi kunjungan ke sekolah dan pameran."
+  },
+  {
+    "id": "pedoman_pmb_usm_dokumen",
+    "category": "pendaftaran",
+    "keywords": [
+      "ujian saringan masuk",
+      "usm",
+      "syarat pmb",
+      "dokumen pmb",
+      "ijazah",
+      "skhun",
+      "rapor di atas 7.5",
+      "biodata my cic"
+    ],
+    "title": "Seleksi PMB, USM, dan Dokumen Akademik Calon Mahasiswa",
+    "content": "Menurut pedoman akademik, UCIC menyelenggarakan seleksi mahasiswa baru pada semester ganjil dan genap. Calon mahasiswa wajib membayar biaya pendaftaran sesuai ketentuan. Calon mahasiswa dengan rata-rata rapor di atas 7,5 tidak perlu mengikuti Ujian Saringan Masuk (USM). S1 Akuntansi, S1 Manajemen, dan D3 Manajemen Bisnis menerima SMA/SMK/MA sederajat semua jurusan dengan materi USM IPS Terpadu. S1 Teknik Informatika, S1 Sistem Informasi, S1 DKV, D3 Manajemen Informasi, dan D3 Komputer Akuntansi menerima SMA/MA IPA atau SMK Teknik dengan materi USM IPA Terpadu. Dokumen administrasi akademik meliputi fotokopi ijazah/STTB terakhir dilegalisir 1 lembar dengan menunjukkan ijazah asli, fotokopi transkrip/SKHUN/STK 1 lembar, fotokopi akta kelahiran/surat kenal lahir/KTP 1 lembar, dan pas foto warna 3x4 sebanyak 3 lembar. Biodata My CIC yang wajib lengkap mencakup nama, NIK, RT/RW, kelurahan, kode pos, kecamatan, tempat dan tanggal lahir, kewarganegaraan, agama, dan nama ibu kandung."
+  },
+  {
+    "id": "pedoman_career_center",
+    "category": "karir",
+    "keywords": [
+      "career center",
+      "pusat karir",
+      "bursa kerja",
+      "pelatihan kerja",
+      "tracer study",
+      "alumni kerja"
+    ],
+    "title": "Career Center UCIC",
+    "content": "Career Center UCIC menjadi pusat pelayanan informasi bursa kerja dan pusat pelatihan bagi mahasiswa yang akan memasuki dunia kerja. Dalam pedoman akademik, setiap mahasiswa wajib mengikuti 2 pelatihan. Career Center juga melaksanakan tracer study yang diikuti oleh mahasiswa yang telah lulus untuk mengetahui penyerapan lulusan, proses lulusan memasuki dunia kerja, dan posisi lulusan dalam dunia kerja."
+  },
+  {
+    "id": "pedoman_perpustakaan_jam_keanggotaan",
+    "category": "fasilitas",
+    "keywords": [
+      "perpustakaan",
+      "jam perpustakaan",
+      "anggota perpustakaan",
+      "aktivasi perpustakaan",
+      "kartu anggota",
+      "kartu mahasiswa"
+    ],
+    "title": "Perpustakaan UCIC: Lokasi, Jam, dan Keanggotaan",
+    "content": "Perpustakaan UCIC berada di lantai 2. Jam operasional dalam masa aktif adalah Senin-Jumat pukul 09.00-19.00 WIB dan Sabtu pukul 09.00-17.00 WIB. Pada periode libur semester, jam layanan Senin-Jumat pukul 09.00-17.00 WIB. Anggota perpustakaan adalah dosen, karyawan, dan mahasiswa UCIC yang terdaftar. Mahasiswa menjadi anggota dengan menunjukkan kartu mahasiswa yang masih berlaku dan mengisi formulir aktivasi keanggotaan. Proses aktivasi maksimal 1 x 24 jam. Kartu mahasiswa yang sudah diaktifkan menjadi kartu anggota perpustakaan. Dosen/pegawai menggunakan kartu pegawai, SK pengangkatan, atau identitas kepegawaian, mengisi formulir, dan menyerahkan foto 2x3. Keanggotaan tidak dikenakan biaya, tetapi kartu hilang dikenakan biaya pembuatan ulang sesuai ketentuan pedoman."
+  },
+  {
+    "id": "pedoman_perpustakaan_fasilitas_aturan",
+    "category": "fasilitas",
+    "keywords": [
+      "fasilitas perpustakaan",
+      "opac",
+      "e-journal",
+      "ebsco",
+      "proquest",
+      "gale cengage",
+      "aturan perpustakaan",
+      "katalog pustaka"
+    ],
+    "title": "Fasilitas dan Aturan Perpustakaan UCIC",
+    "content": "Fasilitas perpustakaan UCIC meliputi kartu anggota, loker atau tempat penyimpanan tas, peminjaman bahan pustaka khusus anggota, akses internet/wifi, OPAC, public computer, e-journals seperti EBSCO, Proquest, dan Gale Cengage, ruang baca, dan ruang diskusi. Pengguna wajib mengisi buku pengunjung, mengisi daftar pengguna komputer jika memakai komputer, tidak membawa tas dan jaket ke ruang perpustakaan, menjaga ketenangan, tidak membawa makanan, tidak merokok, tidak merusak atau mengotori koleksi, dan tidak membawa keluar koleksi tanpa prosedur. Koleksi dapat dicari langsung di rak, melalui katalog perpustakaan di https://pustaka.cic.ac.id/, atau dengan bantuan staf perpustakaan."
+  },
+  {
+    "id": "pedoman_perpustakaan_peminjaman_bebas_pustaka",
+    "category": "fasilitas",
+    "keywords": [
+      "pinjam buku",
+      "peminjaman perpustakaan",
+      "bebas pustaka",
+      "surat bebas pustaka",
+      "denda perpustakaan",
+      "skripsi perpustakaan",
+      "cd skripsi"
+    ],
+    "title": "Peminjaman Buku, Bebas Pustaka, dan Sanksi Perpustakaan",
+    "content": "Aturan peminjaman perpustakaan UCIC: mahasiswa dapat meminjam maksimal 2 buku berbeda selama 7 hari dan dapat diperpanjang 1 kali; karyawan dapat meminjam buku dengan masa pinjam 7 hari; dosen dapat meminjam maksimal 3 buku berbeda selama 7 hari dan dapat diperpanjang 2 kali. Surat bebas pustaka menjadi salah satu persyaratan sidang komprehensif. Syaratnya meliputi menunjukkan KTM, menyerahkan surat keterangan dari prodi, surat lunas pembayaran dari BAU dan bukti pembayaran sumbangan perpustakaan, menyerahkan skripsi/tesis yang sudah dijilid dan ditandatangani pembimbing/penguji dengan surat bebas plagiat, menyerahkan jurnal dengan keterangan bebas plagiat, serta menyerahkan CD berisi skripsi/tesis dan jurnal dalam format PDF. Pengambilan surat bebas pustaka dilakukan sendiri dan tidak dapat diwakilkan. Buku rusak atau hilang wajib diganti dengan buku sama atau ganti rugi 2 kali harga buku. Keterlambatan pengembalian dikenakan denda Rp2.000 per hari per buku dan dapat berdampak pada penundaan KHS atau ijazah."
+  },
+  {
+    "id": "pedoman_fasilitas_ict_laboratorium",
+    "category": "fasilitas",
+    "keywords": [
+      "ict",
+      "pusdatin",
+      "laboratorium komputer",
+      "lab komputer",
+      "internet kampus",
+      "fasilitas komputer",
+      "usb",
+      "virus"
+    ],
+    "title": "Fasilitas ICT dan Laboratorium UCIC",
+    "content": "Fasilitas ICT UCIC digunakan untuk mendukung proses belajar mengajar. Mahasiswa wajib menjaga fasilitas komputer di laboratorium komputer dan perpustakaan. Laboratorium komputer dikhususkan untuk proses perkuliahan; penggunaan komputer di luar jam kuliah dapat dilakukan di ruang perpustakaan dengan jumlah terbatas. Mahasiswa dilarang menggunakan komputer untuk game atau hal yang tidak berkaitan dengan proses belajar mengajar, dilarang menggunakan file/USB/CD/email/website yang berpotensi membawa virus atau spyware, dan tidak diperkenankan menyimpan data di komputer kampus. Mahasiswa harus membawa media penyimpanan sendiri. Pusdatin dapat membatasi penggunaan komputer dan internet untuk menjaga keamanan dan kelancaran layanan. Mahasiswa bertanggung jawab atas kehilangan atau kerusakan fasilitas akibat kelalaian pemakaian."
+  },
+  {
+    "id": "pedoman_fasilitas_parkir_ibadah",
+    "category": "fasilitas",
+    "keywords": [
+      "parkir",
+      "jam parkir",
+      "mushola",
+      "ibadah",
+      "tempat ibadah",
+      "fasilitas ibadah"
+    ],
+    "title": "Fasilitas Parkir dan Ibadah UCIC",
+    "content": "Mahasiswa wajib mematuhi peraturan parkir UCIC dan memarkir kendaraan dengan rapi tanpa mengganggu kendaraan lain. Pengelola parkir tidak bertanggung jawab atas kehilangan atau kerusakan akibat kesalahan atau kelalaian pemilik kendaraan. Parkir mobil dan motor disediakan di pelataran parkir samping dan depan gedung, sedangkan halaman parkir depan gedung diperuntukkan bagi staf dan tamu. Jam operasional parkir dalam pedoman: Senin-Jumat pukul 07.00-22.00 WIB dan Sabtu pukul 07.00-21.00 WIB. Untuk ibadah, mahasiswa Muslim dapat menggunakan mushola di bagian belakang gedung Universitas CIC dan wajib menjaga kebersihan serta ketertiban. Mahasiswa beragama Nasrani, Hindu, dan Budha dapat mengajukan ruangan tempat peribadatan."
+  },
+  {
+    "id": "pedoman_baak_tugas_layanan",
+    "category": "akademik",
+    "keywords": [
+      "tugas baak",
+      "layanan baak",
+      "administrasi akademik",
+      "pddikti",
+      "feeder",
+      "kopertis",
+      "surat masih kuliah",
+      "kerja praktik"
+    ],
+    "title": "Tugas dan Layanan BAAK UCIC",
+    "content": "BAAK atau Biro Administrasi Akademik dan Kemahasiswaan melayani kebutuhan mahasiswa terkait administrasi akademik. Tugas BAAK meliputi perencanaan dan pengelolaan berkas data kemahasiswaan sejak penerimaan mahasiswa baru, proses belajar mengajar, penyetaraan mahasiswa lanjutan, KRS, KHS, UTS, UAS, sampai kegiatan akhir studi seperti transkrip. BAAK juga membantu penyusunan kalender akademik, daftar pengawas ujian, pengumpulan soal, pengaturan ruang, penyiapan berkas UTS/UAS/ujian susulan, pengiriman dan pengembalian berkas ujian, serta koordinasi dengan fakultas. BAAK melakukan pelaporan akademik ke Kopertis/Dikti melalui FEEDER/PDDIKTI secara periodik dan memberikan layanan administrasi seperti surat keterangan masih kuliah, surat usulan kerja praktik, surat tugas mengajar, serta pengarsipan administrasi kemahasiswaan dan alumni."
+  },
+  {
+    "id": "pedoman_sekretariat_perkuliahan_bau",
+    "category": "akademik",
+    "keywords": [
+      "sekretariat perkuliahan",
+      "bau",
+      "biro administrasi umum",
+      "jadwal pembayaran",
+      "jumlah pembayaran",
+      "rekening kampus",
+      "keuangan kampus"
+    ],
+    "title": "Sekretariat Perkuliahan dan BAU",
+    "content": "Sekretariat Perkuliahan memberikan pelayanan kebutuhan perkuliahan sesuai jadwal perkuliahan. BAU atau Biro Administrasi Umum melayani kebutuhan mahasiswa terkait keuangan, seperti jadwal pembayaran, jumlah pembayaran, rekening pembayaran, dan hal-hal lain yang berhubungan dengan administrasi keuangan kampus."
+  },
+  {
+    "id": "pedoman_ukm_organisasi_mahasiswa",
+    "category": "kegiatan",
+    "keywords": [
+      "organisasi mahasiswa",
+      "ukm pedoman",
+      "hmp",
+      "sekber",
+      "himpunan mahasiswa",
+      "ukm musik",
+      "ukm olahraga",
+      "kewirausahaan"
+    ],
+    "title": "Organisasi Mahasiswa, UKM, SEKBER, dan HMP UCIC",
+    "content": "Organisasi kemahasiswaan UCIC menjadi wahana pengembangan diri mahasiswa untuk memperluas wawasan, meningkatkan keilmuan, dan membangun integritas kepribadian. Organisasi kemahasiswaan ada di tingkat universitas, fakultas, dan program studi. UKM tingkat universitas yang tercantum dalam pedoman meliputi UKM Musik dan PSM, UKM Olahraga seperti futsal, karate, sepakbola, dan basket, UKM CFM, UKM Kewirausahaan, serta Himpunan Program Studi. SEKBER adalah organisasi kemahasiswaan tingkat universitas yang beranggotakan pengurus HMP dan bertugas mengoordinasikan kegiatan HMP, terutama kegiatan penalaran dan keilmuan. HMP adalah organisasi tingkat program studi yang menyelenggarakan kegiatan kokurikuler sesuai bidang keilmuan masing-masing."
+  },
+  {
+    "id": "pedoman_sanksi_etika_akademik",
+    "category": "akademik",
+    "keywords": [
+      "sanksi etika",
+      "pelanggaran etika",
+      "kecurangan ujian",
+      "absen palsu",
+      "pelecehan seksual",
+      "memakai sandal",
+      "politik praktis"
+    ],
+    "title": "Sanksi Pelanggaran Etika dan Akademik",
+    "content": "Pelanggaran etika seperti tidak menjaga kebersihan dan ketertiban, merokok, berbicara tidak sopan, berbusana tidak rapi, mengganggu pembelajaran, tinggal di kampus seperti indekos, melakukan kegiatan politik praktis, memakai sandal jepit, atau membawa hewan ke kampus dapat dikenai teguran dan surat peringatan. Kecurangan dalam ujian dapat menyebabkan mata kuliah yang diujikan digugurkan dan berkas ujian tidak sampai ke dosen, dengan sanksi hingga skorsing 2 semester. Kecurangan perkuliahan seperti mengabsen atau diabsenkan orang lain dapat dikenai sanksi hingga skorsing 1 semester. Perbuatan pelecehan seksual dan perbuatan tercela dapat dikenai skorsing 1 sampai 2 semester."
+  },
+  {
+    "id": "pedoman_sanksi_kriminal_berat",
+    "category": "akademik",
+    "keywords": [
+      "sanksi kriminal",
+      "senjata",
+      "kekerasan",
+      "pencurian",
+      "perjudian",
+      "tawuran",
+      "plagiat",
+      "narkoba",
+      "diberhentikan"
+    ],
+    "title": "Sanksi Pelanggaran Berat dan Tindak Kriminal",
+    "content": "Pelanggaran berat seperti membawa atau menggunakan senjata, bahan peledak, atau barang sejenis dapat dipanggil komisi disiplin, diberi peringatan/pengarahan, barang diserahkan ke kepolisian, serta dapat diskors atau diberhentikan oleh Rektor. Ancaman atau kekerasan fisik terhadap dosen, karyawan, atau mahasiswa dapat dikenai skorsing 1-2 semester hingga dikeluarkan. Merampas, memeras, merusak, atau mencuri milik orang lain atau milik UCIC dapat diwajibkan mengganti rugi, orang tua diberitahu, diserahkan ke kepolisian, dan dikenai skorsing atau pemberhentian. Perjudian, mabuk-mabukan, tawuran, hasutan, atau penyebaran informasi yang merugikan nama baik dapat dikenai skorsing. Memalsukan karya ujian, plagiat, manipulasi nilai, atau pelanggaran akademik berat dapat dikenai skorsing hingga dikeluarkan. Penyalahgunaan narkotika/psikotropika/zat adiktif, perbuatan asusila, atau perkelahian yang menyebabkan luka berat/kematian dapat menyebabkan mahasiswa diberhentikan."
+  },
+  {
+    "id": "pedoman_mou_kerja_sama",
+    "category": "profil",
+    "keywords": [
+      "mou",
+      "kerja sama",
+      "mitra ucic",
+      "acharya",
+      "nitte",
+      "sathyabama",
+      "srm",
+      "propan",
+      "about cirebon",
+      "smk"
+    ],
+    "title": "Kerja Sama dan MoU UCIC dalam Pedoman Akademik",
+    "content": "UCIC menjalin kerja sama dengan institusi pendidikan dalam dan luar negeri, perusahaan, serta lembaga negara untuk meningkatkan kompetensi mahasiswa dan mendukung praktik kerja lapangan. Mitra MoU yang tercantum dalam pedoman antara lain Acharya Institutes, Nitte Meenakshi Institute of Technology India, Sathyabama Institute of Science and Technology, SRM Institute of Science and Technology, Universitas Raharja, Universitas Al Azhar Medan, The Cultural Exchange and International Education Foundation, About Cirebon, PT Propan Raya ICC Cirebon, SMA Putra Nirmala, SMK Al-Hidayah Kota Cirebon, SMK Manba'ul Ulum, SMK Presiden Kota Cirebon, SMAN 4 Cirebon, SMKN 2 Cirebon, SMAN 6 Cirebon, SMAN 1 Palimanan, SMKN 1 Leuwi Munding, SMKN 1 Kadipaten, MA Putri PUI Majalengka, dan UMKM Kecap Merk Damai Purwokerto."
+  },
+  {
+    "id": "sarpras_pendahuluan_ruang_lingkup",
+    "category": "fasilitas",
+    "keywords": [
+      "sarpras",
+      "sarana prasarana",
+      "ruang lingkup fasilitas",
+      "evaluasi fasilitas",
+      "kondisi fasilitas",
+      "pengembangan fasilitas"
+    ],
+    "title": "Ruang Lingkup Sarana dan Prasarana UCIC",
+    "content": "Sarana dan prasarana menjadi faktor penting untuk menunjang keberhasilan proses pendidikan di UCIC. Ketersediaan fasilitas yang memadai mendukung kualitas pembelajaran dan kenyamanan civitas akademika. Data sarpras digunakan untuk mengetahui kondisi fasilitas, mengevaluasi kelayakan fasilitas, dan menjadi dasar pengambilan keputusan pengembangan. Ruang lingkup sarpras mencakup ruang kelas, laboratorium, perpustakaan, fasilitas IT seperti WiFi dan server, serta fasilitas umum lainnya."
+  },
+  {
+    "id": "sarpras_kampus_1_ringkasan",
+    "category": "fasilitas",
+    "keywords": [
+      "kampus 1 fasilitas",
+      "fasilitas kampus 1",
+      "ruang kelas kampus 1",
+      "auditorium kampus 1",
+      "perpustakaan kampus 1",
+      "inkubator",
+      "baak kampus 1"
+    ],
+    "title": "Fasilitas Kampus 1 UCIC",
+    "content": "Kampus 1 UCIC menyediakan sarana dan prasarana untuk kegiatan akademik dan non-akademik. Fasilitasnya meliputi 9 ruang kelas ber-AC, 1 auditorium berkapasitas sekitar 120 orang, 1 perpustakaan, 1 ruang Inkubator Center, 1 ruang Inkubator Bisnis, 1 ruang Unit Kesehatan, 1 ruang konsultasi mahasiswa, 3 ruang dosen, 1 ruang BAAK, 1 ruang keuangan, toilet pria dan wanita, mushola, area parkir luas, serta 18 titik CCTV yang beroperasi 24 jam."
+  },
+  {
+    "id": "sarpras_kampus_1_mahasiswa_lab",
+    "category": "fasilitas",
+    "keywords": [
+      "kantin kampus 1",
+      "student business corner",
+      "sbc",
+      "ruang podcast",
+      "lab komputer kampus 1",
+      "laboratorium komputer kampus 1",
+      "25 pc"
+    ],
+    "title": "Fasilitas Penunjang Mahasiswa dan Laboratorium Kampus 1",
+    "content": "Kampus 1 UCIC memiliki area terbuka yang dimanfaatkan sebagai kantin mahasiswa sekaligus Student Business Corner (SBC) untuk mendukung kegiatan kewirausahaan mahasiswa. Fasilitas multimedia dan laboratorium di Kampus 1 meliputi 1 ruang podcast dan 1 laboratorium komputer dengan kapasitas 25 unit PC."
+  },
+  {
+    "id": "sarpras_kampus_2_ringkasan",
+    "category": "fasilitas",
+    "keywords": [
+      "kampus 2 fasilitas",
+      "fasilitas kampus 2",
+      "kelas modern",
+      "smart tv",
+      "full kaca",
+      "cctv kampus 2",
+      "mushola kampus 2"
+    ],
+    "title": "Fasilitas Kampus 2 UCIC",
+    "content": "Kampus 2 UCIC dirancang dengan konsep modern dan berbasis teknologi untuk mendukung pembelajaran interaktif dan inovatif. Fasilitasnya meliputi 5 ruang kelas modern berdesain full kaca yang dilengkapi Smart TV, 2 toilet pria, 2 toilet wanita, 2 mushola, serta 18 titik CCTV yang beroperasi sekitar 24 jam untuk keamanan lingkungan kampus."
+  },
+  {
+    "id": "sarpras_kampus_2_convention_hall",
+    "category": "fasilitas",
+    "keywords": [
+      "convention hall",
+      "hall kampus 2",
+      "videotron",
+      "seminar",
+      "workshop",
+      "kapasitas 350",
+      "acara besar"
+    ],
+    "title": "Convention Hall Kampus 2 UCIC",
+    "content": "Kampus 2 UCIC memiliki 1 ruang convention hall dengan kapasitas sekitar 350 orang. Convention hall dilengkapi 1 videotron berkualitas tinggi dan 2 unit Smart TV. Fasilitas ini digunakan untuk kegiatan seminar, workshop, dan acara besar lainnya."
+  },
+  {
+    "id": "sarpras_kampus_2_ruang_fungsional_lab_ai",
+    "category": "fasilitas",
+    "keywords": [
+      "lab ai",
+      "laboratorium ai",
+      "lab komputer ai",
+      "ruang marketing",
+      "ruang pameran",
+      "journey ucic",
+      "16 pc",
+      "10 pc"
+    ],
+    "title": "Ruang Fungsional dan Laboratorium AI Kampus 2",
+    "content": "Kampus 2 UCIC memiliki 1 ruang marketing yang berfungsi sebagai pusat konsultasi serta 1 ruang pameran karya dan perjalanan atau journey UCIC. Fasilitas laboratorium komputer berbasis AI terdiri dari 1 laboratorium komputer berkapasitas 16 PC yang mendukung teknologi Artificial Intelligence dan 1 laboratorium tambahan berkapasitas 10 PC yang juga mendukung teknologi AI."
+  },
+  {
+    "id": "sarpras_wifi_6_jaringan",
+    "category": "fasilitas",
+    "keywords": [
+      "wifi",
+      "wifi 6",
+      "802.11ax",
+      "internet kampus",
+      "jaringan kampus",
+      "bandwidth",
+      "pembelajaran digital",
+      "server"
+    ],
+    "title": "Fasilitas Jaringan dan WiFi 6 UCIC",
+    "content": "Untuk mendukung pembelajaran digital dan aktivitas administrasi, Kampus 1 dan Kampus 2 UCIC telah dilengkapi jaringan internet nirkabel atau WiFi yang mendukung teknologi WiFi 6 (802.11ax). Dukungan WiFi 6 memungkinkan akses internet lebih cepat, koneksi lebih stabil untuk banyak pengguna secara bersamaan, efisiensi penggunaan bandwidth, serta dukungan optimal untuk pembelajaran digital, streaming, penelitian, sistem informasi kampus, dan administrasi."
+  },
+  {
+    "id": "faq_perpustakaan_pengertian_pengguna",
+    "category": "fasilitas",
+    "keywords": [
+      "apa itu perpustakaan ucic",
+      "perpustakaan ucic",
+      "pengguna perpustakaan",
+      "siapa saja boleh ke perpustakaan",
+      "mahasiswa dosen tenaga kependidikan",
+      "perpustakaan mitra"
+    ],
+    "title": "FAQ Perpustakaan UCIC: Pengertian dan Pengguna",
+    "content": "Perpustakaan UCIC adalah fasilitas akademik yang menyediakan sumber informasi seperti buku, jurnal, dan layanan literasi untuk mendukung kegiatan belajar, penelitian, dan pengembangan pengetahuan sivitas akademika. Layanan perpustakaan dapat digunakan oleh mahasiswa, dosen, dan tenaga kependidikan di lingkungan UCIC. Perpustakaan mitra yang telah bekerja sama dengan Perpustakaan UCIC juga dapat mengakses layanan dengan ketentuan tertentu."
+  },
+  {
+    "id": "faq_perpustakaan_keanggotaan_layanan",
+    "category": "fasilitas",
+    "keywords": [
+      "anggota perpustakaan",
+      "cara jadi anggota perpustakaan",
+      "kartu mahasiswa perpustakaan",
+      "layanan perpustakaan",
+      "antar buku dosen",
+      "repository",
+      "e-library"
+    ],
+    "title": "FAQ Perpustakaan UCIC: Keanggotaan dan Layanan",
+    "content": "Mahasiswa UCIC secara otomatis terdaftar sebagai anggota perpustakaan. Kartu Mahasiswa dapat digunakan untuk mengakses layanan peminjaman. Layanan yang tersedia di Perpustakaan UCIC meliputi peminjaman dan pengembalian buku, layanan repository dan e-library, serta layanan antar buku khusus dosen."
+  },
+  {
+    "id": "faq_perpustakaan_peminjaman_denda",
+    "category": "fasilitas",
+    "keywords": [
+      "masa pinjam buku",
+      "pinjam buku berapa lama",
+      "perpanjang peminjaman",
+      "denda telat buku",
+      "denda perpustakaan",
+      "rp 2000"
+    ],
+    "title": "FAQ Perpustakaan UCIC: Peminjaman dan Denda",
+    "content": "Masa peminjaman buku di Perpustakaan UCIC umumnya 7-14 hari, tergantung jenis koleksi. Peminjaman dapat diperpanjang sesuai ketentuan yang berlaku. Jika pengguna terlambat mengembalikan buku, denda yang berlaku adalah Rp2.000 per hari per buku."
+  },
+  {
+    "id": "faq_perpustakaan_layanan_digital",
+    "category": "fasilitas",
+    "keywords": [
+      "layanan digital perpustakaan",
+      "e catalogue",
+      "e-catalogue",
+      "e library",
+      "e-library",
+      "repository institusi",
+      "pustaka cic",
+      "ucic library",
+      "ebook cic"
+    ],
+    "title": "FAQ Perpustakaan UCIC: Layanan Digital",
+    "content": "Perpustakaan UCIC menyediakan layanan digital berupa e-catalogue di https://pustaka.cic.ac.id/, e-library di https://uciclibrary.perpustakaan.co.id/home.ks, dan repository institusi di https://ebook.cic.ac.id/home/daftar. Perpustakaan juga menyediakan akses internet/WiFi untuk mendukung kegiatan belajar."
+  },
+  {
+    "id": "faq_perpustakaan_akses_repository",
+    "category": "fasilitas",
+    "keywords": [
+      "akses repository ucic",
+      "cara buka repository",
+      "repository my cic",
+      "menu e-book",
+      "skripsi repository",
+      "jurnal repository",
+      "karya ilmiah"
+    ],
+    "title": "FAQ Perpustakaan UCIC: Cara Mengakses Repository",
+    "content": "Repository UCIC dapat diakses khusus oleh mahasiswa dan dosen UCIC melalui portal My CIC, lalu memilih menu E-book. Repository digunakan untuk mencari skripsi, jurnal, dan karya ilmiah lainnya. Contoh akses dari Portal Dosen yang tercantum dalam FAQ adalah https://dosen.cic.ac.id/portal/dosen/?mod=dosen&act=repositori."
+  },
+  {
+    "id": "faq_perpustakaan_ai_etika",
+    "category": "fasilitas",
+    "keywords": [
+      "ai di perpustakaan",
+      "boleh pakai ai",
+      "etika akademik",
+      "plagiarisme",
+      "cantumkan sumber",
+      "bantuan tugas"
+    ],
+    "title": "FAQ Perpustakaan UCIC: Penggunaan AI",
+    "content": "Pengguna boleh menggunakan AI untuk membantu tugas di perpustakaan, tetapi harus digunakan secara bijak dan sesuai etika akademik. Pengguna tetap wajib mencantumkan sumber dan tidak boleh melakukan plagiarisme."
+  },
+  {
+    "id": "faq_perpustakaan_jam_kontak",
+    "category": "kontak",
+    "keywords": [
+      "jam perpustakaan terbaru",
+      "kontak perpustakaan",
+      "email perpustakaan",
+      "instagram perpustakaan",
+      "perpustakaan@cic.ac.id",
+      "@perpustakaan_ucic",
+      "lokasi perpustakaan"
+    ],
+    "title": "FAQ Perpustakaan UCIC: Jam Layanan dan Kontak",
+    "content": "Jam layanan Perpustakaan UCIC mengikuti kebijakan kampus; contoh jam yang tercantum dalam FAQ adalah Senin-Jumat pukul 08.00-16.00 WIB. Informasi terbaru dapat dilihat di media resmi perpustakaan. Perpustakaan dapat dihubungi melalui email perpustakaan@cic.ac.id, Instagram @perpustakaan_ucic, atau datang langsung ke lokasi Perpustakaan UCIC di Jl. Kesambi No. 202, Kota Cirebon."
   }
 ]
