@@ -1233,8 +1233,8 @@ export default function VoiceUI({
           </div>
         </div>
 
-        {/* Chat bubbles — desktop only */}
-        <div className="absolute top-0 right-0 bottom-28 w-[340px] hidden md:flex flex-col justify-end pr-8 pb-6 pt-4 pointer-events-auto z-10 transition-colors overflow-hidden">
+        {/* Chat bubbles — landscape/wide mode only */}
+        <div className="absolute top-0 right-0 bottom-28 w-[340px] hidden md:flex [@media(orientation:portrait)]:hidden flex-col justify-end pr-8 pb-6 pt-4 pointer-events-auto z-10 transition-colors overflow-hidden">
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center gap-2 pb-4 opacity-50">
               <IconSparkle />
@@ -1272,7 +1272,7 @@ export default function VoiceUI({
         {!isAtBottom && messages.length > 0 && (
           <button
             onClick={scrollToBottom}
-            className="absolute bottom-40 right-[155px] z-30 w-8 h-8 rounded-full hidden md:flex
+            className="absolute bottom-40 right-[155px] z-30 w-8 h-8 rounded-full hidden md:flex [@media(orientation:portrait)]:hidden
               bg-white/90 dark:bg-slate-800/90 border border-gray-200/70 dark:border-white/10
               shadow-lg items-center justify-center text-gray-500 dark:text-gray-300
               hover:bg-white dark:hover:bg-slate-700 active:scale-95 transition-all duration-150 animate-fade-in"
@@ -1285,13 +1285,11 @@ export default function VoiceUI({
 
         {/* Bottom content for speak mode */}
         <div className="flex flex-col items-center gap-3 pb-8 pt-2 px-4 relative z-20 pointer-events-auto">
-          <div className="w-full max-w-sm md:hidden">
+          <div className="w-full max-w-sm md:hidden [@media(orientation:portrait)]:block">
             {/* Portrait mode: Show LiveCaption when SELA is speaking */}
             {avatarState === "speaking" && latestMsg?.role === "assistant" && (
               <LiveCaption
-                role={latestMsg.role}
                 text={latestMsg.text}
-                lang={lang}
                 isLoading={false}
                 avatarState={avatarState}
               />
@@ -1307,6 +1305,7 @@ export default function VoiceUI({
                   role={latestMsg.role}
                   text={latestMsg.text}
                   lang={lang}
+                  qrVisibleMs={20000}
                   isNew={
                     latestMsg.role === "assistant" &&
                     latestMsg.id === latestSelaId

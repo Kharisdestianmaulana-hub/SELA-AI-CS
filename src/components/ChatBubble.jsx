@@ -54,8 +54,9 @@ function splitTextByLinks(text = '') {
   return parts
 }
 
-function QrLinkCard({ url }) {
+function QrLinkCard({ url, visibleMs = null }) {
   const [qrSrc, setQrSrc] = useState('')
+  const [isVisible, setIsVisible] = useState(true)
 
   useEffect(() => {
     let active = true
@@ -78,6 +79,20 @@ function QrLinkCard({ url }) {
     }
   }, [url])
 
+  useEffect(() => {
+    setIsVisible(true)
+
+    if (!visibleMs) return undefined
+
+    const timeout = setTimeout(() => {
+      setIsVisible(false)
+    }, visibleMs)
+
+    return () => clearTimeout(timeout)
+  }, [url, visibleMs])
+
+  if (!isVisible) return null
+
   return (
     <span className="my-2 flex w-fit max-w-full flex-col items-center gap-1 rounded-xl border border-gray-200/80 bg-white p-2 shadow-sm dark:border-white/10 dark:bg-slate-900/80">
       {qrSrc ? (
@@ -99,7 +114,7 @@ function QrLinkCard({ url }) {
   )
 }
 
-function ChatContent({ text }) {
+function ChatContent({ text, qrVisibleMs = null }) {
   const parts = splitTextByLinks(text)
 
   if (!parts.some(part => part.type === 'qr')) return normalizeSelaAliases(text)
@@ -108,7 +123,7 @@ function ChatContent({ text }) {
     <span className="whitespace-pre-wrap break-words">
       {parts.map((part, index) => (
         part.type === 'qr' ? (
-          <QrLinkCard key={`${part.value}-${index}`} url={part.value} />
+          <QrLinkCard key={`${part.value}-${index}`} url={part.value} visibleMs={qrVisibleMs} />
         ) : (
           <span key={`${part.value}-${index}`}>{normalizeSelaAliases(part.value)}</span>
         )
@@ -117,7 +132,7 @@ function ChatContent({ text }) {
   )
 }
 
-export default function ChatBubble({ role, text, lang = 'id', isLoading = false, isNew = false }) {
+export default function ChatBubble({ role, text, lang = 'id', isLoading = false, isNew = false, qrVisibleMs = null }) {
   const isUser = role === 'user'
   const [displayed, setDisplayed] = useState(isNew ? '' : text)
   const intervalRef = useRef(null)
@@ -159,7 +174,7 @@ export default function ChatBubble({ role, text, lang = 'id', isLoading = false,
             <span className="w-2 h-2 rounded-full bg-gray-400 dark:bg-gray-500 animate-bounce" />
           </span>
         ) : (
-          <ChatContent text={displayed} />
+          <ChatContent text={displayed} qrVisibleMs={qrVisibleMs} />
         )}
       </div>
     </div>
