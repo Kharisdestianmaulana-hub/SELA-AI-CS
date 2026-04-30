@@ -25,6 +25,38 @@ const ragDataset = dataset.filter(
     !EXCLUDED_RAG_IDS.has(item.id),
 );
 
+const DATASET_CATEGORY_ALIASES = {
+  akademik: [
+    "akademik",
+    "baak",
+    "krs",
+    "khs",
+    "sks",
+    "uts",
+    "uas",
+    "sidang",
+    "skripsi",
+    "wisuda",
+    "yudisium",
+    "cuti",
+    "nilai",
+    "absensi",
+    "kehadiran",
+    "hadir",
+    "telat",
+    "terlambat",
+    "alpa",
+    "perkuliahan",
+  ],
+  akreditasi: ["akreditasi", "ban pt", "mutu", "kualitas"],
+  karir: ["karir", "career", "alumni", "kerja", "bursa kerja"],
+  kegiatan: ["kegiatan", "ukm", "organisasi", "hmp", "ekskul", "pkkmb", "ospek"],
+  kurikulum: ["kurikulum", "mata kuliah", "semester", "matkul", "curriculum"],
+  nilai: ["nilai", "budaya", "karakter", "great", "commitment", "integrity"],
+  profil: ["profil", "sejarah", "pimpinan", "rektor", "yayasan", "ucic"],
+  visi_misi: ["visi", "misi", "tujuan", "arah", "2030"],
+};
+
 const QUERY_PHRASE_ALIASES = [
   [/\bkelas karyawan\b/g, "kelas sore rpl"],
   [/\bbiaya masuk\b/g, "biaya pendaftaran"],
@@ -37,6 +69,9 @@ const QUERY_PHRASE_ALIASES = [
   [/\be wallet\b/g, "ewallet"],
   [/\bjalur masuk\b/g, "pendaftaran pmb"],
   [/\borang tua\b/g, "wali orang tua"],
+  [/\btelat masuk kelas\b/g, "kehadiran kuliah telat alpa"],
+  [/\bterlambat masuk kelas\b/g, "kehadiran kuliah terlambat alpa"],
+  [/\bsiapa rektor\b/g, "rektor pimpinan"],
 ];
 
 const RAG_STOPWORDS = new Set([
@@ -59,6 +94,22 @@ const RAG_STOPWORDS = new Set([
   "nih",
   "sih",
   "ya",
+  "ada",
+  "aja",
+  "saja",
+  "mau",
+  "ingin",
+  "pengen",
+  "boleh",
+  "bisa",
+  "ga",
+  "gak",
+  "nggak",
+  "tidak",
+  "kalo",
+  "kalau",
+  "mana",
+  "kah",
   "min",
   "admin",
   "sela",
@@ -69,9 +120,18 @@ const RAG_STOPWORDS = new Set([
   "cendekia",
   "ucic",
   "cic",
+  "cirebon",
   "gimana",
   "bagaimana",
+  "berapa",
+  "kapan",
   "gmn",
+  "cara",
+  "info",
+  "informasi",
+  "jelaskan",
+  "minta",
+  "tolong",
   "eh",
   "sila",
   "anu",
@@ -118,9 +178,45 @@ const RAG_SYNONYMS = {
   fasilitas: ["sarana", "lab", "laboratorium", "perpustakaan", "facility"],
   fakultas: ["jurusan", "prodi", "program", "studi", "major"],
   jurusan: ["fakultas", "prodi", "program", "studi", "major"],
+  akademik: [
+    "baak",
+    "krs",
+    "khs",
+    "sks",
+    "uts",
+    "uas",
+    "ujian",
+    "sidang",
+    "skripsi",
+    "wisuda",
+    "yudisium",
+    "cuti",
+    "nilai",
+    "absensi",
+    "kehadiran",
+    "hadir",
+    "telat",
+    "terlambat",
+    "alpa",
+    "perkuliahan",
+  ],
+  akreditasi: ["mutu", "kualitas", "ban pt", "ban-pt"],
+  karir: ["career", "alumni", "kerja", "bursa kerja", "tracer study"],
+  kegiatan: ["ukm", "organisasi", "hmp", "ekskul", "pkkmb", "ospek"],
   kontak: ["nomor", "telepon", "wa", "whatsapp", "email", "alamat", "hubungi"],
+  kurikulum: ["mata kuliah", "matkul", "semester", "curriculum"],
   kelas: ["jadwal", "jam", "pagi", "sore", "malam", "karyawan", "rpl"],
-  lokasi: ["alamat", "dimana", "where"],
+  lokasi: [
+    "alamat",
+    "alamatnya",
+    "berada",
+    "dimana",
+    "letak",
+    "letaknya",
+    "lokasinya",
+    "terletak",
+    "where",
+  ],
   orientasi: ["ospek", "pkkmb", "maba", "camaba"],
   pembayaran: [
     "bayar",
@@ -146,6 +242,15 @@ const RAG_SYNONYMS = {
   syarat: ["persyaratan", "berkas", "dokumen", "requirement", "requirements"],
   visi: ["misi", "tujuan"],
 };
+
+const BROAD_SYNONYM_KEYS = new Set(["akademik"]);
+const GENERIC_REVERSE_SYNONYM_TOKENS = new Set([
+  "fakultas",
+  "jurusan",
+  "prodi",
+  "program",
+  "studi",
+]);
 
 const TYPO_TOKEN_MAP = {
   dmn: "dimana",
@@ -237,6 +342,26 @@ const TOPIC_HINTS = {
     "bisnis",
   ],
   kontak: ["kontak", "whatsapp", "telepon", "email", "alamat", "hubungi"],
+  rektor: [
+    "rektor",
+    "pimpinan",
+    "ketua",
+    "pemimpin",
+    "kepala kampus",
+    "chandra",
+    "lukita",
+  ],
+  lokasi: [
+    "lokasi",
+    "alamat",
+    "alamatnya",
+    "dimana",
+    "di mana",
+    "berada",
+    "letak",
+    "letaknya",
+    "terletak",
+  ],
   orientasi: ["ospek", "orientasi", "pkkmb", "maba"],
   beasiswa: ["beasiswa", "kip", "bantuan"],
   fasilitas: ["fasilitas", "lab", "perpustakaan", "gedung", "ruang"],
@@ -270,6 +395,24 @@ const INTENT_PATTERNS = {
     "anak bisnis",
   ],
   kontak: ["kontak", "nomor", "whatsapp", "telepon", "hubungi", "alamat"],
+  rektor: [
+    "rektor",
+    "siapa rektor",
+    "pimpinan ucic",
+    "ketua ucic",
+    "pemimpin ucic",
+    "kepala kampus",
+    "chandra lukita",
+  ],
+  lokasi: [
+    "lokasi",
+    "alamat",
+    "alamat kampus",
+    "kampus dimana",
+    "kampus di mana",
+    "berada dimana",
+    "letak kampus",
+  ],
   orientasi: ["ospek", "orientasi", "pkkmb", "maba"],
   beasiswa: ["beasiswa", "kip", "potongan", "bantuan"],
   fasilitas: ["fasilitas", "lab", "perpustakaan", "wifi", "gedung"],
@@ -313,6 +456,20 @@ const AWAM_TOPIC_ALIASES = {
     "pilih jurusan apa",
   ],
   kontak: ["nomor admin", "wa kampus", "hubungi kampus", "kontak pmb"],
+  rektor: [
+    "rektor ucic siapa",
+    "siapa rektor ucic",
+    "yang memimpin ucic",
+    "pimpinan kampus siapa",
+  ],
+  lokasi: [
+    "kampusnya dimana",
+    "kampusnya di mana",
+    "alamat kampusnya",
+    "ucic ada dimana",
+    "ucic berada dimana",
+    "letak ucic",
+  ],
   orientasi: ["ospek maba", "acara anak baru", "orientasi anak baru"],
   beasiswa: ["potongan biaya", "bantuan biaya", "beasiswa anak pintar"],
   fasilitas: ["gedungnya gimana", "ada lab ga", "fasilitas kampus apa aja"],
@@ -325,6 +482,8 @@ const CANONICAL_REWRITE_MAP = {
   kelas: "jadwal kelas sore pagi rpl untuk mahasiswa bekerja ucic",
   jurusan: "jurusan program studi rekomendasi jurusan ucic",
   kontak: "kontak admin pmb dan alamat kampus ucic",
+  rektor: "rektor pimpinan ucic chandra lukita",
+  lokasi: "lokasi alamat kampus ucic",
   orientasi: "orientasi mahasiswa baru ospek pkkmb ucic",
   beasiswa: "program beasiswa dan bantuan biaya ucic",
   fasilitas: "fasilitas kampus laboratorium perpustakaan ucic",
@@ -398,6 +557,7 @@ const SHORT_VALID_QUERY_TOKENS = new Set([
   "prodi",
   "kontak",
   "alamat",
+  "lokasi",
   "kampus",
   "kuliah",
   "beasiswa",
@@ -690,13 +850,52 @@ function setLearnedArtifacts(artifacts) {
   setStoredJson(LEARNED_ARTIFACTS_KEY, artifacts);
 }
 
+function getDatasetTopicAliasBank() {
+  const bank = {};
+
+  for (const [category, aliases] of Object.entries(DATASET_CATEGORY_ALIASES)) {
+    bank[category] = mergeUniqueStrings(bank[category], aliases, 220);
+  }
+
+  for (const item of ragDataset) {
+    const category = normalizeText(item.category);
+    if (!category) continue;
+
+    const rawAliases = [
+      category,
+      String(item.id || "").replace(/_/g, " "),
+      item.title,
+      ...(item.keywords || []),
+      ...(DATASET_CATEGORY_ALIASES[category] || []),
+    ];
+
+    const expandedAliases = [];
+    for (const alias of rawAliases) {
+      const normalizedAlias = normalizeText(alias);
+      if (!normalizedAlias) continue;
+
+      expandedAliases.push(normalizedAlias);
+      normalizedAlias
+        .split(" ")
+        .filter((token) => token.length > 2 && !RAG_STOPWORDS.has(token))
+        .forEach((token) => expandedAliases.push(token));
+    }
+
+    bank[category] = mergeUniqueStrings(bank[category], expandedAliases, 220);
+  }
+
+  return bank;
+}
+
 function getIntentSynonymBank() {
   const learnedArtifacts = getLearnedArtifacts();
   const approvedTopics =
     learnedArtifacts.shadow_faq_reviews?.approved_topics || {};
+  const datasetTopicAliases = getDatasetTopicAliasBank();
   const bank = {};
 
   for (const intent of new Set([
+    ...Object.keys(datasetTopicAliases),
     ...Object.keys(INTENT_PATTERNS),
     ...Object.keys(TOPIC_HINTS),
     ...Object.keys(AWAM_TOPIC_ALIASES),
@@ -710,6 +909,7 @@ function getIntentSynonymBank() {
         ...(INTENT_PATTERNS[intent] || []),
         ...(TOPIC_HINTS[intent] || []),
         ...(AWAM_TOPIC_ALIASES[intent] || []),
+        ...(datasetTopicAliases[intent] || []),
         ...(learnedArtifacts.learned_awam_aliases?.[intent] || []),
         ...(approvedTopics[intent]?.query_forms || []),
       ],
@@ -810,11 +1010,16 @@ function getSearchTokens(text = "") {
 
   const expanded = new Set(tokens);
   for (const token of tokens) {
-    if (RAG_SYNONYMS[token]) {
+    if (RAG_SYNONYMS[token] && !BROAD_SYNONYM_KEYS.has(token)) {
       RAG_SYNONYMS[token].forEach((alias) => expanded.add(alias));
     }
     for (const [canonical, aliases] of Object.entries(RAG_SYNONYMS)) {
-      if (aliases.includes(token)) expanded.add(canonical);
+      if (
+        aliases.includes(token) &&
+        !GENERIC_REVERSE_SYNONYM_TOKENS.has(token)
+      ) {
+        expanded.add(canonical);
+      }
     }
   }
 
@@ -1049,11 +1254,16 @@ function deriveConversationTopicState(messageHistory = []) {
 
 function getTokenVariants(token) {
   const variants = new Set([token]);
-  if (RAG_SYNONYMS[token]) {
+  if (RAG_SYNONYMS[token] && !BROAD_SYNONYM_KEYS.has(token)) {
     RAG_SYNONYMS[token].forEach((alias) => variants.add(alias));
   }
   for (const [canonical, aliases] of Object.entries(RAG_SYNONYMS)) {
-    if (aliases.includes(token)) variants.add(canonical);
+    if (
+      aliases.includes(token) &&
+      !GENERIC_REVERSE_SYNONYM_TOKENS.has(token)
+    ) {
+      variants.add(canonical);
+    }
   }
   return [...variants];
 }
@@ -1074,17 +1284,44 @@ function itemContainsTokenVariant(item, token) {
   );
 }
 
-function hasEnoughTokenCoverage(item, baseTokens) {
-  if (baseTokens.length === 0) return item.id === "profil_ucic";
-  const matchedCount = baseTokens.filter((token) =>
+function getMatchedTokenCount(item, baseTokens) {
+  return baseTokens.filter((token) =>
     itemContainsTokenVariant(item, token),
   ).length;
+}
+
+function hasStrongFieldMatch(item, baseTokens) {
+  const title = normalizeText(item.title);
+  const category = normalizeText(item.category);
+  const keywords = (item.keywords || []).map(normalizeText);
+
+  return baseTokens.some((token) => {
+    const variants = getTokenVariants(token);
+    return variants.some(
+      (variant) =>
+        category === variant ||
+        title.split(" ").includes(variant) ||
+        keywords.some(
+          (keyword) => keyword === variant || keyword.split(" ").includes(variant),
+        ),
+    );
+  });
+}
+
+function hasEnoughTokenCoverage(item, baseTokens, score = 0) {
+  if (baseTokens.length === 0) return item.id === "profil_ucic";
+  const matchedCount = getMatchedTokenCount(item, baseTokens);
+  if (matchedCount === 0) return false;
+  if (baseTokens.length <= 2) return true;
+  if (hasStrongFieldMatch(item, baseTokens)) return true;
+  if (score >= 14 && matchedCount >= 1) return true;
+
   const requiredMatches =
     baseTokens.length === 1 ? 1 : Math.min(2, baseTokens.length);
   return matchedCount >= requiredMatches;
 }
 
-function scoreDatasetItem(item, tokens, topicHints = []) {
+function scoreDatasetItem(item, tokens, topicHints = [], userQuery = "") {
   if (tokens.length === 0) {
     const q = normalizeText(item.title);
     return item.id === "profil_ucic" || q.includes("profil universitas")
@@ -1096,7 +1333,21 @@ function scoreDatasetItem(item, tokens, topicHints = []) {
   const category = normalizeText(item.category);
   const keywords = (item.keywords || []).map(normalizeText);
   const content = normalizeText(item.content);
+  const searchableText = [title, category, ...keywords, content].join(" ");
+  const normalizedQuery = normalizeText(userQuery);
   let score = 0;
+
+  if (normalizedQuery) {
+    if (keywords.some((keyword) => keyword.includes(normalizedQuery)))
+      score += 24;
+    if (title.includes(normalizedQuery)) score += 18;
+    if (content.includes(normalizedQuery)) score += 6;
+
+    for (const keyword of keywords) {
+      if (keyword.length < 4) continue;
+      if (normalizedQuery.includes(keyword)) score += 18;
+    }
+  }
 
   for (const token of tokens) {
     if (keywords.some((keyword) => keyword === token)) score += 8;
@@ -1104,8 +1355,8 @@ function scoreDatasetItem(item, tokens, topicHints = []) {
     if (title.split(" ").includes(token)) score += 7;
     else if (title.includes(token)) score += 3;
     if (category === token) score += 3;
-    if (content.split(" ").includes(token)) score += 2;
-    else if (content.includes(token)) score += 0.5;
+    if (content.split(" ").includes(token)) score += 2.5;
+    else if (content.includes(token)) score += 1;
   }
 
   const matchedTokens = tokens.filter(
@@ -1128,6 +1379,15 @@ function scoreDatasetItem(item, tokens, topicHints = []) {
     ) {
       score += 4;
     }
+  }
+
+  const adjacentPairs = tokens
+    .map((token, index) => [token, tokens[index + 1]].filter(Boolean).join(" "))
+    .filter((pair) => pair.split(" ").length === 2);
+  for (const pair of adjacentPairs) {
+    if (keywords.some((keyword) => keyword.includes(pair))) score += 12;
+    else if (title.includes(pair)) score += 10;
+    else if (content.includes(pair)) score += 5;
   }
 
   return score;
@@ -1157,24 +1417,44 @@ function retrieveCampusContext(userQuery, fuseResults = [], topicState = null) {
 
   const ranked = ragDataset
     .map((item) => {
-      const lexicalScore = scoreDatasetItem(item, tokens, topicHints);
+      const lexicalScore = scoreDatasetItem(item, tokens, topicHints, userQuery);
       const fuseMeta = fuseRank.get(item.id);
       const fuseBoost = fuseMeta ? Math.max(0, 4 - fuseMeta.rank * 0.35) : 0;
       const fuseQualityBoost = fuseMeta ? Math.max(0, 1 - fuseMeta.score) : 0;
+      const score = lexicalScore + fuseBoost + fuseQualityBoost;
       return {
         item,
-        score: lexicalScore + fuseBoost + fuseQualityBoost,
+        score,
+        matchedTokenCount: getMatchedTokenCount(item, baseTokens),
         fuseScore: fuseMeta?.score,
       };
     })
     .filter(
       (result) =>
-        result.score >= 5 && hasEnoughTokenCoverage(result.item, baseTokens),
+        result.score >= 4 &&
+        hasEnoughTokenCoverage(result.item, baseTokens, result.score),
     )
     .sort((a, b) => b.score - a.score);
 
+  const fuseFallback = fuseResults
+    .slice(0, 5)
+    .filter((result) => (result.score ?? 1) <= 0.42)
+    .map((result, index) => ({
+      item: result.item,
+      score: Math.max(8, 14 - index),
+      fuseScore: result.score,
+    }))
+    .filter(
+      (result) =>
+        !ranked.some((rankedResult) => rankedResult.item.id === result.item.id),
+    );
+
+  const combined = [...ranked, ...fuseFallback].sort(
+    (a, b) => b.score - a.score,
+  );
+
   return {
-    matches: ranked.slice(0, 5),
+    matches: combined.slice(0, 5),
     tokens,
     topicHints,
     intent,
@@ -1351,9 +1631,69 @@ function buildIntentResponseGuide(intent = null) {
       return "Untuk topik syarat, utamakan daftar berkas yang perlu disiapkan. Boleh memakai format daftar ringan dalam satu jawaban bila itu membuat isi lebih jelas.";
     case "kelas":
       return "Untuk topik kelas, sebutkan pilihan kelas yang tersedia dan jam pentingnya terlebih dahulu.";
+    case "lokasi":
+      return "Untuk topik lokasi, jawab alamat kampus secara langsung. Jika konteks memuat lebih dari satu kampus, sebutkan semua lokasi kampus yang tersedia dengan ringkas.";
+    case "akademik":
+      return "Untuk topik akademik, jawab sesuai prosedur BAAK atau pedoman akademik di konteks. Sebutkan syarat, alur, atau batasan penting yang memang tertulis.";
+    case "kurikulum":
+      return "Untuk topik kurikulum, sebutkan program studi yang dimaksud dan ringkas mata kuliah atau semester yang tersedia di konteks.";
+    case "fasilitas":
+      return "Untuk topik fasilitas, sebutkan fasilitas yang relevan saja. Jika user menanyakan tempat tertentu seperti perpustakaan, lab, parkir, atau WiFi, fokus ke tempat itu.";
+    case "dosen":
+      return "Untuk topik dosen, sebutkan nama dosen dan bidang atau prodi terkait hanya jika ada di konteks.";
+    case "kegiatan":
+      return "Untuk topik kegiatan mahasiswa, jawab jenis kegiatan, UKM, organisasi, atau agenda mahasiswa yang tersedia di konteks.";
+    case "profil":
+      return "Untuk topik profil kampus, jawab fakta identitas, sejarah, pimpinan, kerja sama, atau keunggulan UCIC sesuai konteks.";
+    case "rektor":
+      return "Untuk topik rektor atau pimpinan, jawab nama rektor secara langsung sesuai konteks. Jangan meminta user menghubungi kampus jika nama rektor ada di konteks.";
     default:
       return "Jawab tetap ringkas, jelas, dan fokus ke inti informasi yang memang ada di konteks.";
   }
+}
+
+const UNAVAILABLE_RESPONSE_PATTERNS = [
+  /belum punya informasi/i,
+  /belum memiliki informasi/i,
+  /tidak memiliki informasi/i,
+  /tidak punya informasi/i,
+  /informasi.*belum tersedia/i,
+  /menanyakannya langsung/i,
+  /hubungi.*kampus/i,
+  /check with the campus/i,
+  /does not have.*information/i,
+  /do not have.*information/i,
+  /not have.*information/i,
+  /information.*not available/i,
+];
+
+function looksLikeUnavailableAnswer(text = "") {
+  return UNAVAILABLE_RESPONSE_PATTERNS.some((pattern) =>
+    pattern.test(String(text || "")),
+  );
+}
+
+function truncateForVoice(text = "", maxLength = 650) {
+  const normalized = String(text || "").replace(/\s+/g, " ").trim();
+  if (normalized.length <= maxLength) return normalized;
+
+  const clipped = normalized.slice(0, maxLength);
+  const sentenceEnd = Math.max(
+    clipped.lastIndexOf("."),
+    clipped.lastIndexOf("?"),
+    clipped.lastIndexOf("!"),
+  );
+  if (sentenceEnd > 180) return clipped.slice(0, sentenceEnd + 1).trim();
+  return `${clipped.replace(/\s+\S*$/, "").trim()}.`;
+}
+
+function buildDatasetAnswerFromMatches(matches = [], effectiveLang = "id") {
+  const topMatch = matches[0]?.item;
+  if (!topMatch?.content) return "";
+
+  const content = truncateForVoice(topMatch.content);
+  if (effectiveLang === "en") return content;
+  return content;
 }
 
 function applySessionLearningToArtifacts(artifacts, session) {
@@ -1526,12 +1866,12 @@ async function getFuse() {
   try {
     fuse = new Fuse(ragDataset, {
       keys: [
-        { name: "title", weight: 0.45 },
-        { name: "keywords", weight: 0.4 },
+        { name: "title", weight: 0.4 },
+        { name: "keywords", weight: 0.35 },
         { name: "category", weight: 0.1 },
-        { name: "content", weight: 0.05 },
+        { name: "content", weight: 0.15 },
       ],
-      threshold: 0.55,
+      threshold: 0.65,
       ignoreLocation: true,
       includeScore: true,
     });
@@ -1625,6 +1965,8 @@ async function resolveRetrievalState(messageHistory = [], userQuery = "") {
     ),
   };
 }
+
+export const __debugResolveRetrievalState = resolveRetrievalState;
 
 export async function evaluateRetrievalGoldens() {
   const cases = [];
@@ -2134,6 +2476,8 @@ Kamu HANYA bertugas dan DIIZINKAN menjawab pertanyaan seputar kampus UCIC (seper
 1. Jika pertanyaan BERHUBUNGAN dengan UCIC:
    - Jawab menggunakan DARI [KONTEKS KAMPUS] di bawah ini sebagai FAKTA MUTLAK.
    - Jika [KONTEKS KAMPUS] memuat informasi yang ditanyakan, WAJIB jawab berdasarkan konteks tersebut. Jangan mengatakan belum punya informasi kalau jawabannya ada di konteks.
+   - Jika [KONTEKS KAMPUS] tidak kosong, kamu DILARANG menjawab "maaf belum punya informasi", "hubungi kampus", atau penolakan sejenis sebelum memakai informasi yang tersedia.
+   - Untuk pertanyaan langsung seperti "siapa", "dimana", "berapa", "kapan", atau "apa", jawab langsung dari kalimat paling relevan di [KONTEKS KAMPUS].
    - Jika pertanyaan user masih samar seperti "yang itu", "terus gimana", atau "berapa yang tadi", gunakan konteks percakapan terakhir dan jawab bagian yang paling mungkin dimaksud user dengan tetap hati-hati.
    - Jika konteks yang ada hanya menjawab sebagian, berikan jawaban parsial yang membantu. Jangan langsung menolak kalau masih ada bagian yang bisa dijawab dari konteks.
    - Jika transcript user tampak mengulang frasa yang sama, ANGGAP itu artefak suara. Jangan menegur, jangan berkomentar bahwa user mengulang, dan jangan mengatakan akan menjelaskan sekali saja. Cukup jawab inti pertanyaannya dengan normal.
@@ -2181,6 +2525,8 @@ You ONLY serve and are PERMITTED to answer questions related to the UCIC campus 
 1. If the question is RELATED to UCIC:
    - Answer using the [CAMPUS CONTEXT] below as ABSOLUTE FACT.
    - If the [CAMPUS CONTEXT] contains the requested information, you MUST answer from that context. Do not say the information is unavailable when it exists in the context.
+   - If [CAMPUS CONTEXT] is not empty, you are FORBIDDEN from saying the information is unavailable, telling the user to check with campus staff, or refusing before using the available context.
+   - For direct questions like "who", "where", "how much", "when", or "what", answer directly from the most relevant sentence in [CAMPUS CONTEXT].
    - If the user's wording is vague, such as "that one", "then how", or "how much for that", use the recent conversation context and answer the most likely intended topic carefully.
    - If the context only answers part of the request, still provide the helpful partial answer instead of declining immediately.
    - If the transcript appears to repeat the same phrase, treat that as a voice artifact. Do not scold the user, do not comment on repetition, and do not say you will explain it only once. Just answer normally.
@@ -2256,10 +2602,20 @@ IF you DECLINE to answer because the topic is unrelated to the campus, DO NOT ad
 
   // Parse follow-up suggestions from response
   const { text: cleanText, suggestions } = parseSuggestions(text || "");
+  const datasetFallbackAnswer = buildDatasetAnswerFromMatches(
+    finalMatches,
+    effectiveLang,
+  );
+  const shouldUseDatasetFallback =
+    datasetFallbackAnswer &&
+    finalMatches.length > 0 &&
+    looksLikeUnavailableAnswer(cleanText);
 
   return {
-    text: cleanText || "Maaf, SELA agak bingung. Bisa diulang?",
-    suggestions,
+    text:
+      (shouldUseDatasetFallback ? datasetFallbackAnswer : cleanText) ||
+      "Maaf, SELA agak bingung. Bisa diulang?",
+    suggestions: shouldUseDatasetFallback ? [] : suggestions,
     media: mediaResults,
     detectedLang: effectiveLang,
   };

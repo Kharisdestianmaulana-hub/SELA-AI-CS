@@ -70,5 +70,53 @@
     "query": "persaratan daftar kuliah apa",
     "expected_intents": ["syarat", "pendaftaran"],
     "expected_ids": ["pmb_syarat", "faq_awam_syarat_daftar"]
+  },
+  {
+    "id": "golden_13",
+    "query": "ucic ada jurusan apa aja",
+    "expected_intents": ["jurusan"],
+    "expected_ids": ["jurusan_ucic", "jurusan_fti", "jurusan_feb", "jurusan_fps"]
+  },
+  {
+    "id": "golden_14",
+    "query": "kalau suka desain cocok masuk prodi apa",
+    "expected_intents": ["jurusan"],
+    "expected_ids": ["faq_awam_jurusan_rekomendasi", "prodi_dkv_detail", "prodi_dkv"]
+  },
+  {
+    "id": "golden_15",
+    "query": "fasilitas kampus ucic ada lab apa aja",
+    "expected_intents": ["fasilitas"],
+    "expected_ids": ["fasilitas_kampus_lengkap"]
+  },
+  {
+    "id": "golden_16",
+    "query": "beasiswa di ucic ada apa aja",
+    "expected_intents": ["beasiswa"],
+    "expected_ids": ["beasiswa"]
+  },
+  {
+    "id": "golden_17",
+    "query": "kapan pendaftaran mahasiswa baru dibuka",
+    "expected_intents": ["pendaftaran"],
+    "expected_ids": ["pmb_jadwal", "pendaftaran_pmb"]
+  },
+  {
+    "id": "golden_18",
+    "query": "kalau telat masuk kelas lebih dari 15 menit gimana",
+    "expected_intents": ["akademik"],
+    "expected_ids": ["baak_kehadiran_perkuliahan"]
+  },
+  {
+    "id": "golden_19",
+    "query": "cara isi krs mahasiswa lama gimana",
+    "expected_intents": ["akademik"],
+    "expected_ids": ["baak_krs_heregistrasi"]
+  },
+  {
+    "id": "golden_20",
+    "query": "syarat sidang skripsi apa aja",
+    "expected_intents": ["akademik"],
+    "expected_ids": ["baak_syarat_sidang_skripsi", "baak_skripsi_tugas_akhir"]
   }
 ]

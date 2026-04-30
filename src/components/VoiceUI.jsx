@@ -205,7 +205,7 @@ export default function VoiceUI({
   const lastFaceTimeRef = useRef(0);
   const lastDetectRef = useRef(0); // throttle detection ke ~500ms
   const properFaceTimeRef = useRef(null); // timestamp ketika wajah mulai menghadap dengan benar
-  const PROPER_FACE_CONFIRMATION_MS = 2000; // 2 detik sebelum auto-activate
+  const PROPER_FACE_CONFIRMATION_MS = 1000; // 1 detik sebelum auto-activate
   const MIN_FACE_SIZE_RATIO = 0.2; // minimum 20% dari video width (~1m distance untuk kiosk)
 
   // Sinkronkan refs dengan state
