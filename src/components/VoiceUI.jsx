@@ -346,6 +346,7 @@ export default function VoiceUI({
     markSessionInteraction();
     setActivated(true);
     setLangSelected(false);
+    setAwaitingLangSelect(false);
 
     // Sapa dalam Bahasa Indonesia dulu
     const greetID = "Halo! Selamat datang di UCIC. Saya SELA.";
@@ -363,7 +364,7 @@ export default function VoiceUI({
       () => {
         isProcessingRef.current = false;
         setAvatarState("idle");
-        // Tampilkan tombol pilihan bahasa
+        setAwaitingLangSelect(true);
       },
     );
   };
@@ -1072,7 +1073,7 @@ export default function VoiceUI({
       const askEN = "Would you like to speak in Indonesian or English?";
       const combined = `${greetID}\n\n${greetEN}\n\n${askID}\n\n${askEN}`;
       if (onReceive) onReceive(combined);
-      setAwaitingLangSelect(true);
+      setAwaitingLangSelect(false);
       speakSequenceWithAvatar(
         [
           { text: greetID, lang: "id" },
@@ -1080,8 +1081,10 @@ export default function VoiceUI({
           { text: askID, lang: "id" },
           { text: askEN, lang: "en" },
         ],
-        () =>
-          setAvatarState("idle"),
+        () => {
+          setAvatarState("idle");
+          setAwaitingLangSelect(true);
+        },
       );
       return;
     }
@@ -1327,7 +1330,7 @@ export default function VoiceUI({
           )}
 
           {/* Tombol pilihan bahasa — muncul setelah greeting bilingual selesai */}
-          {activated && !langSelected && avatarState === "idle" && (
+          {activated && awaitingLangSelect && !langSelected && avatarState === "idle" && (
             <div className="flex gap-3 animate-fade-in">
               <button
                 onClick={() => handleLangSelect("id")}
