@@ -43,7 +43,7 @@ test("buildResponsePlan marks enumerate-all and summary-only voice modes", () =>
   });
 
   assert.equal(plan.mustEnumerateAll, true);
-  assert.equal(plan.ttsMode, "summary_only");
+  assert.equal(plan.ttsMode, "adaptive");
   assert.equal(plan.maxContextItems, 6);
 });
 
@@ -90,14 +90,50 @@ test("buildSpokenText shortens jurusan detail answers for TTS", () => {
     },
   ];
 
-  const spoken = buildSpokenText(
-    "UCIC memiliki 3 fakultas dengan daftar lengkap jurusan yang ditampilkan di layar.",
-    plan,
-    "id",
-    matches,
-  );
+  const longAnswer = `UCIC memiliki 3 fakultas dengan program studi yang cukup beragam untuk calon mahasiswa.
+
+Fakultas Teknologi Informasi mencakup beberapa pilihan yang fokus pada komputer, sistem, dan desain.
+
+Fakultas Ekonomi dan Bisnis mencakup pilihan yang berhubungan dengan bisnis, akuntansi, dan manajemen.
+
+Fakultas Pendidikan dan Sains memiliki pilihan program studi di bidang olahraga.
+
+Daftar lengkap setiap program studi saya tampilkan di layar agar lebih mudah dibaca.`;
+
+  const spoken = buildSpokenText(longAnswer, plan, "id", matches);
 
   assert.match(spoken, /3 fakultas/i);
   assert.match(spoken, /10 program studi/i);
   assert.doesNotMatch(spoken, /Teknik Informatika, S1 Sistem Informasi/i);
+});
+
+test("buildSpokenText keeps short detailed answers full for TTS", () => {
+  const plan = buildResponsePlan("kalau saya suka komputer masuk jurusan apa ya", {
+    intent: "jurusan",
+  });
+  const shortAnswer = `Jika Anda suka komputer, maka jurusan yang cocok untuk Anda di UCIC adalah:
+
+Teknik Informatika: jurusan ini fokus pada pemrograman dan pengembangan perangkat lunak.
+Sistem Informasi: jurusan ini fokus pada pengelolaan sistem informasi dan aplikasi.`;
+
+  const spoken = buildSpokenText(shortAnswer, plan, "id", []);
+
+  assert.equal(spoken, shortAnswer);
+});
+
+test("buildSpokenText summarizes answers starting from three paragraphs", () => {
+  const plan = buildResponsePlan("kalau saya suka komputer masuk jurusan apa ya", {
+    intent: "jurusan",
+  });
+  const detailedAnswer = `Jika Anda suka komputer, maka jurusan yang paling cocok di UCIC adalah Teknik Informatika atau Sistem Informasi.
+
+Teknik Informatika lebih cocok jika Anda suka pemrograman, software, dan pengembangan teknologi.
+
+Sistem Informasi lebih cocok jika Anda suka kombinasi komputer, data, dan proses bisnis.`;
+
+  const spoken = buildSpokenText(detailedAnswer, plan, "id", []);
+
+  assert.notEqual(spoken, detailedAnswer);
+  assert.match(spoken, /Intinya/i);
+  assert.match(spoken, /Teknik Informatika atau Sistem Informasi/i);
 });

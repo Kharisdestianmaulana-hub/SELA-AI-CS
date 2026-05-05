@@ -258,6 +258,36 @@ export default function VoiceUI({
     setIsAtBottom(true);
   };
 
+  const speakWithAvatar = (text, speechLang = lang, onDone = null) => {
+    speakText(
+      text,
+      () => setAvatarState("speaking"),
+      () => {
+        setAvatarState("idle");
+        if (onDone) onDone();
+      },
+      speechLang,
+    );
+  };
+
+  const speakSequenceWithAvatar = (segments = [], onComplete = null) => {
+    const queue = segments.filter((segment) => segment?.text);
+
+    const playNext = (index) => {
+      if (index >= queue.length) {
+        if (onComplete) onComplete();
+        return;
+      }
+
+      const segment = queue[index];
+      speakWithAvatar(segment.text, segment.lang || lang, () => {
+        playNext(index + 1);
+      });
+    };
+
+    playNext(0);
+  };
+
   const markSessionInteraction = () => {
     lastInteractionTimeRef.current = Date.now();
   };
@@ -316,7 +346,6 @@ export default function VoiceUI({
     markSessionInteraction();
     setActivated(true);
     setLangSelected(false);
-    setAvatarState("speaking");
 
     // Sapa dalam Bahasa Indonesia dulu
     const greetID = "Halo! Selamat datang di UCIC. Saya SELA.";
@@ -324,39 +353,18 @@ export default function VoiceUI({
     const greetEN = "Hello! Welcome to UCIC. I'm SELA.";
     const askEN = "Would you like to speak in Indonesian or English?";
 
-    speakText(
-      greetID,
-      null,
+    speakSequenceWithAvatar(
+      [
+        { text: greetID, lang: "id" },
+        { text: greetEN, lang: "en" },
+        { text: askID, lang: "id" },
+        { text: askEN, lang: "en" },
+      ],
       () => {
-        // Lalu sapa dalam Bahasa Inggris
-        speakText(
-          greetEN,
-          null,
-          () => {
-            // Tanya dalam Bahasa Indonesia
-            speakText(
-              askID,
-              null,
-              () => {
-                // Tanya lagi dalam Bahasa Inggris
-                speakText(
-                  askEN,
-                  null,
-                  () => {
-                    isProcessingRef.current = false;
-                    setAvatarState("idle");
-                    // Tampilkan tombol pilihan bahasa
-                  },
-                  "en",
-                );
-              },
-              "id",
-            );
-          },
-          "en",
-        );
+        isProcessingRef.current = false;
+        setAvatarState("idle");
+        // Tampilkan tombol pilihan bahasa
       },
-      "id",
     );
   };
 
@@ -902,8 +910,6 @@ export default function VoiceUI({
       if (onReceive) onReceive(response);
       markSessionInteraction();
 
-      setAvatarState("speaking");
-
       // Fallback: kalau TTS onEnd tidak pernah terpanggil (bug Chrome),
       // paksa restart listen setelah estimasi durasi + buffer
       const spokenText = response.spokenText || response.text;
@@ -978,7 +984,6 @@ export default function VoiceUI({
     stopListening();
     window.speechSynthesis?.cancel();
     isProcessingRef.current = true;
-    setAvatarState("speaking");
 
     const farewellChat = currentChat
       ? {
@@ -1012,9 +1017,9 @@ export default function VoiceUI({
       if (onReset) onReset();
     }, 6000);
 
-    speakText(
+    speakWithAvatar(
       msg,
-      null,
+      lang,
       () => {
         clearTimeout(farewellFallback);
         archiveConversationSession({
@@ -1031,7 +1036,6 @@ export default function VoiceUI({
         setAwaitingLangSelect(false);
         if (onReset) onReset();
       },
-      lang,
     );
   };
 
@@ -1068,26 +1072,16 @@ export default function VoiceUI({
       const askEN = "Would you like to speak in Indonesian or English?";
       const combined = `${greetID}\n\n${greetEN}\n\n${askID}\n\n${askEN}`;
       if (onReceive) onReceive(combined);
-      setAvatarState("speaking");
       setAwaitingLangSelect(true);
-      speakText(
-        greetID,
-        null,
+      speakSequenceWithAvatar(
+        [
+          { text: greetID, lang: "id" },
+          { text: greetEN, lang: "en" },
+          { text: askID, lang: "id" },
+          { text: askEN, lang: "en" },
+        ],
         () =>
-          speakText(
-            greetEN,
-            null,
-            () =>
-              speakText(
-                askID,
-                null,
-                () =>
-                  speakText(askEN, null, () => setAvatarState("idle"), "en"),
-                "id",
-              ),
-            "en",
-          ),
-        "id",
+          setAvatarState("idle"),
       );
       return;
     }
@@ -1104,12 +1098,10 @@ export default function VoiceUI({
       setIsWaitingAI(false);
       if (onReceive) onReceive(response);
       markSessionInteraction();
-      setAvatarState("speaking");
-      speakText(
+      speakWithAvatar(
         response.spokenText || response.text,
-        null,
-        () => setAvatarState("idle"),
         response.detectedLang || lang,
+        () => setAvatarState("idle"),
       );
     } catch {
       setIsWaitingAI(false);
@@ -1136,15 +1128,12 @@ export default function VoiceUI({
       onSend(langLabel);
       if (onReceive) onReceive(confirm);
     }
-    setAvatarState("speaking");
-    speakText(
+    speakWithAvatar(
       confirm,
-      null,
+      chosen,
       () => {
-        setAvatarState("idle");
         startListeningRef.current?.();
       },
-      chosen,
     );
   };
 

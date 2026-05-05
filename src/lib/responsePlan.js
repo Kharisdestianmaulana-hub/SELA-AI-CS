@@ -47,6 +47,13 @@ function truncateSentence(text = "", maxLength = 160) {
   return `${clipped.replace(/\s+\S*$/, "").trim()}.`;
 }
 
+function countReadableParagraphs(text = "") {
+  return String(text || "")
+    .split(/\n\s*\n/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean).length;
+}
+
 function extractLeadSentence(text = "", maxLength = 150) {
   const flattened = String(text || "")
     .replace(/\[(.*?)\]/g, " ")
@@ -258,7 +265,7 @@ export function buildResponsePlan(userQuery = "", { intent = null } = {}) {
 
   return {
     displayMode,
-    ttsMode: displayMode === "brief" ? "full" : "summary_only",
+    ttsMode: displayMode === "brief" ? "full" : "adaptive",
     mustEnumerateAll,
     maxContextItems: displayMode === "brief" ? 3 : 6,
     intent,
@@ -365,6 +372,13 @@ export function buildSpokenText(
   if (!cleanedText) return "";
   if (plan.ttsMode === "full") return cleanedText;
 
+  const paragraphCount = countReadableParagraphs(cleanedText);
+  const shouldSummarize =
+    plan.ttsMode === "summary_only" ||
+    paragraphCount >= 3;
+
+  if (!shouldSummarize) return cleanedText;
+
   if (plan.displayMode === "list_detail" && plan.intent === "jurusan") {
     const { facultyCount, programCount } = extractJurusanCounts(matches);
     if (facultyCount > 0 || programCount > 0) {
@@ -380,10 +394,6 @@ export function buildSpokenText(
     plan.displayMode,
     lang,
   );
-
-  if (plan.displayMode === "list_detail") {
-    return summaryLead;
-  }
 
   const core = extractLeadSentence(cleanedText, 140);
   if (!core) return summaryLead;

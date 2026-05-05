@@ -2715,23 +2715,27 @@ export function speakText(text, onStart, onEnd, lang = "id") {
 
   const doSpeak = () => {
     const utterance = new SpeechSynthesisUtterance(text);
+    let settled = false;
     utterance.lang = lang === "en" ? "en-US" : "id-ID";
     utterance.rate = 0.95; // Sedikit lebih lambat agar terdengar wibawa dan tenang
     utterance.pitch = 1.0; // Pitch normal, tidak terlalu melengking
+
+    const finalize = () => {
+      if (settled) return;
+      settled = true;
+      if (onEnd) onEnd();
+    };
 
     utterance.onstart = () => {
       if (onStart) onStart();
     };
     utterance.onend = () => {
-      if (onEnd) onEnd();
+      finalize();
     };
     utterance.onerror = (e) => {
-      // "interrupted" sering terjadi di Chrome karena cancel() sebelumnya,
-      // abaikan saja dan tetap panggil onEnd supaya loop tidak putus
+      // Tetap finalize juga saat interrupted agar state avatar / loop UI sinkron
       console.warn("SpeechSynthesis error:", e.error);
-      if (e.error !== "interrupted") {
-        if (onEnd) onEnd();
-      }
+      finalize();
     };
 
     const voices = window.speechSynthesis.getVoices();
