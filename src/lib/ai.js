@@ -1,6 +1,12 @@
 import Fuse from "fuse.js";
 import dataset from "../data/ucic_dataset.json";
 import ragGoldens from "../data/rag_goldens.json";
+import {
+  buildResponsePlan,
+  buildResponsePlanPrompt,
+  buildSpokenText,
+  prioritizeResponseMatches,
+} from "./responsePlan";
 
 // ── RAG Setup ────────────────────────────────────────────────────────────────
 
@@ -1627,6 +1633,8 @@ function buildIntentResponseGuide(intent = null) {
       return "Untuk topik pendaftaran, jawab langkah inti dulu secara runtut: cara daftar online/offline, langkah berikutnya, lalu arahkan ke syarat atau pembayaran bila relevan.";
     case "biaya":
       return "Untuk topik biaya, sebutkan minimal biaya pendaftaran, contoh biaya awal beberapa prodi jika ada, lalu metode pembayaran atau cicilan jika tersedia. Boleh sampai 4 kalimat pendek agar tetap jelas.";
+    case "jurusan":
+      return "Untuk topik jurusan atau program studi, jika user menanyakan daftar umum, sebutkan semua fakultas dan program studi yang tersedia dari konteks. Jika user menanyakan satu prodi tertentu, fokus ke prodi itu.";
     case "syarat":
       return "Untuk topik syarat, utamakan daftar berkas yang perlu disiapkan. Boleh memakai format daftar ringan dalam satu jawaban bila itu membuat isi lebih jelas.";
     case "kelas":
@@ -1673,6 +1681,31 @@ function looksLikeUnavailableAnswer(text = "") {
   );
 }
 
+function looksTooBriefForResponsePlan(text = "", responsePlan = null) {
+  if (!responsePlan || responsePlan.displayMode === "brief") return false;
+
+  const normalized = String(text || "").trim();
+  if (!normalized) return true;
+
+  const lineCount = normalized.split("\n").filter(Boolean).length;
+  const structuredCount =
+    normalized.match(/(?:^|\n)\s*(?:[-*]|\d+\.)\s+/g)?.length || 0;
+
+  if (responsePlan.displayMode === "list_detail") {
+    if (normalized.length < 120) return true;
+    if (responsePlan.mustEnumerateAll && lineCount < 3 && structuredCount < 2) {
+      return true;
+    }
+    return false;
+  }
+
+  if (responsePlan.displayMode === "step_detail") {
+    return normalized.length < 110 || structuredCount === 0;
+  }
+
+  return false;
+}
+
 function truncateForVoice(text = "", maxLength = 650) {
   const normalized = String(text || "").replace(/\s+/g, " ").trim();
   if (normalized.length <= maxLength) return normalized;
@@ -1687,13 +1720,27 @@ function truncateForVoice(text = "", maxLength = 650) {
   return `${clipped.replace(/\s+\S*$/, "").trim()}.`;
 }
 
-function buildDatasetAnswerFromMatches(matches = [], effectiveLang = "id") {
-  const topMatch = matches[0]?.item;
-  if (!topMatch?.content) return "";
+function buildDatasetAnswerFromMatches(
+  matches = [],
+  effectiveLang = "id",
+  responsePlan = null,
+) {
+  const contents = matches
+    .map((match) => match?.item?.content?.trim())
+    .filter(Boolean);
+  if (contents.length === 0) return "";
 
-  const content = truncateForVoice(topMatch.content);
-  if (effectiveLang === "en") return content;
-  return content;
+  const topContent = contents[0];
+  if (!responsePlan || responsePlan.displayMode === "brief") {
+    const content = truncateForVoice(topContent);
+    if (effectiveLang === "en") return content;
+    return content;
+  }
+
+  const maxSections = responsePlan.displayMode === "list_detail" ? 4 : 2;
+  const merged = [...new Set(contents)].slice(0, maxSections).join("\n\n");
+  if (effectiveLang === "en") return merged;
+  return merged;
 }
 
 function applySessionLearningToArtifacts(artifacts, session) {
@@ -1892,14 +1939,16 @@ async function resolveRetrievalState(messageHistory = [], userQuery = "") {
   );
   const canonicalRewrite = buildCanonicalRewrite(userQuery, topicState);
   const f = await getFuse();
+  const initialIntent = classifyCampusIntent(userQuery) || topicState.activeTopic;
 
   let matches = [];
   let finalMatches = [];
   let topicHints = [];
-  let intent = null;
+  let intent = initialIntent;
   let ragScore = 1;
   let contextStr = "";
   let mediaResults = [];
+  let responsePlan = buildResponsePlan(userQuery, { intent: initialIntent });
   let answerability = {
     level: "none",
     reason: "no_match",
@@ -1915,11 +1964,15 @@ async function resolveRetrievalState(messageHistory = [], userQuery = "") {
     );
     matches = retrieval.matches;
     topicHints = retrieval.topicHints;
-    intent = retrieval.intent;
-    finalMatches =
-      matches.length > 0
-        ? matches
-        : getTopicFallbackMatches(intent, topicHints);
+    intent = retrieval.intent || initialIntent;
+    responsePlan = buildResponsePlan(userQuery, { intent });
+    const rawMatches =
+      matches.length > 0 ? matches : getTopicFallbackMatches(intent, topicHints);
+    finalMatches = prioritizeResponseMatches(rawMatches, {
+      responsePlan,
+      intent,
+      catalog: ragDataset,
+    });
     answerability = computeAnswerability(finalMatches, userQuery, topicState);
 
     if (finalMatches.length > 0) {
@@ -1927,7 +1980,6 @@ async function resolveRetrievalState(messageHistory = [], userQuery = "") {
         finalMatches[0].fuseScore ??
         Math.max(0, 1 - finalMatches[0].score / 20);
       contextStr = finalMatches
-        .slice(0, 4)
         .map(
           (r) =>
             `Topik: ${r.item.title}\nKategori: ${r.item.category}\nInfo: ${r.item.content}`,
@@ -1949,6 +2001,7 @@ async function resolveRetrievalState(messageHistory = [], userQuery = "") {
     finalMatches,
     topicHints,
     intent,
+    responsePlan,
     ragScore,
     contextStr,
     mediaResults,
@@ -2388,6 +2441,7 @@ export async function getChatCompletion(messageHistory, lang = "id") {
     finalMatches,
     topicHints,
     intent,
+    responsePlan,
     ragScore,
     contextStr,
     mediaResults,
@@ -2406,6 +2460,7 @@ export async function getChatCompletion(messageHistory, lang = "id") {
     query: userQuery,
     retrievalQuery,
     canonicalRewrite,
+    responsePlan,
     answerability: answerability.level,
     route: confidenceRouting.route,
     transcriptMarker: preparedQuery.marker,
@@ -2467,7 +2522,7 @@ export async function getChatCompletion(messageHistory, lang = "id") {
 Hari ini adalah ${today}.
 Gaya bicaramu tenang, hangat, elegan, dan profesional. Kamu adalah "Wajah Digital" UCIC.
 Kamu boleh menggunakan partikel bahasa lisan seperti 'nih', 'sih', 'dong', atau 'ya', namun penggunaannya HARUS sangat tepat, natural secara tata bahasa, dan tidak berlebihan agar wibawamu tetap terjaga. Penempatannya harus dilihat dari kata sebelumnya apakah cocok atau tidak.
-Jawabanmu umumnya singkat dan nyaman didengar lewat suara. Untuk topik yang padat seperti biaya atau syarat, kamu boleh memberi jawaban sedikit lebih panjang selama tetap ringkas, jelas, dan enak didengar.
+Panjang jawabanmu HARUS adaptif mengikuti jenis pertanyaan user. Untuk pertanyaan fakta tunggal, jawab singkat. Untuk pertanyaan daftar, syarat, alur, atau perbandingan, jawab lebih lengkap dan terstruktur agar nyaman dibaca di layar.
 
 [TUGAS UTAMAMU]:
 Kamu HANYA bertugas dan DIIZINKAN menjawab pertanyaan seputar kampus UCIC (seperti Pendaftaran, Akademik, Fasilitas, dan Informasi Kampus lainnya).
@@ -2496,6 +2551,9 @@ Kamu HANYA bertugas dan DIIZINKAN menjawab pertanyaan seputar kampus UCIC (seper
 [KONTEKS KAMPUS]:
 ${contextStr || "Kosong"}
 
+[ATURAN KEDALAMAN JAWABAN]:
+${buildResponsePlanPrompt(responsePlan, "id")}
+
 [ARAH KLARIFIKASI]:
 ${clarificationHint || "Kosong"}
 
@@ -2515,7 +2573,7 @@ JIKA kamu MENOLAK menjawab karena di luar topik kampus, kamu TIDAK PERLU menamba
   const systemPromptEN = `You are SELA, the virtual receptionist for Universitas Catur Insan Cendekia (UCIC) who embodies a gentle, charismatic, authoritative, and deeply intelligent persona.
 Today is ${todayEN}.
 Your speaking style is calm, warm, elegant, and highly professional. You are the "Digital Face" of UCIC.
-Your answers should stay concise and comfortable for Text-To-Speech. For dense topics such as cost or requirements, you may be slightly more detailed as long as the answer stays tight and easy to follow.
+Your answer length MUST adapt to the user's question type. For single facts, stay brief. For lists, requirements, procedures, or comparisons, answer more fully and structure the response clearly for on-screen reading.
 You MUST ALWAYS answer the user in ENGLISH.
 
 [YOUR MAIN TASK]:
@@ -2544,6 +2602,9 @@ You ONLY serve and are PERMITTED to answer questions related to the UCIC campus 
 
 [CAMPUS CONTEXT]:
 ${contextStr || "Empty"}
+
+[RESPONSE DEPTH RULE]:
+${buildResponsePlanPrompt(responsePlan, "en")}
 
 [CLARIFICATION DIRECTION]:
 ${clarificationHint || "Empty"}
@@ -2605,16 +2666,29 @@ IF you DECLINE to answer because the topic is unrelated to the campus, DO NOT ad
   const datasetFallbackAnswer = buildDatasetAnswerFromMatches(
     finalMatches,
     effectiveLang,
+    responsePlan,
   );
+  const shouldFallbackForDepth =
+    responsePlan.displayMode !== "brief" &&
+    responsePlan.displayMode !== "compare_detail" &&
+    looksTooBriefForResponsePlan(cleanText, responsePlan);
   const shouldUseDatasetFallback =
     datasetFallbackAnswer &&
     finalMatches.length > 0 &&
-    looksLikeUnavailableAnswer(cleanText);
+    (looksLikeUnavailableAnswer(cleanText) || shouldFallbackForDepth);
+  const displayText =
+    (shouldUseDatasetFallback ? datasetFallbackAnswer : cleanText) ||
+    "Maaf, SELA agak bingung. Bisa diulang?";
+  const spokenText = buildSpokenText(
+    displayText,
+    responsePlan,
+    effectiveLang,
+    finalMatches,
+  );
 
   return {
-    text:
-      (shouldUseDatasetFallback ? datasetFallbackAnswer : cleanText) ||
-      "Maaf, SELA agak bingung. Bisa diulang?",
+    text: displayText,
+    spokenText,
     suggestions: shouldUseDatasetFallback ? [] : suggestions,
     media: mediaResults,
     detectedLang: effectiveLang,

@@ -906,7 +906,8 @@ export default function VoiceUI({
 
       // Fallback: kalau TTS onEnd tidak pernah terpanggil (bug Chrome),
       // paksa restart listen setelah estimasi durasi + buffer
-      const estDuration = Math.max(3000, response.text.length * 80);
+      const spokenText = response.spokenText || response.text;
+      const estDuration = Math.max(3000, spokenText.length * 80);
       const ttsFallback = setTimeout(() => {
         if (isProcessingRef.current) {
           console.warn("[SELA] TTS onEnd timeout — force restart listen");
@@ -918,7 +919,7 @@ export default function VoiceUI({
       }, estDuration + 2000);
 
       speakText(
-        response.text,
+        spokenText,
         () => setAvatarState("speaking"),
         () => {
           clearTimeout(ttsFallback);
@@ -1105,7 +1106,7 @@ export default function VoiceUI({
       markSessionInteraction();
       setAvatarState("speaking");
       speakText(
-        response.text,
+        response.spokenText || response.text,
         null,
         () => setAvatarState("idle"),
         response.detectedLang || lang,

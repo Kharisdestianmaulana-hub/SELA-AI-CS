@@ -6,6 +6,7 @@ import { t } from '../lib/translations'
 const URL_PATTERN = /(https?:\/\/[^\s]+)/g
 const TRAILING_PUNCTUATION = /[.,!?;:)\]]$/
 const SELA_ALIASES = new Set(['cela', 'sela', 'zela', 'selah', 'sella'])
+const BOLD_PATTERN = /(\*\*[^*]+\*\*)/g
 
 function isSelaAlias(word) {
   return SELA_ALIASES.has(word.toLowerCase())
@@ -52,6 +53,117 @@ function splitTextByLinks(text = '') {
   }
 
   return parts
+}
+
+function splitMarkdownBlocks(text = '') {
+  const lines = String(text || '').replace(/\r/g, '').split('\n')
+  const blocks = []
+  let paragraphLines = []
+  let activeList = null
+
+  const flushParagraph = () => {
+    if (paragraphLines.length === 0) return
+    blocks.push({
+      type: 'paragraph',
+      content: paragraphLines.join('\n').trim()
+    })
+    paragraphLines = []
+  }
+
+  const flushList = () => {
+    if (!activeList) return
+    blocks.push(activeList)
+    activeList = null
+  }
+
+  lines.forEach((line) => {
+    const trimmed = line.trim()
+
+    if (!trimmed) {
+      flushParagraph()
+      flushList()
+      return
+    }
+
+    const headingMatch = trimmed.match(/^(#{1,3})\s+(.*)$/)
+    if (headingMatch) {
+      flushParagraph()
+      flushList()
+      blocks.push({
+        type: 'heading',
+        level: headingMatch[1].length,
+        content: headingMatch[2]
+      })
+      return
+    }
+
+    const unorderedMatch = trimmed.match(/^[-*]\s+(.*)$/)
+    if (unorderedMatch) {
+      flushParagraph()
+      if (!activeList || activeList.type !== 'unordered-list') {
+        flushList()
+        activeList = { type: 'unordered-list', items: [] }
+      }
+      activeList.items.push(unorderedMatch[1])
+      return
+    }
+
+    const orderedMatch = trimmed.match(/^(\d+)\.\s+(.*)$/)
+    if (orderedMatch) {
+      flushParagraph()
+      if (!activeList || activeList.type !== 'ordered-list') {
+        flushList()
+        activeList = { type: 'ordered-list', items: [] }
+      }
+      activeList.items.push(orderedMatch[2])
+      return
+    }
+
+    flushList()
+    paragraphLines.push(line)
+  })
+
+  flushParagraph()
+  flushList()
+
+  return blocks
+}
+
+function renderInlineMarkdown(text = '', keyPrefix = 'inline', qrVisibleMs = null) {
+  const normalized = normalizeSelaAliases(text)
+  const parts = splitTextByLinks(normalized)
+
+  return parts.flatMap((part, partIndex) => {
+    if (part.type === 'qr') {
+      return (
+        <QrLinkCard
+          key={`${keyPrefix}-qr-${partIndex}`}
+          url={part.value}
+          visibleMs={qrVisibleMs}
+        />
+      )
+    }
+
+    return part.value
+      .split(BOLD_PATTERN)
+      .filter(Boolean)
+      .map((segment, segmentIndex) => {
+        const boldMatch = segment.match(/^\*\*(.*)\*\*$/)
+        if (boldMatch) {
+          return (
+            <strong key={`${keyPrefix}-bold-${partIndex}-${segmentIndex}`} className="font-semibold text-gray-800 dark:text-white">
+              {boldMatch[1]}
+            </strong>
+          )
+        }
+
+        return (
+          <span key={`${keyPrefix}-text-${partIndex}-${segmentIndex}`}>
+            {segment}
+          </span>
+        )
+      })
+  })
 }
 
 function QrLinkCard({ url, visibleMs = null }) {
@@ -115,20 +227,63 @@ function QrLinkCard({ url, visibleMs = null }) {
 }
 
 function ChatContent({ text, qrVisibleMs = null }) {
-  const parts = splitTextByLinks(text)
+  const blocks = splitMarkdownBlocks(text)
 
-  if (!parts.some(part => part.type === 'qr')) return normalizeSelaAliases(text)
+  if (blocks.length === 0) {
+    return (
+      <span className="whitespace-pre-wrap break-words">
+        {renderInlineMarkdown(text, 'fallback', qrVisibleMs)}
+      </span>
+    )
+  }
 
   return (
-    <span className="whitespace-pre-wrap break-words">
-      {parts.map((part, index) => (
-        part.type === 'qr' ? (
-          <QrLinkCard key={`${part.value}-${index}`} url={part.value} visibleMs={qrVisibleMs} />
-        ) : (
-          <span key={`${part.value}-${index}`}>{normalizeSelaAliases(part.value)}</span>
+    <div className="space-y-2 break-words">
+      {blocks.map((block, blockIndex) => {
+        if (block.type === 'heading') {
+          const headingClass =
+            block.level === 1
+              ? 'text-base font-semibold text-gray-900 dark:text-white'
+              : 'text-sm font-semibold text-gray-800 dark:text-gray-100'
+
+          return (
+            <p key={`heading-${blockIndex}`} className={headingClass}>
+              {renderInlineMarkdown(block.content, `heading-${blockIndex}`, qrVisibleMs)}
+            </p>
+          )
+        }
+
+        if (block.type === 'unordered-list') {
+          return (
+            <ul key={`ul-${blockIndex}`} className="list-disc space-y-1 pl-5">
+              {block.items.map((item, itemIndex) => (
+                <li key={`ul-${blockIndex}-${itemIndex}`} className="whitespace-pre-wrap">
+                  {renderInlineMarkdown(item, `ul-${blockIndex}-${itemIndex}`, qrVisibleMs)}
+                </li>
+              ))}
+            </ul>
+          )
+        }
+
+        if (block.type === 'ordered-list') {
+          return (
+            <ol key={`ol-${blockIndex}`} className="list-decimal space-y-1 pl-5">
+              {block.items.map((item, itemIndex) => (
+                <li key={`ol-${blockIndex}-${itemIndex}`} className="whitespace-pre-wrap">
+                  {renderInlineMarkdown(item, `ol-${blockIndex}-${itemIndex}`, qrVisibleMs)}
+                </li>
+              ))}
+            </ol>
+          )
+        }
+
+        return (
+          <p key={`p-${blockIndex}`} className="whitespace-pre-wrap break-words">
+            {renderInlineMarkdown(block.content, `p-${blockIndex}`, qrVisibleMs)}
+          </p>
         )
-      ))}
-    </span>
+      })}
+    </div>
   )
 }
 
