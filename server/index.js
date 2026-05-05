@@ -249,7 +249,7 @@ app.post("/api/chat", async (req, res) => {
       messages: messages,
       model: "llama-3.3-70b-versatile",
       temperature: 0.6,
-      max_tokens: 200,
+      max_tokens: 450,
     });
 
     const responseText = completion.choices[0]?.message?.content || "";

@@ -278,11 +278,11 @@ export function buildResponsePlanPrompt(responsePlan, lang = "id") {
   if (lang === "en") {
     switch (plan.displayMode) {
       case "list_detail":
-        return `Depth mode: list detail. Show all relevant items from context, not just examples. Keep the answer structured with line breaks, and preserve grouping by faculty, category, or section when the context provides it.${plan.mustEnumerateAll ? " You must enumerate every relevant item found in context." : ""}`;
+        return `Depth mode: list detail. Show all relevant items from context, not just examples. Use clean markdown: put each group title on its own line, and put every item on a separate bullet or numbered line.${plan.mustEnumerateAll ? " You must enumerate every relevant item found in context." : ""}`;
       case "step_detail":
-        return "Depth mode: step detail. Present the answer in a clear, structured order. Requirements, steps, and conditions should be easy to scan on screen with short grouped lines.";
+        return "Depth mode: step detail. Present the answer in clean markdown with each requirement, step, or condition on its own line. Use numbered lines for ordered steps and bullets for unordered requirements.";
       case "compare_detail":
-        return "Depth mode: compare detail. Compare the relevant options fairly and clearly. Highlight the core differences, strengths, and suitable use cases in a structured way.";
+        return "Depth mode: compare detail. Compare the relevant options fairly in clean markdown. Use short grouped lines or bullets so differences, strengths, and suitable use cases are easy to scan.";
       default:
         return "Depth mode: brief. Answer directly in 1 to 3 sentences, focusing only on the main fact the user asked for.";
     }
@@ -290,11 +290,11 @@ export function buildResponsePlanPrompt(responsePlan, lang = "id") {
 
   switch (plan.displayMode) {
     case "list_detail":
-      return `Mode jawaban: detail daftar. Tampilkan semua item relevan dari konteks, jangan hanya memberi contoh. Susun jawaban rapi dengan baris baru dan pertahankan pengelompokan per fakultas, kategori, atau bagian jika ada di konteks.${plan.mustEnumerateAll ? " Kamu wajib menyebut semua item relevan yang ada di konteks." : ""}`;
+      return `Mode jawaban: detail daftar. Tampilkan semua item relevan dari konteks, jangan hanya memberi contoh. Gunakan markdown rapi: judul kelompok di baris sendiri, lalu setiap item di baris bullet atau nomor sendiri.${plan.mustEnumerateAll ? " Kamu wajib menyebut semua item relevan yang ada di konteks." : ""}`;
     case "step_detail":
-      return "Mode jawaban: detail langkah. Tampilkan langkah, syarat, atau alur secara runtut dan mudah dipindai di layar. Gunakan format terstruktur dengan baris baru yang jelas.";
+      return "Mode jawaban: detail langkah. Tampilkan langkah, syarat, atau alur dengan markdown rapi. Setiap langkah, syarat, atau ketentuan harus berada di baris sendiri. Gunakan nomor untuk urutan langkah dan bullet untuk syarat.";
     case "compare_detail":
-      return "Mode jawaban: detail perbandingan. Bandingkan opsi yang relevan secara adil dan jelas, lalu sebutkan perbedaan inti, kekuatan, dan kecocokan utamanya secara terstruktur.";
+      return "Mode jawaban: detail perbandingan. Bandingkan opsi yang relevan secara adil dengan markdown rapi. Gunakan baris pendek atau bullet supaya perbedaan, kekuatan, dan kecocokan mudah dipindai.";
     default:
       return "Mode jawaban: singkat. Jawab langsung ke inti dalam 1 sampai 3 kalimat tanpa pengantar yang bertele-tele.";
   }

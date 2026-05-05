@@ -181,6 +181,7 @@ export default function VoiceUI({
   const audioCtxRef = useRef(null);
   const analyserRef = useRef(null);
   const recorderRef = useRef(null);
+  const aiRequestSeqRef = useRef(0);
   const vadFrameRef = useRef(null);
   const silenceStartRef = useRef(null);
   const hasSpeechRef = useRef(false);
@@ -883,6 +884,7 @@ export default function VoiceUI({
 
       onSend(text);
       setIsWaitingAI(true);
+      const requestId = ++aiRequestSeqRef.current;
 
       const history = (currentChat?.messages || []).map((m) => ({
         role: m.role,
@@ -890,6 +892,7 @@ export default function VoiceUI({
       }));
       history.push({ role: "user", content: text });
       const response = await getChatCompletion(history, lang);
+      if (requestId !== aiRequestSeqRef.current) return;
       setIsWaitingAI(false);
       console.log("[SELA Voice] Query final ke RAG:", {
         original: rawText,
@@ -980,6 +983,8 @@ export default function VoiceUI({
 
   // ── Farewell handler ──────────────────────────────────────────
   const handleFarewell = (userText) => {
+    aiRequestSeqRef.current++;
+    setIsWaitingAI(false);
     markSessionInteraction();
     onSend(userText);
     stopListening();
@@ -1091,6 +1096,7 @@ export default function VoiceUI({
 
     setAvatarState("thinking");
     setIsWaitingAI(true);
+    const requestId = ++aiRequestSeqRef.current;
     try {
       const history = (currentChat?.messages || []).map((m) => ({
         role: m.role,
@@ -1098,6 +1104,7 @@ export default function VoiceUI({
       }));
       history.push({ role: "user", content: userText });
       const response = await getChatCompletion(history, lang);
+      if (requestId !== aiRequestSeqRef.current) return;
       setIsWaitingAI(false);
       if (onReceive) onReceive(response);
       markSessionInteraction();
@@ -1107,6 +1114,7 @@ export default function VoiceUI({
         () => setAvatarState("idle"),
       );
     } catch {
+      if (requestId !== aiRequestSeqRef.current) return;
       setIsWaitingAI(false);
       if (onReceive) onReceive(t[lang].error_network);
       setAvatarState("idle");

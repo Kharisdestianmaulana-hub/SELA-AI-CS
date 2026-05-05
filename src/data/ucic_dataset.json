@@ -10,19 +10,11 @@
       "cirebon",
       "kampus",
       "sejarah",
-      "sejarah",
       "kapan berdiri",
       "info kampus"
     ],
     "title": "Profil Universitas Catur Insan Cendekia (UCIC)",
-    "content": "Universitas Catur Insan Cendekia (UCIC) merupakan institusi pendidikan modern di Cirebon yang lahir dari penggabungan STMIK CIC dan AP CIC berdasarkan SK Kemenristekdikti 952/KPT/I/2019. Fokus utama UCIC ialah teknologi, bisnis, dan sains. UCIC berkomitmen untuk menghasilkan lulusan yang adaptif, kreatif, dan kompeten di era digital.",
-    "media": [
-      {
-        "type": "image",
-        "url": "https://placehold.co/600x400/1e3a8a/ffffff?text=Gedung+UCIC",
-        "caption": "Gedung Utama Universitas Catur Insan Cendekia (UCIC)"
-      }
-    ]
+    "content": "Universitas Catur Insan Cendekia (UCIC) adalah kampus teknologi AI di Kota Cirebon yang berdampak dan mencetak entrepreneur unggul. UCIC menawarkan pendidikan berkualitas melalui Fakultas Teknologi dan Informasi (FTI), Fakultas Ekonomi dan Bisnis (FEB), dan Fakultas Pendidikan dan Sains (FPS). Program studi UCIC dirancang untuk menjawab kebutuhan industri modern agar mahasiswa menjadi lulusan yang kompeten dan berdaya saing."
   },
   {
     "id": "rektor",
@@ -93,7 +85,7 @@
       "feb"
     ],
     "title": "Fakultas Ekonomi dan Bisnis (FEB)",
-    "content": "Fakultas Ekonomi dan Bisnis (FEB) UCIC memiliki program studi:\n\nProgram S1:\n- Akuntansi\n- Manajemen\n- Bisnis Digital\n\nProgram D3:\n- Manajemen Bisnis\n\nFEB fokus pada pengembangan kompetensi di bidang ekonomi, keuangan, dan bisnis digital."
+    "content": "Fakultas Ekonomi dan Bisnis (FEB) UCIC adalah pilihan untuk calon mahasiswa yang ingin menjadi pemimpin bisnis masa depan. FEB membekali mahasiswa dengan pemahaman ekonomi, bisnis, manajemen, keuangan, dan bisnis digital melalui kurikulum yang relevan dan pembelajaran interaktif.\n\nProgram studi FEB:\n- S1 Manajemen\n- S1 Akuntansi\n- S1 Bisnis Digital\n- D3 Manajemen Bisnis\n\nTerdapat kelas karyawan untuk FEB."
   },
   {
     "id": "jurusan_fti",
@@ -104,16 +96,17 @@
       "fakultas",
       "teknologi",
       "informatika",
-      "teknik",
+      "teknik informatika",
       "sistem informasi",
       "dkv",
       "desain",
       "fti",
+      "manajemen informatika",
       "mi",
-      "ka"
+      "kelas karyawan"
     ],
-    "title": "Fakultas Teknologi Informasi (FTI)",
-    "content": "Fakultas Teknologi Informasi (FTI) UCIC memiliki program studi:\n\nProgram S1:\n- Teknik Informatika\n- Sistem Informasi\n- Desain Komunikasi Visual (DKV)\n\nProgram D3:\n- Manajemen Informatika\n- Komputerisasi Akuntansi\n\nFTI fokus pada pengembangan kompetensi di bidang teknologi informasi, pemrograman, dan desain."
+    "title": "Fakultas Teknologi dan Informasi (FTI)",
+    "content": "Fakultas Teknologi dan Informasi (FTI) UCIC adalah wadah bagi inovator muda yang memiliki minat di bidang teknologi, desain, dan sistem informasi. FTI membekali mahasiswa dengan ilmu dan keterampilan untuk menghadapi era digital.\n\nProgram studi FTI:\n- S1 Teknik Informatika\n- S1 Sistem Informasi\n- S1 Desain Komunikasi Visual (DKV)\n- D3 Manajemen Informatika\n\nTerdapat kelas karyawan untuk FTI."
   },
   {
     "id": "jurusan_fps",
@@ -127,10 +120,14 @@
       "olahraga",
       "kepelatihan",
       "fps",
-      "pikor"
+      "pkor",
+      "pikor",
+      "keolahragaan",
+      "pendidikan kepelatihan olahraga",
+      "pendidikan kepelatihan keolahragaan"
     ],
     "title": "Fakultas Pendidikan dan Sains (FPS)",
-    "content": "Fakultas Pendidikan dan Sains (FPS) UCIC memiliki program studi:\n\nProgram S1:\n- Pendidikan Kepelatihan Olahraga (PIKOR)\n\nFPS fokus pada pengembangan kompetensi di bidang pendidikan dan sains olahraga."
+    "content": "Fakultas Pendidikan dan Sains (FPS) UCIC ditujukan bagi calon mahasiswa yang tertarik pada pengembangan manusia melalui pendidikan dan olahraga. FPS bertujuan mencetak tenaga pendidik dan pelatih profesional yang kompeten, berintegritas, dan mampu beradaptasi dengan perkembangan zaman.\n\nProgram studi FPS:\n- S1 Pendidikan Kepelatihan Olahraga"
   },
   {
     "id": "lokasi_kampus",
@@ -145,7 +142,7 @@
       "tempat"
     ],
     "title": "Lokasi Kampus UCIC",
-    "content": "UCIC memiliki dua lokasi kampus:\n\n- Kampus 1: Jalan Kesambi No. 202, Kota Cirebon\n- Kampus 2: Jalan Kesambi No. 58 A, Kota Cirebon\n\nKedua kampus terletak di kawasan strategis Kota Cirebon dengan akses transportasi yang mudah."
+    "content": "UCIC memiliki dua lokasi kampus di Kota Cirebon:\n\n- Jl. Kesambi No. 58A, Kesambi, Kota Cirebon\n- Jl. Kesambi No. 202, Kesambi, Kota Cirebon\n\nKedua kampus berada di lokasi strategis di Kota Cirebon."
   },
   {
     "id": "kontak_ucic",
@@ -158,10 +155,15 @@
       "hubungi",
       "whatsapp",
       "wa",
-      "hp"
+      "hp",
+      "pmb",
+      "admin pmb",
+      "instagram",
+      "alamat",
+      "website"
     ],
-    "title": "Kontak UCIC",
-    "content": "Kontak Universitas Catur Insan Cendekia (UCIC):\n- Alamat: Jl. Kesambi No. 202, Cirebon\n- Email: info@ucic.ac.id\n- Telepon/WhatsApp: +62 895-1231-4188\n\nUntuk informasi PMB (Penerimaan Mahasiswa Baru), hubungi nomor di atas."
+    "title": "Kontak UCIC dan PMB",
+    "content": "Kontak Universitas Catur Insan Cendekia (UCIC):\n- Kampus 1: Jl. Kesambi No. 202, Kesambi, Kota Cirebon.\n- Kampus 2: Jl. Kesambi No. 58A, Kesambi, Kota Cirebon.\n- Website PMB: https://pmb.cic.ac.id/\n- Link daftar PMB: https://pmb.cic.ac.id/register\n- WhatsApp PMB: 0812 1670 0519\n- Instagram: universitas_cic / pmb_ucic\n\nUntuk pertanyaan pendaftaran, verifikasi pembayaran, kendala login PMB, promo/diskon, dan informasi orientasi, calon mahasiswa dapat menghubungi CS/Admin PMB."
   },
   {
     "id": "pendaftaran_pmb",
@@ -177,17 +179,17 @@
       "persyaratan",
       "maba",
       "ospek",
-      "masuk",
       "syarat",
-      "cara daftar",
       "info daftar",
       "registrasi pmb",
       "daftar online",
       "daftar offline",
-      "verifikasi pmb"
+      "verifikasi pmb",
+      "upload berkas",
+      "camaba"
     ],
     "title": "Pendaftaran Mahasiswa Baru (PMB) UCIC",
-    "content": "Pendaftaran mahasiswa baru UCIC dapat dilakukan secara online melalui https://pmb.cic.ac.id/ atau offline dengan datang langsung ke Kampus 2 UCIC. Alurnya: isi registrasi lengkap, lakukan pembayaran biaya registrasi dan tahap awal, kirim bukti transfer jika memakai rekening, tunggu verifikasi dari tim PMB, lalu upload berkas persyaratan seperti ijazah, KTP, dan dokumen pendukung lainnya. Setelah proses diverifikasi, calon mahasiswa akan mendapat informasi lanjutan dari tim PMB."
+    "content": "Pendaftaran mahasiswa baru UCIC dapat dilakukan secara online melalui https://pmb.cic.ac.id/register atau offline dengan datang langsung ke Kampus 2 UCIC. Alurnya: isi registrasi lengkap, lakukan pembayaran biaya registrasi, perlengkapan, dan tahap awal, kirim bukti transfer jika memakai rekening, tunggu verifikasi dari tim PMB, lalu upload berkas persyaratan seperti ijazah/SKL, KTP, dan dokumen pendukung lainnya. Setelah proses diverifikasi, calon mahasiswa akan mendapat informasi lanjutan dari tim PMB."
   },
   {
     "id": "biaya_kuliah",
@@ -204,18 +206,77 @@
       "uang",
       "bayaran",
       "mahal gak",
-      "spp",
-      "ukt",
       "cicil",
-      "cicilan",
       "uang masuk",
       "metode pembayaran",
       "virtual account",
       "e-wallet",
-      "midtrans"
+      "midtrans",
+      "biaya 2026",
+      "pmb 2026",
+      "ta 2026 2027",
+      "bayar 3 bulan",
+      "bayar semester",
+      "bayar setahun"
     ],
-    "title": "Biaya Kuliah UCIC",
-    "content": "Biaya pendaftaran UCIC adalah Rp200.000.\n\nEstimasi biaya awal per program studi:\n- Teknik Informatika: Rp2.800.000\n- Sistem Informasi: Rp1.800.000\n- DKV (Desain Komunikasi Visual): Rp2.500.000\n- Manajemen: Rp2.200.000\n- Akuntansi: Rp2.200.000\n- Bisnis Digital: Rp2.000.000\n- PKOR (Pendidikan Kepelatihan Olahraga): Rp2.000.000\n- D3 Manajemen Informatika: Rp1.400.000\n\nMetode pembayaran yang tersedia meliputi transfer bank (BCA, Mandiri, BNI, BRI), Virtual Account Midtrans, e-wallet seperti OVO, GoPay, dan DANA, serta pembayaran langsung ke kampus.\n\nUCIC juga menyediakan skema pembayaran bertahap, termasuk cicilan 3 bulan, pembayaran per semester, dan pembayaran penuh dengan potongan tertentu. Rincian biaya per jalur atau program studi dapat dilihat melalui referensi resmi PMB: https://docs.google.com/spreadsheets/d/1UVnVUcAnsou6RXGkJ56izp4Uj0OZNn1o/edit?usp=sharing&ouid=107132054575481969593&rtpof=true&sd=true"
+    "title": "Biaya Kuliah UCIC TA 2026/2027",
+    "content": "Biaya kuliah UCIC TA 2026/2027 memiliki 3 opsi pembayaran:\n1. Bayar 3 bulan atau setengah semester.\n2. Bayar 1 semester atau 6 bulan, dengan potongan Rp170.000.\n3. Bayar 1 tahun atau 2 semester, dengan potongan Rp340.000.\n\nKomponen biaya awal meliputi pendaftaran Rp250.000 dan perlengkapan Rp500.000. DPP mendapat diskon 100% dengan nilai DPP S1 Rp3.000.000 dan DPP D3 Rp2.000.000. Uang gedung Rp4.000.000 mendapat diskon 100%.\n\nNominal total pembayaran berbeda sesuai program studi, jenis kelas, dan skema pembayaran. Kelas yang tersedia pada rincian biaya meliputi reguler, kelas sore, dan RPL khusus S1 Manajemen."
+  },
+  {
+    "id": "biaya_pmb_2026_komponen",
+    "category": "biaya",
+    "keywords": [
+      "biaya",
+      "uang kuliah",
+      "spp",
+      "ukt",
+      "bayar",
+      "cicilan",
+      "3 bulan",
+      "1 semester",
+      "1 tahun",
+      "pmb 2026",
+      "ta 2026 2027",
+      "komponen biaya",
+      "biaya pendaftaran",
+      "perlengkapan",
+      "dpp",
+      "uang gedung",
+      "gedung 4jt",
+      "diskon dpp",
+      "diskon gedung"
+    ],
+    "title": "Komponen Biaya PMB UCIC TA 2026/2027",
+    "content": "Komponen biaya PMB UCIC TA 2026/2027:\n- Pendaftaran: Rp250.000.\n- Perlengkapan: Rp500.000.\n- DPP S1: Rp3.000.000, mendapat diskon 100%.\n- DPP D3: Rp2.000.000, mendapat diskon 100%.\n- Uang gedung: Rp4.000.000, mendapat diskon 100%.\n\nTotal pembayaran awal dihitung dari biaya tahap kuliah, pendaftaran, dan perlengkapan sesuai pilihan program studi dan kelas."
+  },
+  {
+    "id": "biaya_pmb_2026_opsi_pembayaran",
+    "category": "biaya",
+    "keywords": [
+      "biaya",
+      "uang kuliah",
+      "spp",
+      "ukt",
+      "bayar",
+      "cicilan",
+      "3 bulan",
+      "1 semester",
+      "1 tahun",
+      "pmb 2026",
+      "ta 2026 2027",
+      "opsi pembayaran",
+      "bayar 3 bulan",
+      "bayar tahap 1",
+      "bayar setengah semester",
+      "bayar 1 semester",
+      "bayar 6 bulan",
+      "bayar 1 tahun",
+      "bayar 2 semester",
+      "diskon 170",
+      "diskon 340"
+    ],
+    "title": "Opsi Pembayaran Biaya Kuliah UCIC TA 2026/2027",
+    "content": "Opsi pembayaran biaya kuliah UCIC TA 2026/2027:\n1. Bayar 3 bulan: pembayaran tahap 1 atau setengah semester.\n2. Bayar 1 semester: pembayaran tahap 1 dan 2 untuk 6 bulan, mendapat potongan Rp170.000.\n3. Bayar 1 tahun: pembayaran tahap 1, 2, 3, dan 4 untuk 2 semester, mendapat potongan Rp340.000.\n\nSetiap opsi memiliki total berbeda sesuai program studi, kelas reguler, kelas sore, atau RPL."
   },
   {
     "id": "beasiswa",
@@ -227,14 +288,14 @@
       "potongan",
       "scholarship",
       "prestasi",
-      "gratis",
-      "potongan",
       "kip",
       "beasiswa prestasi",
-      "bantuan"
+      "syarat beasiswa",
+      "alur beasiswa",
+      "jadwal seleksi beasiswa"
     ],
-    "title": "Beasiswa UCIC",
-    "content": "UCIC menyediakan berbagai program beasiswa untuk mahasiswa berprestasi dan kurang mampu:\n\n- Beasiswa prestasi akademik\n- Beasiswa prestasi non-akademik (olahraga, seni, dll)\n- Beasiswa KIP-Kuliah (bantuan pemerintah)\n- Beasiswa internal UCIC\n\nUntuk informasi lebih lanjut tentang beasiswa, hubungi bagian kemahasiswaan UCIC."
+    "title": "Informasi Beasiswa UCIC",
+    "content": "UCIC memiliki pilihan beasiswa atau bantuan tertentu. Syarat, alur beasiswa, dan jadwal seleksi beasiswa perlu dikonfirmasi ke CS/Admin PMB atau bagian kemahasiswaan.\n\nUntuk pertanyaan tentang beasiswa, potongan, promo, atau bantuan biaya, calon mahasiswa dapat menghubungi CS/Admin PMB atau bagian kemahasiswaan."
   },
   {
     "id": "akreditasi",
@@ -248,7 +309,7 @@
       "nilai"
     ],
     "title": "Akreditasi UCIC",
-    "content": "UCIC dan program studinya telah terakreditasi oleh BAN-PT (Badan Akreditasi Nasional Perguruan Tinggi). Setiap program studi memiliki status akreditasi yang menjamin kualitas pendidikan. UCIC terus berupaya meningkatkan mutu pendidikan untuk meraih akreditasi terbaik."
+    "content": "UCIC memiliki akreditasi Baik Sekali. Status akreditasi program studi: S1 Teknik Informatika Baik Sekali, S1 Sistem Informasi Baik Sekali, S1 Desain Komunikasi Visual Baik, D3 Manajemen Informatika Baik Sekali, S1 Manajemen Baik Sekali, S1 Bisnis Digital Baik, S1 Akuntansi Baik, D3 Manajemen Bisnis Baik Sekali, dan S1 Pendidikan Kepelatihan Olahraga Baik."
   },
   {
     "id": "daftar_dosen_lengkap",
@@ -277,10 +338,11 @@
       "ai",
       "karir",
       "prospek kerja",
-      "lulusan"
+      "lulusan",
+      "system architect"
     ],
     "title": "Detail Program Studi S1 Teknik Informatika",
-    "content": "S1 Teknik Informatika UCIC fokus pada teknologi komputer dan pemrograman, meliputi pemrograman, pengembangan aplikasi, AI, robotika, cybersecurity, database, dan pengembangan software.\n\nProspek Karir: Software Engineer, Programmer, AI Engineer, Game Developer, Web Developer, Mobile App Developer, Cybersecurity Specialist, Data Scientist, IT Consultant."
+    "content": "S1 Teknik Informatika UCIC berada di Fakultas Teknologi dan Informasi (FTI). Program ini mempelajari pemanfaatan teknologi komputer secara optimal untuk menangani transformasi dan pengolahan data. Mahasiswa mempelajari prinsip ilmu komputer mulai dari perancangan, pengembangan, pengujian, hingga validasi perangkat lunak, serta banyak mengkaji pemrograman, komputasi, dan keterampilan merancang software.\n\nProspek Karir: Software Engineer, Programmer, Front End Web Developer, Back End Web Developer, Full Stack Developer, Web & Mobile Developer, Mobile Application Developer, UI/UX Designer, Data Science/ML Engineer, AI/Machine Learning Engineer, IoT Engineer, Pengembangan Sistem Berbasis AI, IT Officer, Data Scientist, Network Administrator, Digital Entrepreneur, Cyber Security Analyst, dan System Architect.\n\nMata Kuliah Unggulan: Pemrograman Internet, Mobile Programming, Artificial Intelligence, Internet of Things, Machine Learning, UI & UX Designer, Computer Vision and NLP."
   },
   {
     "id": "prodi_sistem_informasi_detail",
@@ -291,10 +353,12 @@
       "karir",
       "prospek kerja",
       "bisnis",
-      "data"
+      "data",
+      "erp",
+      "project manager it"
     ],
     "title": "Detail Program Studi S1 Sistem Informasi",
-    "content": "S1 Sistem Informasi UCIC menggabungkan teknologi informasi dengan dunia bisnis, fokus pada sistem informasi untuk pengambilan keputusan dan pengelolaan data perusahaan.\n\nProspek Karir: System Analyst, IT Consultant, Business Analyst, Database Administrator, IT Project Manager, Data Analyst."
+    "content": "S1 Sistem Informasi UCIC berada di Fakultas Teknologi dan Informasi (FTI). Program ini membekali mahasiswa dengan ilmu sistem informasi dan keterampilan menggunakan metode serta teknik mutakhir untuk menyelesaikan masalah manajemen organisasi berbasis teknologi informasi. Mahasiswa mempelajari konsep sistem enterprise, analisis prospek bisnis, rekayasa sistem informasi, pemrograman berbasis web, pengelolaan basis data, etika profesi, dan kewirausahaan.\n\nProspek Karir: Application Engineer, Digital Marketing, Research and Development (RnD), Data Scientist, Data Analyst, Software Developer, System Analyst, IT Consultant, ERP Specialist, Project Manager IT, Quality Software System, System Designer, Business Application Developer, dan e-Business Manager.\n\nMata Kuliah Unggulan: Audit Sistem Informasi, Enterprise Resource Planning (ERP), Proyek Technopreneurship, E-CRM, Agile Development, UI/UX Design, Business Intelligence."
   },
   {
     "id": "prodi_dkv_detail",
@@ -309,7 +373,7 @@
       "karir"
     ],
     "title": "Detail Program Studi S1 Desain Komunikasi Visual (DKV)",
-    "content": "S1 DKV UCIC mempelajari desain grafis, multimedia, animasi, ilustrasi, branding, serta UI/UX design.\n\nProspek Karir: Graphic Designer, Animator, Illustrator, Creative Director, UI/UX Designer, Content Creator, Motion Graphic Artist."
+    "content": "S1 Desain Komunikasi Visual (DKV) UCIC berada di Fakultas Teknologi dan Informasi (FTI). Program ini menggabungkan kreativitas seni dengan pemahaman komunikasi dan media visual. Mahasiswa mengembangkan keterampilan desain grafis, fotografi, ilustrasi, dan multimedia untuk menciptakan pesan visual yang efektif, estetis, dan berdampak, serta terlibat dalam proyek beragam dan kolaborasi tim.\n\nProspek Karir: Desainer Grafis, UI/UX Designer, Ilustrator, Komik Desainer, Fotografer/Videografer, Desainer Kemasan, Desainer Identitas Visual, Spesialis Media Sosial, Periklanan dan Pemasaran Visual, Produser Konten Digital, Pendidik dan Instruktur, Kewirausahaan, Editor Grafis, Desainer Seni dan Hiburan, Digital Marketing.\n\nMata Kuliah Unggulan: Ilustrasi, Fotografi, Komik, 3D Animasi, Media Interaktif, Desain Komunikasi Visual Identitas, Creative Content Advertising."
   },
   {
     "id": "prodi_akuntansi_detail",
@@ -322,7 +386,7 @@
       "karir"
     ],
     "title": "Detail Program Studi S1 Akuntansi",
-    "content": "S1 Akuntansi UCIC mempelajari pengelolaan keuangan, audit, perpajakan, dan sistem laporan keuangan perusahaan.\n\nProspek Karir: Akuntan, Auditor, Financial Analyst, Tax Consultant, Finance Manager."
+    "content": "S1 Akuntansi UCIC berada di Fakultas Ekonomi dan Bisnis (FEB). Program ini mempelajari pengelolaan dan analisis keuangan untuk membantu organisasi mencapai tujuannya. Mahasiswa mempelajari Akuntansi Keuangan, Akuntansi Manajemen, Pajak, dan Auditing, serta mengembangkan kemampuan analisis dan interpretasi data keuangan untuk pengambilan keputusan bisnis.\n\nProspek Karir: Auditor Internal, Auditor Eksternal, Accounting, Konsultan Keuangan, Data Analis, Konsultan Perpajakan.\n\nMata Kuliah Unggulan: Akuntansi Keuangan, Auditing, Sistem Informasi, Perpajakan."
   },
   {
     "id": "prodi_manajemen_detail",
@@ -336,7 +400,7 @@
       "organisasi"
     ],
     "title": "Detail Program Studi S1 Manajemen",
-    "content": "S1 Manajemen UCIC mempelajari pengelolaan bisnis, manajemen organisasi, pemasaran, dan sumber daya manusia.\n\nProspek Karir: Manager perusahaan, Entrepreneur, Marketing Manager, Business Consultant, HR Manager."
+    "content": "S1 Manajemen UCIC berada di Fakultas Ekonomi dan Bisnis (FEB). Program ini mempelajari berbagai aspek pengelolaan perusahaan atau organisasi yang terkait dengan ilmu ekonomi dan bisnis. Mahasiswa dibekali keterampilan mengelola kebijakan manajemen, strategi bisnis, organisasi, sumber daya manusia, produksi, pemasaran, administrasi, hingga organisasi nirlaba. Program ini juga menanamkan kewirausahaan dan technopreneurship agar lulusan siap bekerja di industri maupun menciptakan peluang usaha berbasis teknologi.\n\nProspek Karir: Account Officer, Bagian Operasional dan Logistik, Product Manager, Market Researcher, Event Planner/Event Organizer, Wirausaha, CEO, Direktur, Manajer, Credit Analyst, Treasury Supervisor, Head of Operations Business.\n\nMata Kuliah Unggulan: Manajemen Keuangan, Manajemen Operasional, Manajemen Pemasaran, Manajemen Sumber Daya Manusia."
   },
   {
     "id": "prodi_bisnis_digital_detail",
@@ -350,22 +414,31 @@
       "online"
     ],
     "title": "Detail Program Studi S1 Bisnis Digital",
-    "content": "S1 Bisnis Digital UCIC mempelajari bisnis berbasis teknologi digital seperti e-commerce, startup, digital marketing, dan strategi bisnis online.\n\nProspek Karir: Digital Marketer, Startup Founder, E-commerce Specialist, Business Strategist, Social Media Manager."
+    "content": "S1 Bisnis Digital UCIC berada di Fakultas Ekonomi dan Bisnis (FEB). Program ini mempelajari pemanfaatan teknologi digital dalam kegiatan bisnis modern yang berkaitan dengan manajemen, ekonomi, teknologi informasi, dan kewirausahaan. Lulusan berperan dalam mengelola dan mengembangkan bisnis berbasis teknologi, digital marketing, e-commerce, analisis data bisnis, inovasi produk digital, manajemen startup, pengembangan aplikasi bisnis, serta pemanfaatan platform digital untuk operasional dan pertumbuhan organisasi.\n\nProspek Karir: Technopreneur, Digital Marketing Manager, Social Media Marketing Manager, Data Intelligence Analyst, e-Commerce Practitioner, Fintech Practitioner, Startup Consultant, Startup Ecosystem Team, Financial Planner.\n\nMata Kuliah Unggulan: Technopreneurship, Financial Technology, Model Bisnis MSMEs, Analisis Bisnis Digital, Startup Business Model."
   },
   {
     "id": "prodi_pkor_detail",
     "category": "jurusan",
     "keywords": [
       "pkor",
+      "pikor",
+      "pendidikan kepelatihan olahraga",
+      "pendidikan kepelatihan keolahragaan",
       "olahraga",
       "kepelatihan",
       "atlet",
       "pelatih",
       "fisiologi",
-      "karir"
+      "biomekanika",
+      "psikologi olahraga",
+      "karir",
+      "pko",
+      "personal trainer",
+      "instruktur fitness",
+      "manajer tim"
     ],
-    "title": "Detail Program Studi S1 Pendidikan Kepelatihan Olahraga (PKOR)",
-    "content": "S1 PKOR UCIC mempelajari ilmu kepelatihan olahraga, pelatihan atlet, fisiologi olahraga, dan manajemen olahraga.\n\nMata Kuliah Unggulan: Ilmu Kepelatihan Olahraga, Biomekanika Olahraga, Psikologi Olahraga, Fisiologi Latihan dan kinerja Atlet, Manajemen Kepelatihan olahraga.\n\nProspek Karir: Pelatih olahraga, Guru olahraga, Personal trainer, Sport analyst, Sport management."
+    "title": "Detail Program Studi S1 Pendidikan Kepelatihan Olahraga",
+    "content": "S1 Pendidikan Kepelatihan Olahraga UCIC berada di Fakultas Pendidikan dan Sains (FPS). Program ini mempelajari teori dan praktik kepelatihan olahraga secara ilmiah dan profesional, dengan keterkaitan pada ilmu pendidikan, ilmu keolahragaan, biomedik, psikologi olahraga, dan manajemen kepelatihan. Lulusan berperan dalam merancang, melaksanakan, dan mengevaluasi program latihan olahraga secara sistematis, mulai dari atlet pemula hingga profesional.\n\nProspek Karir: Guru Olahraga, Pelatih Profesional, Personal Trainer, Instruktur Fitness, Wasit/Juri Olahraga, Sport Entrepreneur, Sport Event Organizer, Konsultan Kebugaran, Manajer Tim/Klub Olahraga, dan tenaga profesional olahraga.\n\nMata Kuliah Unggulan: Ilmu Kepelatihan Olahraga, Biomekanika Olahraga, Psikologi Olahraga, Fisiologi Latihan dan Kinerja Atlet, Manajemen Kepelatihan Olahraga."
   },
   {
     "id": "prodi_d3_mi_detail",
@@ -375,10 +448,14 @@
       "manajemen informatika",
       "diploma",
       "media digital",
-      "konten digital"
+      "konten digital",
+      "it support",
+      "database administrator",
+      "web administrator",
+      "junior programmer"
     ],
     "title": "Detail Program D3 Manajemen Informatika",
-    "content": "D3 Manajemen Informatika UCIC mempelajari teknologi informasi terapan, desain digital, dan manajemen media digital.\n\nKurikulum meliputi: AI Technician, Komputer Grafis, Digital Copywriting, Fotography Digital, Videograf, Brand Identity, Manajemen Media Sosial, Visual Storytelling, Digital Content Marketing, Digital Bisnis Startup, UI & UX Design, E-Commerce, dan Monetisasi Konten Digital."
+    "content": "D3 Manajemen Informatika UCIC berada di Fakultas Teknologi dan Informasi (FTI). Program ini mempelajari teori dan penerapan teknologi informasi untuk mendukung kegiatan bisnis dan operasional perusahaan agar lebih efektif dan efisien. Mahasiswa dibekali kemampuan merancang, mengelola, dan mengimplementasikan sistem informasi sesuai kebutuhan organisasi maupun industri.\n\nProgram ini memadukan keahlian manajemen dengan penguasaan software, teknologi informasi, media digital, database, jaringan, web, dan konten digital. Pembelajaran menekankan praktik melalui proyek nyata, simulasi bisnis digital, dan magang industri.\n\nProspek Karir: Web Designer, Content Creator, Software Developer, Pengajar Teknologi Informasi, Network Administrator, IT Consultant, IT Support Specialist, Database Administrator, Web Administrator, dan Junior Programmer.\n\nMata Kuliah Unggulan: Pemrograman Web, Digital Content Marketing, Fotography Digital, UI & UX Design, Kecerdasan Buatan."
   },
   {
     "id": "magang_detail",
@@ -412,7 +489,7 @@
       "bisa cicilan"
     ],
     "title": "FAQ - Pertanyaan Umum tentang UCIC",
-    "content": "Apakah UCIC bagus? UCIC adalah kampus yang fokus pada teknologi, bisnis, dan kewirausahaan dengan fasilitas laboratorium, dosen berpengalaman, serta program studi yang relevan dengan kebutuhan industri.\n\nApakah ada kelas sore? Ada. UCIC menyediakan kelas sore pada pukul 18.30-21.30.\n\nApakah biaya kuliah bisa dicicil? Bisa. Tersedia skema pembayaran bertahap, termasuk cicilan 3 bulan.\n\nKapan mulai kuliah? Informasi dari data PMB menyebutkan perkuliahan dimulai sekitar bulan September, namun jadwal final tetap mengikuti pengumuman resmi kampus.\n\nKalau suka komputer, jurusan apa yang cocok? Rekomendasi utamanya Teknik Informatika atau Sistem Informasi. Kalau suka desain cocok DKV, kalau suka bisnis cocok Manajemen atau Bisnis Digital, dan kalau suka olahraga cocok PKOR.\n\nPeluang kerja lulusan UCIC terbuka sesuai bidang prodi masing-masing, ditunjang program magang dan kerja sama industri."
+    "content": "Apakah UCIC bagus? UCIC adalah kampus teknologi AI di Kota Cirebon yang berfokus pada teknologi, bisnis, pendidikan, sains, dan kewirausahaan.\n\nApa saja fakultas dan prodi di UCIC? UCIC memiliki FTI dengan S1 Teknik Informatika, S1 Sistem Informasi, S1 DKV, dan D3 Manajemen Informatika; FEB dengan S1 Manajemen, S1 Akuntansi, S1 Bisnis Digital, dan D3 Manajemen Bisnis; serta FPS dengan S1 Pendidikan Kepelatihan Olahraga.\n\nApakah ada kelas karyawan? Ada, kelas karyawan tersedia untuk FTI dan FEB.\n\nApa saja fasilitas UCIC? Fasilitas UCIC meliputi Campus 1, Campus Hub, Convention Hall, Multimedia/DM/3D Virtual Reality Lab, Ruangan Kelas, AI & Data Analysis Lab, Computer Lab, Ruang Meeting, Perpustakaan, Ruang Podcast, Student Business Corner, dan Auditorium.\n\nBagaimana cara daftar? Calon mahasiswa dapat daftar online melalui https://pmb.cic.ac.id/register atau menghubungi WhatsApp PMB 0812 1670 0519."
   },
   {
     "id": "dosen_fti",
@@ -430,8 +507,8 @@
       "manajemen informatika",
       "mi"
     ],
-    "title": "Dosen Fakultas Teknologi Informasi (FTI)",
-    "content": "Dosen yang mengajar di Fakultas Teknologi Informasi (FTI) untuk program studi Teknik Informatika, Sistem Informasi, dan Manajemen Informatika antara lain:\n1. Petrus Sokibi, S.Kom., M.Kom.\n2. Bambang Sugiarto, S.Kom., M.Kom.\n3. Victor Asih, S.Si., M.T.\n4. Marsani Asfi, S.Si., M.Si.\n5. Ridho Taufiq Subagio, S.T., M.Kom.\n6. Kusnadi, S.Kom., M.Kom.\n7. Rifqi Fahrudin, S.Kom., M.Kom.\n8. Lena Magdalena, S.Kom., M.Kom.\n9. Agus Sevitiana, S.Kom., M.Kom.\n10. Mesi Febima, S.Kom., M.Kom.\nMereka ahli di berbagai bidang Ilmu Komputer seperti Algoritma, Rekayasa Perangkat Lunak, Jaringan, AI, dan Struktur Data."
+    "title": "Dosen Fakultas Teknologi dan Informasi (FTI)",
+    "content": "Dosen yang mengajar di Fakultas Teknologi dan Informasi (FTI) untuk program studi Teknik Informatika, Sistem Informasi, dan Manajemen Informatika antara lain:\n1. Petrus Sokibi, S.Kom., M.Kom.\n2. Bambang Sugiarto, S.Kom., M.Kom.\n3. Victor Asih, S.Si., M.T.\n4. Marsani Asfi, S.Si., M.Si.\n5. Ridho Taufiq Subagio, S.T., M.Kom.\n6. Kusnadi, S.Kom., M.Kom.\n7. Rifqi Fahrudin, S.Kom., M.Kom.\n8. Lena Magdalena, S.Kom., M.Kom.\n9. Agus Sevitiana, S.Kom., M.Kom.\n10. Mesi Febima, S.Kom., M.Kom.\nMereka ahli di berbagai bidang Ilmu Komputer seperti Algoritma, Rekayasa Perangkat Lunak, Jaringan, AI, dan Struktur Data."
   },
   {
     "id": "dosen_dkv",
@@ -515,11 +592,11 @@
       "lecturer"
     ],
     "title": "Daftar Dosen Tambahan UCIC",
-    "content": "Dosen-dosen UCIC tambahan berdasarkan data jadwal terbaru:\n\n- Lena Magdalena, MMSI. - Manajemen dan Organisasi, Rekayasa Perangkat Lunak\n- Agung Supriyadi, S.E., M.Ak. - Teknologi Informasi untuk Bisnis, Akuntansi\n- Wiwiek Nurkomala Dewi, S.T., M.M. - Statistik, SIM\n- Oryz Agnu Dian Wulandari, S.E., M.M. - Statistik, Etika Komunikasi Bisnis\n- Ine Rachmawati, M.Sn. - Basic Fotografi, Desain\n- Dzulfiqar Fickri Rosyid, M.Ds. - DKV Sosial, Bahasa Rupa\n- Dewi Anggun, S.E., M.Ak. - Akuntansi Syariah\n- Rifqi Fahrudin, M.Kom. - UI & UX Design, Interaksi Manusia Komputer\n- Agus Sevitiana, S.T., M.Kom. - UI & UX Design, Komputer Grafis\n- Sitta Nurhajjah, S.AB., M.Si - Pengantar Akuntansi, Hukum Bisnis\n- Tiara Khodijah, M.Ds. - DKV Identitas, Basic Tipografi, Animasi 3D\n- Yuni Awalaturrohmah S, M.Pd - General English, Advertising Copywriting\n- Muthia Fariza, S.IP., M.M. - Manajemen SDM, Perilaku Konsumen\n- Galih M.P., M.Ds. - Estetika Visual Desain, Technopreneurship DKV\n- Dewi Laily Purnamasari, S.T., M.M. - Komunikasi Bisnis, Pemasaran\n- Willy Eka Septian, M.Kom. - Web Design, Enterprise Resource Planning\n- Unang Solihin, M.Kom. - Administrasi Jaringan, Keamanan Sistem\n- Mesi Febima, M.Kom. - Pemrograman Internet, Business Intelligence\n- Gytha Nurhana Dhea P.G., S.E., M.M. - Ekonomi Mikro, Matematika Ekonomi\n- Muhammad Hatta, M.Kom. - Rekayasa Aplikasi Internet, Mobile Programming\n- Safitri Akbari, S.E., M.Ak. - Akuntansi Keuangan Dasar/Lanjutan\n- Aan Kanivia, S.E., M.Ak., ACPA - Hukum Perpajakan, Audit\n- Feri Fauzi, S.E., M.M. - Technopreneurship, Seminar Pemasaran\n- Verina Tita Nabila, M.Si. - Data Mining, Deep Learning\n- Arif Nursetyo, M.Kom. - Kecerdasan Buatan, Etika dalam AI\n- Helmi Akmal Fauzan, S.Pd., M.Pd. - Bahasa Indonesia, Pelatihan Cabor\n- Nur Muhamad Hildan, S.Pd., M.Pd. - Bahasa Indonesia, Pelatihan Cabor Futsal\n- Dr. Chandra Lukita, S.E., M.M., M.T.I. - Data Analytics, Rektor UCIC\n- Kinaidi Adam, M.Comp. - Manajemen Proyek Perangkat Lunak\n- Ridho Taufiq S., M.Kom. - Jaminan Kualitas PL, Komunikasi Data\n- Bambang Sugiarto, M.Kom. - Pemrograman Internet, Pengembangan Aplikasi Mobile, Realitas Virtual dan Augmentasi"
+    "content": "Daftar dosen UCIC tambahan:\n\n- Lena Magdalena, MMSI. - Manajemen dan Organisasi, Rekayasa Perangkat Lunak\n- Agung Supriyadi, S.E., M.Ak. - Teknologi Informasi untuk Bisnis, Akuntansi\n- Wiwiek Nurkomala Dewi, S.T., M.M. - Statistik, SIM\n- Oryz Agnu Dian Wulandari, S.E., M.M. - Statistik, Etika Komunikasi Bisnis\n- Ine Rachmawati, M.Sn. - Basic Fotografi, Desain\n- Dzulfiqar Fickri Rosyid, M.Ds. - DKV Sosial, Bahasa Rupa\n- Dewi Anggun, S.E., M.Ak. - Akuntansi Syariah\n- Rifqi Fahrudin, M.Kom. - UI & UX Design, Interaksi Manusia Komputer\n- Agus Sevitiana, S.T., M.Kom. - UI & UX Design, Komputer Grafis\n- Sitta Nurhajjah, S.AB., M.Si - Pengantar Akuntansi, Hukum Bisnis\n- Tiara Khodijah, M.Ds. - DKV Identitas, Basic Tipografi, Animasi 3D\n- Yuni Awalaturrohmah S, M.Pd - General English, Advertising Copywriting\n- Muthia Fariza, S.IP., M.M. - Manajemen SDM, Perilaku Konsumen\n- Galih M.P., M.Ds. - Estetika Visual Desain, Technopreneurship DKV\n- Dewi Laily Purnamasari, S.T., M.M. - Komunikasi Bisnis, Pemasaran\n- Willy Eka Septian, M.Kom. - Web Design, Enterprise Resource Planning\n- Unang Solihin, M.Kom. - Administrasi Jaringan, Keamanan Sistem\n- Mesi Febima, M.Kom. - Pemrograman Internet, Business Intelligence\n- Gytha Nurhana Dhea P.G., S.E., M.M. - Ekonomi Mikro, Matematika Ekonomi\n- Muhammad Hatta, M.Kom. - Rekayasa Aplikasi Internet, Mobile Programming\n- Safitri Akbari, S.E., M.Ak. - Akuntansi Keuangan Dasar/Lanjutan\n- Aan Kanivia, S.E., M.Ak., ACPA - Hukum Perpajakan, Audit\n- Feri Fauzi, S.E., M.M. - Technopreneurship, Seminar Pemasaran\n- Verina Tita Nabila, M.Si. - Data Mining, Deep Learning\n- Arif Nursetyo, M.Kom. - Kecerdasan Buatan, Etika dalam AI\n- Helmi Akmal Fauzan, S.Pd., M.Pd. - Bahasa Indonesia, Pelatihan Cabor\n- Nur Muhamad Hildan, S.Pd., M.Pd. - Bahasa Indonesia, Pelatihan Cabor Futsal\n- Dr. Chandra Lukita, S.E., M.M., M.T.I. - Data Analytics, Rektor UCIC\n- Kinaidi Adam, M.Comp. - Manajemen Proyek Perangkat Lunak\n- Ridho Taufiq S., M.Kom. - Jaminan Kualitas PL, Komunikasi Data\n- Bambang Sugiarto, M.Kom. - Pemrograman Internet, Pengembangan Aplikasi Mobile, Realitas Virtual dan Augmentasi"
   },
   {
     "id": "kurikulum_d3mi_lengkap",
-    "category": "jurusan",
+    "category": "kurikulum",
     "keywords": [
       "kurikulum",
       "d3",
@@ -529,8 +606,8 @@
       "mi",
       "diploma"
     ],
-    "title": "Kurikulum Lengkap D3 Manajemen Informatika",
-    "content": "Semester 1: Pancasila dan kewarganegaraan, Bahasa Indonesia, Pembangunan karakter dan Etika Profesi, General English, Pengantar Media Digital, Komputer Grafis 1, Komunikasi dan Presentasi Dasar, AI Technician.\n\nSemester 2: Pendidikan Agama, Intermediate English, Design Thinking, Fotography Digital, Komputer Grafis 2 (Data Visualization), Statistik Informatika, Digital Copywriting.\n\nSemester 3: English for Specific Purpose, Technopreneurship, Videograf, Brand Identity (Corporate & Personal Branding), Manajemen Media Sosial, Visual Storytelling, Digital Content Marketing.\n\nSemester 4: TOEFL Preparation, Proyek Technopreneurship, Fotography dan Videograf lanjutan, Digital Bisnis (Startup), Integrated Marketing Communication, Digital Content Interaktif, Monetisasi Konten Digital, Mata Kuliah Pilihan (Kecerdasan Buatan / Business Intelegence / Audio Visual Effects).\n\nSemester 5: Trend dan Eksplorasi Content Digital, E-Commerce, UI & UX Design, Proyek Manajemen Informatika, Etika dan Regulasi Media Digital, Sertifikasi Kompetensi & HakI Produk Digital, Manajemen Proyek Media Digital.\n\nSemester 6: Tugas Akhir, Kapita Selekta, Tata Tulis Karya Ilmiah, Influencer Networking & Collaboration, Kampanye Konten Digital, Optimasi Content Digital, Mata Kuliah Pilihan (Pemrogramanan Internet Advance / Animasi 3D / Realitas Virtual dan Augmentasi)."
+    "title": "Kurikulum D3 Manajemen Informatika",
+    "content": "Kurikulum D3 Manajemen Informatika:\n\nSemester 1: Pancasila dan Kewarganegaraan, Bahasa Indonesia, Pembangunan Karakter dan Etika Profesi, General English, Pengantar Media Digital, Komputer Grafis 1, Komunikasi dan Presentasi Dasar, AI Technician.\n\nSemester 2: Pendidikan Agama, Intermediate English, Design Thinking, Fotografi Digital, Komputer Grafis 2 (Data Visualization), Statistik Informatika, Digital Copywriting.\n\nSemester 3: English for Specific Purpose, Technopreneurship, Videografi, Brand Identity (Corporate & Personal Branding), Manajemen Media Sosial, Visual Storytelling, Digital Content Marketing.\n\nSemester 4: TOEFL Preparation, Proyek Technopreneurship, Fotografi dan Videografi Lanjutan, Digital Bisnis (Startup), Integrated Marketing Communication, Digital Content Interaktif, Monetisasi Konten Digital, Mata Kuliah Pilihan.\n\nSemester 5: Trend dan Eksplorasi Content Digital, E-Commerce, UI & UX Design, Proyek Manajemen Informatika, Etika dan Regulasi Media Digital, Sertifikasi Kompetensi & HaKI Produk Digital, Manajemen Proyek Media Digital.\n\nSemester 6: Tugas Akhir, Kapita Selekta, Tata Tulis Karya Ilmiah, Influencer Networking & Collaboration, Kampanye Konten Digital, Optimasi Content Digital, Mata Kuliah Pilihan.\n\nMata Kuliah Pilihan Semester 4: Kecerdasan Buatan, Business Intelligence, Audio Visual Effects.\n\nMata Kuliah Pilihan Semester 6: Pemrograman Internet Advance, Animasi 3D, Realitas Virtual dan Augmentasi."
   },
   {
     "id": "jurusan_ucic",
@@ -550,7 +627,7 @@
       "ucic"
     ],
     "title": "Fakultas dan Program Studi UCIC",
-    "content": "UCIC memiliki 3 fakultas:\n- Fakultas Teknologi Informasi (FTI): S1 Teknik Informatika, S1 Sistem Informasi, S1 Desain Komunikasi Visual, D3 Manajemen Informatika, D3 Komputerisasi Akuntansi.\n- Fakultas Ekonomi dan Bisnis (FEB): S1 Akuntansi, S1 Manajemen, S1 Bisnis Digital, D3 Manajemen Bisnis.\n- Fakultas Pendidikan dan Sains (FPS): S1 Pendidikan Kepelatihan Olahraga."
+    "content": "UCIC memiliki 3 fakultas dengan program studi sebagai berikut:\n- Fakultas Teknologi dan Informasi (FTI): S1 Teknik Informatika, S1 Sistem Informasi, S1 Desain Komunikasi Visual, D3 Manajemen Informatika.\n- Fakultas Ekonomi dan Bisnis (FEB): S1 Manajemen, S1 Akuntansi, S1 Bisnis Digital, D3 Manajemen Bisnis.\n- Fakultas Pendidikan dan Sains (FPS): S1 Pendidikan Kepelatihan Olahraga.\n\nFTI dan FEB menyediakan kelas karyawan."
   },
   {
     "id": "prodi_ti",
@@ -565,10 +642,11 @@
       "prospek kerja",
       "lulusan",
       "computer science",
-      "career"
+      "career",
+      "karir lulusan"
     ],
     "title": "Detail S1 Teknik Informatika",
-    "content": "Fokus pada pemrograman, pengembangan software, AI, cybersecurity, dan database."
+    "content": "S1 Teknik Informatika fokus pada pemanfaatan teknologi komputer, pemrograman, komputasi, perancangan dan pengembangan perangkat lunak, AI, IoT, machine learning, mobile programming, UI/UX, keamanan siber, dan arsitektur sistem. Prospek kariernya meliputi Software Engineer/Programmer, Web & Mobile Developer, Cyber Security Analyst, AI/Machine Learning Engineer, System Architect, Data Scientist, Network Administrator, dan Digital Entrepreneur."
   },
   {
     "id": "prodi_si",
@@ -581,10 +659,11 @@
       "bisnis",
       "data",
       "information system",
-      "career"
+      "career",
+      "karir lulusan"
     ],
     "title": "Detail S1 Sistem Informasi",
-    "content": "Menggabungkan teknologi dan bisnis untuk pengelolaan data dan sistem perusahaan."
+    "content": "S1 Sistem Informasi menggabungkan teknologi dan bisnis untuk pengelolaan data, sistem perusahaan, ERP, e-business, dan solusi organisasi berbasis teknologi. Prospek kariernya meliputi System Analyst, Data Analyst, IT Consultant, ERP Specialist, Project Manager IT, Application Engineer, Software Developer, dan e-Business Manager."
   },
   {
     "id": "prodi_dkv",
@@ -599,10 +678,12 @@
       "karir",
       "design",
       "graphic",
-      "visual"
+      "visual",
+      "prospek kerja",
+      "karir lulusan"
     ],
     "title": "Detail S1 DKV",
-    "content": "Mencakup desain grafis, animasi, UI/UX, branding, dan multimedia."
+    "content": "S1 DKV mencakup desain grafis, UI/UX, ilustrasi, fotografi, videografi, branding, multimedia, animasi, media interaktif, dan konten digital. Prospek kariernya meliputi Graphic Designer, UI/UX Designer, Illustrator, Creative Director, Content Creator/Multimedia Specialist, Desainer Identitas Visual, dan Digital Marketing."
   },
   {
     "id": "prodi_akuntansi",
@@ -615,10 +696,12 @@
       "karir",
       "accounting",
       "finance",
-      "tax"
+      "tax",
+      "prospek kerja",
+      "karir lulusan"
     ],
     "title": "Detail S1 Akuntansi",
-    "content": "Mencakup pengelolaan keuangan, audit, perpajakan, dan pelaporan keuangan."
+    "content": "S1 Akuntansi mencakup pengelolaan keuangan, audit, perpajakan, sistem informasi akuntansi, dan pelaporan keuangan. Prospek kariernya meliputi Auditor Internal, Auditor Eksternal, Accounting, Tax Consultant, Finance Staff, Konsultan Keuangan, Data Analis, dan Konsultan Perpajakan."
   },
   {
     "id": "prodi_manajemen",
@@ -633,10 +716,12 @@
       "management",
       "business",
       "marketing",
-      "career"
+      "career",
+      "prospek kerja",
+      "karir lulusan"
     ],
     "title": "Detail S1 Manajemen",
-    "content": "Mencakup manajemen bisnis, pemasaran, dan sumber daya manusia."
+    "content": "S1 Manajemen mencakup pengelolaan bisnis, pemasaran, sumber daya manusia, keuangan, operasional, strategi organisasi, dan kewirausahaan. Prospek kariernya meliputi Marketing, HRD, Entrepreneur, Account Officer, Product Manager, Market Researcher, Manajer, Credit Analyst, dan Head of Operations Business."
   },
   {
     "id": "prodi_bisdi",
@@ -650,10 +735,12 @@
       "digital marketing",
       "karir",
       "online",
-      "digital business"
+      "digital business",
+      "prospek kerja",
+      "karir lulusan"
     ],
     "title": "Detail S1 Bisnis Digital",
-    "content": "Mencakup e-commerce, startup, financial technology, digital marketing, dan strategi bisnis digital."
+    "content": "S1 Bisnis Digital mencakup digital marketing, e-commerce, financial technology, startup, analisis bisnis digital, model bisnis digital, dan strategi bisnis berbasis teknologi. Prospek kariernya meliputi Digital Marketing Specialist, Social Media Manager, E-commerce Specialist, Business Development, Startup Founder, Technopreneur, Fintech Practitioner, dan Startup Consultant."
   },
   {
     "id": "prodi_pkor",
@@ -669,10 +756,14 @@
       "karir",
       "sports",
       "coaching",
-      "athlete"
+      "athlete",
+      "pendidikan kepelatihan olahraga",
+      "pendidikan kepelatihan keolahragaan",
+      "prospek kerja",
+      "karir lulusan"
     ],
-    "title": "Detail S1 PKOR",
-    "content": "Mencakup ilmu kepelatihan olahraga, fisiologi, biomekanika, psikologi olahraga, dan manajemen olahraga."
+    "title": "Detail S1 Pendidikan Kepelatihan Olahraga",
+    "content": "S1 Pendidikan Kepelatihan Olahraga mencakup kepelatihan olahraga, fisiologi, biomekanika, psikologi olahraga, manajemen olahraga, dan praktik kepelatihan. Prospek kariernya meliputi Pelatih Profesional, Personal Trainer, Instruktur Fitness, Guru Olahraga, Manajer Tim/Klub Olahraga, Wasit/Juri, dan Sport Entrepreneur."
   },
   {
     "id": "prodi_d3mi",
@@ -683,10 +774,12 @@
       "diploma",
       "media digital",
       "konten digital",
-      "d3 mi"
+      "d3 mi",
+      "prospek kerja",
+      "karir lulusan"
     ],
     "title": "Detail D3 Manajemen Informatika",
-    "content": "Fokus pada desain digital, konten digital, dan media sosial. Kurikulum meliputi komputer grafis, videografi, copywriting, UI/UX, e-commerce, dan monetisasi konten."
+    "content": "D3 Manajemen Informatika fokus pada teknologi informasi terapan, database, jaringan, web, media digital, konten digital, UI/UX, e-commerce, dan praktik industri. Prospek kariernya meliputi IT Support Specialist, Database Administrator, Web Administrator, Network Administrator, Junior Programmer, Web Designer, Content Creator, dan Software Developer."
   },
   {
     "id": "prodi_d3mb",
@@ -699,10 +792,13 @@
       "ritel",
       "pemasaran",
       "supply chain",
-      "e commerce"
+      "e commerce",
+      "hrd",
+      "business analyst",
+      "operations manager"
     ],
     "title": "Detail D3 Manajemen Bisnis",
-    "content": "Fokus pada bisnis ritel, pemasaran, layanan pelanggan, pengelolaan keuangan bisnis, supply chain, dan technopreneurship."
+    "content": "D3 Manajemen Bisnis UCIC berada di Fakultas Ekonomi dan Bisnis (FEB). Program ini mempelajari pengelolaan bisnis, pemasaran, operasional, ritel, sumber daya manusia, supply chain, dan technopreneurship. Mahasiswa dibekali pengetahuan dan keterampilan untuk mengelola bisnis, mengambil keputusan, serta mengembangkan inovasi yang relevan di dunia usaha.\n\nProspek Karir: E-Commerce Specialist, Social Media Specialist, Marketing, Staff Marketing, Technopreneurship, Marketing Manager, Human Resource Development (HRD), Business Analyst, Entrepreneur, dan Operations Manager.\n\nMata Kuliah Unggulan: Manajemen Bisnis Ritel, Manajemen Tataletak & Planogram, E-Commerce, Technopreneurship, Manajemen Logistik dan Supply Chain."
   },
   {
     "id": "kurikulum_ti",
@@ -715,8 +811,8 @@
       "mata kuliah",
       "curriculum"
     ],
-    "title": "Ringkasan Kurikulum S1 Teknik Informatika",
-    "content": "Kurikulum S1 Teknik Informatika tersedia semester 1-8. Fokus awal pada dasar komputer, algoritma, basis data, jaringan, dan sistem operasi; semester tengah pada OOP, UI/UX, AI, data mining, mobile, dan keamanan; semester akhir pada IoT, machine learning, proyek, MBKM, magang, dan skripsi."
+    "title": "Kurikulum S1 Teknik Informatika",
+    "content": "Kurikulum S1 Teknik Informatika:\n\nSemester 1: Pancasila dan Kewarganegaraan, Bahasa Indonesia, Pembangunan Karakter dan Etika Profesi, General English, Pemrograman Internet, Aljabar Linear dan Matriks, Arsitektur dan Organisasi Komputer, Algoritma dan Pemrograman.\n\nSemester 2: Pendidikan Agama, Intermediate English, Sistem Basis Data, Komunikasi Data dan Jaringan, Rekayasa Aplikasi Internet, Teknik Multimedia Digital, Sistem Operasi, Struktur Data.\n\nSemester 3: English for Specific Purpose, Statistik for Data Science, Pemrograman Berorientasi Objek, Administrasi Jaringan, Analisis dan Desain Perangkat Lunak, UI & UX Designer, Kecerdasan Buatan, Manajemen Data & Informasi.\n\nSemester 4: TOEFL Preparation, Mobile Programming, Keamanan Sistem Informasi dan Jaringan, Sistem Digital, Data Mining, Sistem Penunjang Keputusan, Grafika Komputer & Pengolahan Citra Digital, Sistem Pakar (Mata Kuliah Peminatan), Sistem Terdistribusi, Pengujian dan Pemeliharaan Sistem.\n\nSemester 5: Student Exchange, Technopreneurship, Pengembangan Aplikasi Mobile, Machine Learning, Internet of Things, Computer Vision and NLP, Game Cerdas, Jaminan Kualitas Perangkat Lunak, Manajemen Proyek Perangkat Lunak.\n\nSemester 6: Student Exchange, Kapita Selekta, Proyek Technopreneurship, Realitas Virtual dan Augmentasi, Metodologi Penelitian & Riset Pustaka, Proyek Teknologi Informasi, KKN Tematik, MBKM (Studi Independen Bersertifikat), Magang (Studi Independen Mandiri).\n\nSemester 7: MBKM (Magang Bersertifikat), Magang Internship Mandiri.\n\nSemester 8: Skripsi.\n\nPeminatan Semester 4 - Intelligence System (IS): Grafika Komputer dan Citra Digital, Sistem Pakar, Sistem Terdistribusi, Pengujian dan Pemeliharaan Sistem.\n\nPeminatan Semester 5 - Software Engineering (SE): Computer Vision and NLP, Game Cerdas, Jaminan Kualitas Perangkat Lunak, Manajemen Proyek Perangkat Lunak."
   },
   {
     "id": "kurikulum_si",
@@ -729,8 +825,8 @@
       "mata kuliah",
       "curriculum"
     ],
-    "title": "Ringkasan Kurikulum S1 Sistem Informasi",
-    "content": "Kurikulum S1 Sistem Informasi tersedia semester 1-8. Fokus awal pada sistem dan bisnis; semester tengah pada basis data, UI/UX, agile, ERP, dan pengembangan aplikasi; semester akhir pada proyek sistem informasi, technopreneurship, magang, KKN, dan skripsi."
+    "title": "Kurikulum S1 Sistem Informasi",
+    "content": "Kurikulum S1 Sistem Informasi:\n\nSemester 1: Pancasila dan Kewarganegaraan, Bahasa Indonesia, Pembangunan Karakter dan Etika Profesi, General English, Matematika Bisnis, Manajemen dan Organisasi, Sistem dan Teknologi Informasi, Algoritma dan Pemrograman.\n\nSemester 2: Pendidikan Agama, Teknologi dan Tren E-commerce, Intermediate English, Arsitektur SI/TI Perusahaan, Tata Kelola Teknologi Informasi, Analisa Proses Bisnis, Pemrograman Web (HTML+CSS), Algoritma dan Pemrograman 2.\n\nSemester 3: Statistik, Sistem Informasi Manajemen, English for Specific Purpose, Interaksi Manusia dan Komputer, Analisa dan Perancangan Sistem Informasi, Sistem Basis Data, Pemrograman Internet 1.\n\nSemester 4: TOEFL Preparation, UI & UX Design, Rekayasa Perangkat Lunak: Agile Scrum Introduction, Analisa Sistem Berorientasi Obyek, Pemrograman Internet Intermediate (Framework, MVC), Mata Kuliah Pilihan 1, Mata Kuliah Pilihan 2.\n\nSemester 5: Perancangan Aplikasi Mobile, Student Exchange (Agile Implementation), Jaringan Komputer, Technopreneurship, Rekayasa Perangkat Lunak, Pemrograman Internet Intermediate, Mata Kuliah Pilihan 1, Mata Kuliah Pilihan 2.\n\nSemester 6: Student Exchange (Audit SI), Student Exchange (Interaksi Manusia & Komputer), Student Exchange (Audio Visual Effects), Metodologi Penelitian dan Riset Pustaka, Proyek Technopreneurship, Proyek Sistem Informasi, Kapita Selekta, Mata Kuliah Pilihan 1.\n\nSemester 7: Magang Internship Mandiri, Magang MBKM (Magang Bersertifikat), KKN Tematik.\n\nSemester 8: Skripsi.\n\nPeminatan Semester 4: Manajemen Data Enterprise, Implementasi Arsitektur Enterprise, E-commerce, Business Intelligence.\n\nPeminatan Semester 5: E-Government, Audit Sistem Informasi, Integrasi Sistem Enterprise, Enterprise Resource Planning.\n\nPeminatan Semester 6: E-CRM, Sistem Penunjang Keputusan."
   },
   {
     "id": "kurikulum_dkv",
@@ -743,8 +839,8 @@
       "mata kuliah",
       "curriculum"
     ],
-    "title": "Ringkasan Kurikulum S1 DKV",
-    "content": "Kurikulum S1 DKV tersedia semester 1-8. Materi meliputi dasar desain, tipografi, fotografi, advertising, packaging, animasi 3D, media interaktif, konten digital, proyek DKV, MBKM, dan skripsi."
+    "title": "Kurikulum S1 Desain Komunikasi Visual (DKV)",
+    "content": "Kurikulum S1 Desain Komunikasi Visual (DKV):\n\nSemester 1: Pancasila dan Kewarganegaraan, Bahasa Indonesia, Pembangunan Karakter dan Etika Profesi, General English, Dasar Desain Grafis, Basic Tipografi, Bahasa Rupa, Computer Graphic for Graphic Design, Estetika Visual Desain.\n\nSemester 2: Pendidikan Agama, Teknologi dan Tren E-commerce, Intermediate English, Sosiologi Desain, Design Thinking, Kinetic Tipografi, Metoda Produksi Grafika, Komik Digital.\n\nSemester 3: English for Specific Purpose, Desain Komunikasi Visual Identitas, 3D Artist, Basic Fotografi, Advertising Copywriting, Semiotika Visual, Web Design, Tinjauan dan Kritik Desain.\n\nSemester 4: TOEFL Preparation, Desain Komunikasi Visual Promosi, Applied Photography, Audio Visual Effects, Packaging Design, Media Interaktif, Animasi 3D, Creative Content Advertising, Inovasi Grafis.\n\nSemester 5: Technopreneurship, Desain Komunikasi Visual Sosial, Metodologi Penelitian Desain, Manajemen Desain & Creativepreneur, Game Desain, UI/UX Designer, Visual Merchandising, Video Brand Production, Student Exchange (Fotografi).\n\nSemester 6: Kapita Selekta, Proyek Technopreneurship, Strategi Konten Digital, Psikologi Persepsi, Project DKV, MBKM (Studi Independen Bersertifikat).\n\nSemester 7: Penguasaan Teknologi (MBKM), Tata Tulis Karya Ilmiah (MBKM), Etika Profesi Kerja (MBKM), Komunikasi dan Teamwork (MBKM), Ide, Inisiatif dan Tanggung Jawab (MBKM), KKN Tematik.\n\nSemester 8: Skripsi.\n\nPeminatan: DIM (Digital Interaktif Media), DA (Digital Advertising)."
   },
   {
     "id": "kurikulum_d3mi",
@@ -758,8 +854,8 @@
       "mata kuliah",
       "curriculum"
     ],
-    "title": "Ringkasan Kurikulum D3 Manajemen Informatika",
-    "content": "Kurikulum D3 Manajemen Informatika tersedia semester 1-6. Fokus pada media digital, komputer grafis, fotografi, videografi, branding, konten digital, startup digital, UI/UX, e-commerce, sertifikasi, dan tugas akhir."
+    "title": "Kurikulum D3 Manajemen Informatika",
+    "content": "Kurikulum D3 Manajemen Informatika:\n\nSemester 1: Pancasila dan Kewarganegaraan, Bahasa Indonesia, Pembangunan Karakter dan Etika Profesi, General English, Pengantar Media Digital, Komputer Grafis 1, Komunikasi dan Presentasi Dasar, AI Technician.\n\nSemester 2: Pendidikan Agama, Intermediate English, Design Thinking, Fotografi Digital, Komputer Grafis 2 (Data Visualization), Statistik Informatika, Digital Copywriting.\n\nSemester 3: English for Specific Purpose, Technopreneurship, Videografi, Brand Identity (Corporate & Personal Branding), Manajemen Media Sosial, Visual Storytelling, Digital Content Marketing.\n\nSemester 4: TOEFL Preparation, Proyek Technopreneurship, Fotografi dan Videografi Lanjutan, Digital Bisnis (Startup), Integrated Marketing Communication, Digital Content Interaktif, Monetisasi Konten Digital, Mata Kuliah Pilihan.\n\nSemester 5: Trend dan Eksplorasi Content Digital, E-Commerce, UI & UX Design, Proyek Manajemen Informatika, Etika dan Regulasi Media Digital, Sertifikasi Kompetensi & HaKI Produk Digital, Manajemen Proyek Media Digital.\n\nSemester 6: Tugas Akhir, Kapita Selekta, Tata Tulis Karya Ilmiah, Influencer Networking & Collaboration, Kampanye Konten Digital, Optimasi Content Digital, Mata Kuliah Pilihan.\n\nMata Kuliah Pilihan Semester 4: Kecerdasan Buatan, Business Intelligence, Audio Visual Effects.\n\nMata Kuliah Pilihan Semester 6: Pemrograman Internet Advance, Animasi 3D, Realitas Virtual dan Augmentasi."
   },
   {
     "id": "kurikulum_manajemen",
@@ -771,8 +867,8 @@
       "mata kuliah",
       "curriculum"
     ],
-    "title": "Ringkasan Kurikulum S1 Manajemen",
-    "content": "Kurikulum S1 Manajemen tersedia semester 1-8. Fokus pada ekonomi, pemasaran, SDM, keuangan, operasi, technopreneurship, digital transformation, kepemimpinan, magang, dan skripsi."
+    "title": "Kurikulum S1 Manajemen",
+    "content": "Kurikulum S1 Manajemen:\n\nSemester 1: Pendidikan Agama, Pancasila dan Kewarganegaraan, General English, Bahasa Indonesia, Ekonomi Mikro, Akuntansi Keuangan Dasar, Teknologi Informasi untuk Bisnis, Manajemen & Bisnis Dasar.\n\nSemester 2: Pengembangan Karakter, Manajemen Pemasaran, Matematika Ekonomi dan Bisnis, Hukum Bisnis, Komunikasi Bisnis dan Negosiasi, Perilaku Konsumen, Ekonomi Makro, Sistem Informasi Manajemen.\n\nSemester 3: Manajemen Sumber Daya Manusia, Digital Marketing, Manajemen Keuangan, Manajemen Operasi, Technopreneurship, Akuntansi Biaya, Big Data Analytic.\n\nSemester 4: English for Business, Manajemen Proyek Teknologi Informasi, Manajemen Anggaran, Perilaku Organisasional, Technopreneurship Lanjutan, Manajemen Strategik, Teori Portofolio dan Analisis Investasi.\n\nSemester 5: Manajemen Inovasi Berbasis Teknologi, Bisnis Digital, Statistika dan Analisis Bisnis, Metodologi Penelitian, Manajemen Transformasi Digital, Analisa Laporan Keuangan (Student Exchange), Mata Kuliah Pilihan.\n\nSemester 6: E-Commerce & Platform, Etika Profesi Bisnis, Seminar Manajemen, Metode Pengambilan Keputusan (Student Exchange), Kapita Selekta, Mata Kuliah Pilihan.\n\nSemester 7: Magang Studi Independen, Kepemimpinan Bisnis, Kepemimpinan Entrepreneur, Kemampuan Kerja Tim, Literasi Digital, Literasi Data.\n\nSemester 8: Skripsi."
   },
   {
     "id": "kurikulum_bisnisdigital",
@@ -786,8 +882,8 @@
       "mata kuliah",
       "curriculum"
     ],
-    "title": "Ringkasan Kurikulum S1 Bisnis Digital",
-    "content": "Kurikulum S1 Bisnis Digital tersedia semester 1-8. Fokus pada konsep bisnis digital, SEO, digital marketing, fintech, startup, IMC, business intelligence, digital business development, MBKM, dan skripsi."
+    "title": "Kurikulum S1 Bisnis Digital",
+    "content": "Kurikulum S1 Bisnis Digital:\n\nSemester 1: Bahasa Indonesia, Pancasila dan Kewarganegaraan, Pengembangan Karakter & Etika Profesi, General English, Ekonomika Bisnis, Etika dan Komunikasi Bisnis, Konsep dan Ide Bisnis Digital, Manajemen Bisnis.\n\nSemester 2: Pendidikan Agama, Graphic Design (Video Animation), Financial Management, Web Design, Search Engine Optimization (SEO), Statistika Bisnis, Digital Marketing, Management Information System.\n\nSemester 3: Technopreneurship, Financial Technology, Model Bisnis MSMEs (K1), Analisis Bisnis Digital (K2), Startup Business Model (K3), Analisa Investasi Bisnis & Portfolio, Metodologi Penelitian Bisnis, Studi Kelayakan Bisnis.\n\nSemester 4: Project Technopreneurship, English for Business, e-Customer Relationship Management, Academic Writing and Publication, Customer Behaviour, Integrated Marketing Communication (IMC).\n\nSemester 5: Business Intelligence, Digital Business Platform, Design Thinking Method, Supply Chain Management, Student Exchange: Fotografi (DKV).\n\nSemester 6: Digital Business Development (Project) - Digital MSMEs-Preneur, Digital Business Development (Project) - Digital Business Consultant, Digital Business Development (Project) - Digital Business Startup, Crowdfunding & Fintech Ecosystem, Enterprise Resources Planning, Data Mining, Kapita Selekta, Writing Business Report.\n\nSemester 7: Digital Business Development (Project), MBKM (Kewirausahaan/SIB/Penelitian/PKM).\n\nSemester 8: Skripsi.\n\nMata Kuliah Konsentrasi Digital MSMEs-Preneur: MSMEs Business Model Development, AI for MSMEs Business.\n\nMata Kuliah Konsentrasi Digital Business Consultant: Data Analytics, Market Research.\n\nMata Kuliah Konsentrasi Digital Business Startup: Business Modelling, Startup Ideation and Validation."
   },
   {
     "id": "kurikulum_akuntansi",
@@ -799,8 +895,8 @@
       "mata kuliah",
       "curriculum"
     ],
-    "title": "Ringkasan Kurikulum S1 Akuntansi",
-    "content": "Kurikulum S1 Akuntansi tersedia semester 1-8. Fokus pada akuntansi keuangan, audit, perpajakan, sistem informasi akuntansi, metodologi penelitian, etika profesi, magang, dan skripsi."
+    "title": "Kurikulum S1 Akuntansi",
+    "content": "Kurikulum S1 Akuntansi:\n\nSemester 1: Akuntansi Keuangan Dasar, Ekonomi Mikro, General English, Manajemen & Bisnis Dasar, Pancasila & Kewarganegaraan, Pendidikan Agama, Teknologi Informasi untuk Bisnis, Bahasa Indonesia.\n\nSemester 2: Ekonomi Makro, Hukum Bisnis, Komunikasi Bisnis & Negosiasi, Matematika Ekonomi dan Bisnis, Pengembangan Karakter, Praktikum Akuntansi Keuangan, Akuntansi Keuangan Menengah, Akuntansi Biaya.\n\nSemester 3: Akuntansi Manajemen, Hukum Perpajakan, Manajemen Keuangan, Sistem Informasi Akuntansi, Technopreneurship, Akuntansi Sektor Publik, Akuntansi Keuangan Lanjutan.\n\nSemester 4: Akuntansi Entitas Mikro, Kecil dan Menengah, Akuntansi Internasional, Auditing 1, Technopreneurship Lanjutan, Teknologi Keuangan, Akuntansi Perpajakan, English for Business, Bisnis Digital (Student Exchange Prodi Manajemen).\n\nSemester 5: Metodologi Penelitian, Akuntansi Syariah, Analisis Laporan Keuangan, Auditing 2, Statistika dan Analisis Bisnis, Praktikum Perpajakan, Agile Implementation (Student Exchange Prodi SI).\n\nSemester 6 (Peminatan REGULER & SIB): Seminar Akuntansi, Teori Akuntansi, Kapita Selekta, Teori Portofolio dan Analisis Investasi, Etika Profesi Akuntan, Praktikum Auditing, Mata Kuliah Pilihan 1 (Lintas Prodi UCIC).\n\nSemester 6-7: KKN Tematik.\n\nSemester 7: Penatausahaan Dokumen Perkantoran, Pengoperasian Aplikasi dan Alat Bantu Perkantoran, Mengolah Data Perkantoran, Kreativitas dan Inisiatif, Etika Profesi Kerja, Komunikasi dan Teamwork, Magang.\n\nSemester 8: Skripsi.\n\nMata Kuliah Pilihan: Akuntansi Keperilakuan, Akuntansi Sosial dan Lingkungan, Akuntansi Pemerintahan, Akuntansi Desa, Audit Forensik, Audit Investigatif, Audit Sektor Publik, Audit Sistem Informasi, Audit Internal, Pengantar Manajemen Perpajakan, Perpajakan Internasional, Sistem Informasi Akuntansi Lanjutan."
   },
   {
     "id": "kurikulum_pkor",
@@ -812,10 +908,11 @@
       "pendidikan kepelatihan olahraga",
       "semester",
       "mata kuliah",
-      "curriculum"
+      "curriculum",
+      "pendidikan kepelatihan keolahragaan"
     ],
-    "title": "Ringkasan Kurikulum S1 Pendidikan Kepelatihan Olahraga",
-    "content": "Kurikulum S1 PKOR tersedia semester 1-8. Fokus pada anatomi, fisiologi, kepelatihan cabang olahraga, biomekanika, psikologi olahraga, metodologi penelitian, MBKM, praktik lapangan, dan skripsi."
+    "title": "Kurikulum S1 Pendidikan Kepelatihan Olahraga",
+    "content": "Kurikulum S1 Pendidikan Kepelatihan Olahraga:\n\nSemester 1: Bahasa Indonesia, Pancasila dan Kewarganegaraan, General English, Pengembangan Karakter, Anatomi, Pembelajaran Motorik, Pelatihan Cabor Atletik, Pelatihan Cabor Renang, Pelatihan Cabor Futsal.\n\nSemester 2: Pendidikan Agama, Fisiologi Olahraga, Manajemen dan Administrasi Olahraga, Pelatihan Cabor Sepak Bola, Pelatihan Cabor Basket, Pelatihan Cabor Voli, Pelatihan Cabor Taekwondo, English for Education, Landasan Pendidikan, Kurikulum dan Pembelajaran.\n\nSemester 3: Technopreneurship, English for Sport, Bimbingan Konseling, Teori Belajar dan Pembelajaran, Pelatihan Cabor Pencak Silat, Pelatihan Cabor Karate, Pengantar Ilmu Keolahragaan, Perwasitan Olahraga, Teori dan Metodologi Kepelatihan Olahraga, Manajemen Pertandingan/Perlombaan.\n\nSemester 4: Biomekanika Olahraga, Ilmu Gizi Olahraga, Teknologi Kepelatihan Olahraga, Analisis Performance Olahraga berbasis AI, Technopreneurship Lanjutan, Kurikulum dan Pembelajaran, Sport Pedagogy.\n\nSemester 5: Metode Penelitian Pendidikan Olahraga, Manajemen Kepelatihan Olahraga, Didaktik Metodik Olahraga, Psikologi Olahraga, Evaluasi Kepelatihan Olahraga, Kinesiologi dan Massage Olahraga.\n\nSemester 6: Microteaching, Kapita Selekta, Statistika, Pemandu Bakat Olahraga, Seminar Magang Kepelatihan Olahraga, Evaluasi dan Pengembangan Latihan, Sistem Organisasi dan Pertandingan, Pemasaran Olahraga, Pengembangan Program Latihan Berbasis Data.\n\nSemester 7: MBKM: Profesi Kependidikan, Praktek Lapangan Persekolahan, Sarana dan Prasarana Olahraga, Tes dan Pengukuran Olahraga, Strategi dan Taktik Olahraga berbasis Digital, Pencegahan dan Perawatan Cedera Olahraga.\n\nSemester 8: Skripsi."
   },
   {
     "id": "kurikulum_d3mb",
@@ -829,8 +926,8 @@
       "mata kuliah",
       "curriculum"
     ],
-    "title": "Ringkasan Kurikulum D3 Manajemen Bisnis",
-    "content": "Kurikulum D3 Manajemen Bisnis tersedia semester 1-6. Fokus pada bisnis dasar, ritel, perpajakan, akuntansi bisnis, SDM, supply chain, pemasaran ritel, kepemimpinan, seminar bisnis, dan tugas akhir."
+    "title": "Kurikulum D3 Manajemen Bisnis",
+    "content": "Kurikulum D3 Manajemen Bisnis:\n\nSemester 1: Pembangunan Karakter dan Etika Profesi, Pancasila, Kewarganegaraan, dan Anti Korupsi, General English, Bahasa Indonesia, Pengantar Akuntansi, Teknologi Informasi untuk Bisnis, Manajemen & Bisnis Dasar, Pengantar Ilmu Ekonomi Bisnis.\n\nSemester 2: Intermediate English, Pendidikan Agama, Matematika Ekonomi dan Bisnis, Dasar-Dasar Perpajakan, Perilaku Konsumen, Pengelolaan Keuangan Ritel, Manajemen Tataletak & Planogram, Strategi Pemasaran Ritel.\n\nSemester 3: English for Specific Purpose, Technopreneurship, Sistem Akuntansi, Akuntansi Keuangan Bisnis, Manajemen Sumber Daya Manusia, Praktikum Akuntansi Manual, Manajemen Logistik dan Supply Chain, Manajemen Hubungan Pelanggan, Hukum Bisnis.\n\nSemester 4: Technopreneurship Lanjutan, TOEFL Preparation, Metodologi Penelitian Bisnis, Penganggaran Perusahaan, Aplikasi Software Akuntansi, Studi Kelayakan Bisnis, Manajemen Kualitas, Manajemen Kas dan Portofolio.\n\nSemester 5: Kepemimpinan, Kemampuan Bekerjasama, Kemampuan Berkomunikasi, Kreativitas, Kemampuan Administrasi, Kemampuan Merumuskan Masalah Teknis, Kemampuan Menyelesaikan Masalah Teknis, Seminar Bisnis.\n\nSemester 6: Kapita Selekta, Tugas Akhir, Komunikasi Bisnis."
   },
   {
     "id": "magang",
@@ -843,10 +940,13 @@
       "industri",
       "pengalaman",
       "intern",
-      "job training"
+      "job training",
+      "mbkm",
+      "magang akademik",
+      "kampus merdeka"
     ],
     "title": "Program Magang UCIC",
-    "content": "Mahasiswa dapat magang di semester akhir untuk mendapat pengalaman kerja nyata, membangun jaringan profesional, dan memperkuat portofolio sebagai bekal karir."
+    "content": "Mahasiswa dapat mengikuti magang atau MBKM sesuai arahan program studi, BAAK, dan kalender akademik. Program magang memberi pengalaman kerja nyata, membangun jaringan profesional, memperkuat portofolio, dan mendukung kesiapan karier setelah lulus. Detail periode, persyaratan, dan pembimbing mengikuti arahan prodi/BAAK."
   },
   {
     "id": "dosen_mku",
@@ -875,13 +975,12 @@
       "early bird",
       "pendaftaran mahasiswa baru",
       "gelombang",
-      "kapan buka",
       "deadline",
       "tutup kapan",
       "pendaftaran ditutup"
     ],
     "title": "Jadwal Pendaftaran Mahasiswa Baru UCIC",
-    "content": "Pendaftaran mahasiswa baru dibuka dalam beberapa gelombang. Gelombang Early Bird (Okt-Des), Gelombang 1 (Jan-Apr), dan Gelombang 2 (Mei-Agt). Kuota terbatas, jadi lebih baik daftar sekarang!"
+    "content": "Informasi jadwal, gelombang, dan batas akhir pendaftaran mahasiswa baru UCIC mengikuti pengumuman PMB. Calon mahasiswa dapat langsung mendaftar melalui https://pmb.cic.ac.id/register atau menghubungi WhatsApp PMB 0812 1670 0519 untuk jadwal terbaru."
   },
   {
     "id": "pmb_syarat",
@@ -927,7 +1026,7 @@
       "cs pmb"
     ],
     "title": "Cara Mendaftar dan Kontak PMB UCIC",
-    "content": "Cara mendaftar di UCIC bisa dilakukan secara offline dengan datang langsung ke Kampus 2 UCIC di Jl. Kesambi No. 58A, atau secara online melalui website https://pmb.cic.ac.id lalu memilih menu pendaftaran. Jika membutuhkan bantuan terkait pendaftaran, verifikasi, atau kendala teknis PMB, calon mahasiswa dapat menghubungi Admin PMB melalui WhatsApp di +6281216700519."
+    "content": "Cara mendaftar di UCIC dapat dilakukan secara online melalui https://pmb.cic.ac.id/register. Jika membutuhkan bantuan pendaftaran, calon mahasiswa dapat menghubungi Admin PMB melalui WhatsApp 0812 1670 0519. Calon mahasiswa juga dapat datang ke UCIC di Jl. Kesambi No. 58A atau Jl. Kesambi No. 202, Kesambi, Kota Cirebon."
   },
   {
     "id": "biaya_pmb_gelombang_1_summary",
@@ -940,13 +1039,239 @@
       "mahal gak",
       "bayar",
       "cicilan",
-      "gelombang 1",
+      "gelombang",
+      "early bird",
       "tahap 1",
       "total tagihan",
-      "diskon"
+      "diskon",
+      "biaya 3 bulan",
+      "biaya semester",
+      "biaya setahun",
+      "skema 55"
     ],
-    "title": "Ringkasan Opsi Pembayaran Gelombang 1",
-    "content": "Terdapat 3 opsi keringanan pembayaran untuk Gelombang 1. Opsi per 3 Bulan biayanya sekitar Rp1,8 - Rp2,9 Juta. Opsi per Semester (6 Bulan) mendapat diskon Rp170rb dengan kisaran Rp2,7 - Rp5 Juta. Opsi 1 Tahun penuh mendapat diskon Rp340rb dengan kisaran Rp4,7 - Rp9,2 Juta. Angka pasti menyesuaikan program studi yang Anda ambil."
+    "title": "Ringkasan Nominal Biaya PMB UCIC TA 2026/2027",
+    "content": "Ringkasan nominal pembayaran awal UCIC TA 2026/2027:\n- Skema Early Bird standar: bayar 3 bulan mulai Rp1.845.000 sampai Rp2.970.000; bayar 1 semester mulai Rp2.770.000 sampai Rp5.020.000; bayar 1 tahun mulai Rp4.790.000 sampai Rp9.290.000.\n- Skema Early Bird 55%: bayar 3 bulan mulai Rp2.470.000 sampai Rp4.240.000; bayar 1 semester mulai Rp4.020.000 sampai Rp7.560.000; bayar 1 tahun mulai Rp7.290.000 sampai Rp14.370.000.\n\nNominal paling rendah terdapat pada program D3 reguler, sedangkan nominal paling tinggi terdapat pada S1 Teknik Informatika/Sistem Informasi/DKV kelas sore pada skema 55%."
+  },
+  {
+    "id": "biaya_teknik_informatika_2026",
+    "category": "biaya",
+    "keywords": [
+      "biaya",
+      "uang kuliah",
+      "spp",
+      "ukt",
+      "bayar",
+      "cicilan",
+      "3 bulan",
+      "1 semester",
+      "1 tahun",
+      "pmb 2026",
+      "ta 2026 2027",
+      "teknik informatika",
+      "ti",
+      "s1 ti",
+      "informatika",
+      "biaya ti",
+      "biaya teknik informatika",
+      "kelas sore teknik informatika"
+    ],
+    "title": "Biaya S1 Teknik Informatika UCIC TA 2026/2027",
+    "content": "Biaya S1 Teknik Informatika UCIC TA 2026/2027 tersedia dalam 3 opsi pembayaran: bayar 3 bulan, bayar 1 semester, dan bayar 1 tahun.\n\nSkema Early Bird standar:\n- Reguler: 3 bulan Rp2.820.000, 1 semester Rp4.720.000, 1 tahun Rp8.690.000.\n- Kelas Sore: 3 bulan Rp2.970.000, 1 semester Rp5.020.000, 1 tahun Rp9.290.000.\n\nSkema Early Bird 55%:\n- Reguler: 3 bulan Rp4.000.000, 1 semester Rp7.080.000, 1 tahun Rp13.410.000.\n- Kelas Sore: 3 bulan Rp4.240.000, 1 semester Rp7.560.000, 1 tahun Rp14.370.000.\n\nTotal pembayaran sudah memasukkan biaya tahap kuliah, pendaftaran Rp250.000, dan perlengkapan Rp500.000. DPP dan uang gedung mendapat diskon 100% pada skema ini."
+  },
+  {
+    "id": "biaya_sistem_informasi_2026",
+    "category": "biaya",
+    "keywords": [
+      "biaya",
+      "uang kuliah",
+      "spp",
+      "ukt",
+      "bayar",
+      "cicilan",
+      "3 bulan",
+      "1 semester",
+      "1 tahun",
+      "pmb 2026",
+      "ta 2026 2027",
+      "sistem informasi",
+      "si",
+      "s1 si",
+      "biaya si",
+      "biaya sistem informasi",
+      "kelas sore sistem informasi"
+    ],
+    "title": "Biaya S1 Sistem Informasi UCIC TA 2026/2027",
+    "content": "Biaya S1 Sistem Informasi UCIC TA 2026/2027 tersedia dalam 3 opsi pembayaran: bayar 3 bulan, bayar 1 semester, dan bayar 1 tahun.\n\nSkema Early Bird standar:\n- Reguler: 3 bulan Rp2.820.000, 1 semester Rp4.720.000, 1 tahun Rp8.690.000.\n- Kelas Sore: 3 bulan Rp2.970.000, 1 semester Rp5.020.000, 1 tahun Rp9.290.000.\n\nSkema Early Bird 55%:\n- Reguler: 3 bulan Rp4.000.000, 1 semester Rp7.080.000, 1 tahun Rp13.410.000.\n- Kelas Sore: 3 bulan Rp4.240.000, 1 semester Rp7.560.000, 1 tahun Rp14.370.000.\n\nTotal pembayaran sudah memasukkan biaya tahap kuliah, pendaftaran Rp250.000, dan perlengkapan Rp500.000. DPP dan uang gedung mendapat diskon 100% pada skema ini."
+  },
+  {
+    "id": "biaya_dkv_2026",
+    "category": "biaya",
+    "keywords": [
+      "biaya",
+      "uang kuliah",
+      "spp",
+      "ukt",
+      "bayar",
+      "cicilan",
+      "3 bulan",
+      "1 semester",
+      "1 tahun",
+      "pmb 2026",
+      "ta 2026 2027",
+      "dkv",
+      "desain komunikasi visual",
+      "biaya dkv",
+      "biaya desain",
+      "kelas sore dkv"
+    ],
+    "title": "Biaya S1 Desain Komunikasi Visual UCIC TA 2026/2027",
+    "content": "Biaya S1 Desain Komunikasi Visual UCIC TA 2026/2027 tersedia dalam 3 opsi pembayaran: bayar 3 bulan, bayar 1 semester, dan bayar 1 tahun.\n\nSkema Early Bird standar:\n- Reguler: 3 bulan Rp2.820.000, 1 semester Rp4.720.000, 1 tahun Rp8.690.000.\n- Kelas Sore: 3 bulan Rp2.970.000, 1 semester Rp5.020.000, 1 tahun Rp9.290.000.\n\nSkema Early Bird 55%:\n- Reguler: 3 bulan Rp4.000.000, 1 semester Rp7.080.000, 1 tahun Rp13.410.000.\n- Kelas Sore: 3 bulan Rp4.240.000, 1 semester Rp7.560.000, 1 tahun Rp14.370.000.\n\nTotal pembayaran sudah memasukkan biaya tahap kuliah, pendaftaran Rp250.000, dan perlengkapan Rp500.000. DPP dan uang gedung mendapat diskon 100% pada skema ini."
+  },
+  {
+    "id": "biaya_manajemen_2026",
+    "category": "biaya",
+    "keywords": [
+      "biaya",
+      "uang kuliah",
+      "spp",
+      "ukt",
+      "bayar",
+      "cicilan",
+      "3 bulan",
+      "1 semester",
+      "1 tahun",
+      "pmb 2026",
+      "ta 2026 2027",
+      "manajemen",
+      "s1 manajemen",
+      "biaya manajemen",
+      "kelas sore manajemen",
+      "rpl manajemen",
+      "biaya rpl"
+    ],
+    "title": "Biaya S1 Manajemen UCIC TA 2026/2027",
+    "content": "Biaya S1 Manajemen UCIC TA 2026/2027 tersedia dalam 3 opsi pembayaran: bayar 3 bulan, bayar 1 semester, dan bayar 1 tahun.\n\nSkema Early Bird standar:\n- Reguler: 3 bulan Rp2.535.000, 1 semester Rp4.150.000, 1 tahun Rp7.550.000.\n- Kelas Sore: 3 bulan Rp2.685.000, 1 semester Rp4.450.000, 1 tahun Rp8.150.000.\n- RPL: 3 bulan Rp2.850.000, 1 semester Rp4.780.000, 1 tahun Rp8.810.000.\n\nSkema Early Bird 55%:\n- Reguler: 3 bulan Rp3.555.000, 1 semester Rp6.190.000, 1 tahun Rp11.630.000.\n- Kelas Sore: 3 bulan Rp3.790.000, 1 semester Rp6.660.000, 1 tahun Rp12.570.000.\n- RPL: 3 bulan Rp3.450.000, 1 semester Rp5.980.000, 1 tahun Rp11.210.000.\n\nTotal pembayaran sudah memasukkan biaya tahap kuliah, pendaftaran Rp250.000, dan perlengkapan Rp500.000. DPP dan uang gedung mendapat diskon 100% pada skema ini."
+  },
+  {
+    "id": "biaya_akuntansi_2026",
+    "category": "biaya",
+    "keywords": [
+      "biaya",
+      "uang kuliah",
+      "spp",
+      "ukt",
+      "bayar",
+      "cicilan",
+      "3 bulan",
+      "1 semester",
+      "1 tahun",
+      "pmb 2026",
+      "ta 2026 2027",
+      "akuntansi",
+      "s1 akuntansi",
+      "biaya akuntansi",
+      "kelas sore akuntansi"
+    ],
+    "title": "Biaya S1 Akuntansi UCIC TA 2026/2027",
+    "content": "Biaya S1 Akuntansi UCIC TA 2026/2027 tersedia dalam 3 opsi pembayaran: bayar 3 bulan, bayar 1 semester, dan bayar 1 tahun.\n\nSkema Early Bird standar:\n- Reguler: 3 bulan Rp2.535.000, 1 semester Rp4.150.000, 1 tahun Rp7.550.000.\n- Kelas Sore: 3 bulan Rp2.685.000, 1 semester Rp4.450.000, 1 tahun Rp8.150.000.\n\nSkema Early Bird 55%:\n- Reguler: 3 bulan Rp3.555.000, 1 semester Rp6.190.000, 1 tahun Rp11.630.000.\n- Kelas Sore: 3 bulan Rp3.790.000, 1 semester Rp6.660.000, 1 tahun Rp12.570.000.\n\nTotal pembayaran sudah memasukkan biaya tahap kuliah, pendaftaran Rp250.000, dan perlengkapan Rp500.000. DPP dan uang gedung mendapat diskon 100% pada skema ini."
+  },
+  {
+    "id": "biaya_bisnis_digital_2026",
+    "category": "biaya",
+    "keywords": [
+      "biaya",
+      "uang kuliah",
+      "spp",
+      "ukt",
+      "bayar",
+      "cicilan",
+      "3 bulan",
+      "1 semester",
+      "1 tahun",
+      "pmb 2026",
+      "ta 2026 2027",
+      "bisnis digital",
+      "bisdig",
+      "bisdi",
+      "biaya bisnis digital",
+      "kelas sore bisnis digital"
+    ],
+    "title": "Biaya S1 Bisnis Digital UCIC TA 2026/2027",
+    "content": "Biaya S1 Bisnis Digital UCIC TA 2026/2027 tersedia dalam 3 opsi pembayaran: bayar 3 bulan, bayar 1 semester, dan bayar 1 tahun.\n\nSkema Early Bird standar:\n- Reguler: 3 bulan Rp2.040.000, 1 semester Rp3.160.000, 1 tahun Rp5.570.000.\n- Kelas Sore: 3 bulan Rp2.190.000, 1 semester Rp3.460.000, 1 tahun Rp6.170.000.\n\nSkema Early Bird 55%:\n- Reguler: 3 bulan Rp2.775.000, 1 semester Rp4.630.000, 1 tahun Rp8.510.000.\n- Kelas Sore: 3 bulan Rp3.015.000, 1 semester Rp5.110.000, 1 tahun Rp9.470.000.\n\nTotal pembayaran sudah memasukkan biaya tahap kuliah, pendaftaran Rp250.000, dan perlengkapan Rp500.000. DPP dan uang gedung mendapat diskon 100% pada skema ini."
+  },
+  {
+    "id": "biaya_pkor_2026",
+    "category": "biaya",
+    "keywords": [
+      "biaya",
+      "uang kuliah",
+      "spp",
+      "ukt",
+      "bayar",
+      "cicilan",
+      "3 bulan",
+      "1 semester",
+      "1 tahun",
+      "pmb 2026",
+      "ta 2026 2027",
+      "pkor",
+      "pko",
+      "pikor",
+      "pendidikan kepelatihan olahraga",
+      "biaya pkor",
+      "biaya pko",
+      "biaya olahraga"
+    ],
+    "title": "Biaya S1 Pendidikan Kepelatihan Olahraga UCIC TA 2026/2027",
+    "content": "Biaya S1 Pendidikan Kepelatihan Olahraga UCIC TA 2026/2027 tersedia dalam 3 opsi pembayaran: bayar 3 bulan, bayar 1 semester, dan bayar 1 tahun.\n\nSkema Early Bird standar:\n- Reguler: 3 bulan Rp2.040.000, 1 semester Rp3.160.000, 1 tahun Rp5.570.000.\n\nSkema Early Bird 55%:\n- Reguler: 3 bulan Rp2.775.000, 1 semester Rp4.630.000, 1 tahun Rp8.510.000.\n\nTotal pembayaran sudah memasukkan biaya tahap kuliah, pendaftaran Rp250.000, dan perlengkapan Rp500.000. DPP dan uang gedung mendapat diskon 100% pada skema ini."
+  },
+  {
+    "id": "biaya_d3_manajemen_bisnis_2026",
+    "category": "biaya",
+    "keywords": [
+      "biaya",
+      "uang kuliah",
+      "spp",
+      "ukt",
+      "bayar",
+      "cicilan",
+      "3 bulan",
+      "1 semester",
+      "1 tahun",
+      "pmb 2026",
+      "ta 2026 2027",
+      "d3 manajemen bisnis",
+      "d3 mb",
+      "biaya d3 manajemen bisnis",
+      "biaya manajemen bisnis"
+    ],
+    "title": "Biaya D3 Manajemen Bisnis UCIC TA 2026/2027",
+    "content": "Biaya D3 Manajemen Bisnis UCIC TA 2026/2027 tersedia dalam 3 opsi pembayaran: bayar 3 bulan, bayar 1 semester, dan bayar 1 tahun.\n\nSkema Early Bird standar:\n- Reguler: 3 bulan Rp1.845.000, 1 semester Rp2.770.000, 1 tahun Rp4.790.000.\n\nSkema Early Bird 55%:\n- Reguler: 3 bulan Rp2.470.000, 1 semester Rp4.020.000, 1 tahun Rp7.290.000.\n\nTotal pembayaran sudah memasukkan biaya tahap kuliah, pendaftaran Rp250.000, dan perlengkapan Rp500.000. DPP dan uang gedung mendapat diskon 100% pada skema ini."
+  },
+  {
+    "id": "biaya_d3_manajemen_informatika_2026",
+    "category": "biaya",
+    "keywords": [
+      "biaya",
+      "uang kuliah",
+      "spp",
+      "ukt",
+      "bayar",
+      "cicilan",
+      "3 bulan",
+      "1 semester",
+      "1 tahun",
+      "pmb 2026",
+      "ta 2026 2027",
+      "d3 manajemen informatika",
+      "d3 mi",
+      "manajemen informatika",
+      "biaya d3 mi",
+      "biaya manajemen informatika",
+      "kelas sore d3 mi"
+    ],
+    "title": "Biaya D3 Manajemen Informatika UCIC TA 2026/2027",
+    "content": "Biaya D3 Manajemen Informatika UCIC TA 2026/2027 tersedia dalam 3 opsi pembayaran: bayar 3 bulan, bayar 1 semester, dan bayar 1 tahun.\n\nSkema Early Bird standar:\n- Reguler: 3 bulan Rp1.845.000, 1 semester Rp2.770.000, 1 tahun Rp4.790.000.\n- Kelas Sore: 3 bulan Rp1.995.000, 1 semester Rp3.070.000, 1 tahun Rp5.390.000.\n\nSkema Early Bird 55%:\n- Reguler: 3 bulan Rp2.470.000, 1 semester Rp4.020.000, 1 tahun Rp7.290.000.\n- Kelas Sore: 3 bulan Rp2.710.000, 1 semester Rp4.500.000, 1 tahun Rp8.250.000.\n\nTotal pembayaran sudah memasukkan biaya tahap kuliah, pendaftaran Rp250.000, dan perlengkapan Rp500.000. DPP dan uang gedung mendapat diskon 100% pada skema ini."
   },
   {
     "id": "ukm_kegiatan_ekskul",
@@ -996,24 +1321,7 @@
       "ruang kelas"
     ],
     "title": "Fasilitas Kampus Lengkap UCIC",
-    "content": "Fasilitas di UCIC Cirebon sangat terkini! Mulai dari Ruang Kelas Modern, Meeting Room, Perpustakaan, Auditorium, Student Business Corner, hingga Convention Hall. Khusus di bidang teknologi, kami memiliki Lab Multimedia, fasilitas Digital Marketing (DM), 3D Virtual Reality Lab, serta AI & Data Analysis Lab!",
-    "media": [
-      {
-        "type": "image",
-        "url": "https://placehold.co/600x400/1e40af/ffffff?text=Lab+Komputer",
-        "caption": "Laboratorium Komputer UCIC"
-      },
-      {
-        "type": "image",
-        "url": "https://placehold.co/600x400/0f766e/ffffff?text=Perpustakaan",
-        "caption": "Perpustakaan Digital UCIC"
-      },
-      {
-        "type": "image",
-        "url": "https://placehold.co/600x400/4338ca/ffffff?text=VR+Lab",
-        "caption": "3D Virtual Reality Lab UCIC"
-      }
-    ]
+    "content": "Fasilitas UCIC meliputi Campus 1, Campus Hub, Convention Hall, Multimedia/DM/3D Virtual Reality Lab, Ruangan Kelas, AI & Data Analysis Lab, Computer Lab, Ruang Meeting, Perpustakaan, Ruang Podcast, Student Business Corner, dan Auditorium."
   },
   {
     "id": "kegiatan_ospek_maba",
@@ -1048,8 +1356,8 @@
       "rpl",
       "kelas pagi"
     ],
-    "title": "Jadwal Kuliah UCIC",
-    "content": "UCIC menyediakan beberapa pilihan jadwal kuliah sesuai program yang diambil. Kelas pagi umumnya berlangsung pukul 08.00-16.00, sedangkan kelas sore berlangsung pukul 18.30-21.30. Tersedia juga jalur RPL (Rekognisi Pembelajaran Lampau) yang ditujukan khusus untuk mahasiswa yang sudah bekerja. Jadwal spesifik per mata kuliah tetap mengikuti pengumuman akademik dan dapat dicek melalui sistem kampus."
+    "title": "Jadwal Kuliah, Kelas Sore, dan RPL UCIC",
+    "content": "UCIC menyediakan beberapa pilihan kelas:\n- Kelas pagi: 08.00-16.00.\n- Kelas sore: 18.30-21.30.\n- RPL (Rekognisi Pembelajaran Lampau): khusus untuk mahasiswa yang sudah bekerja atau memiliki pengalaman belajar/kerja yang relevan.\n\nJadwal spesifik per mata kuliah tetap mengikuti pengumuman akademik dan sistem kampus."
   },
   {
     "id": "daftar_ulang_camaba",
@@ -1061,10 +1369,11 @@
       "camaba",
       "maba",
       "setelah daftar",
-      "sesudah diterima"
+      "sesudah diterima",
+      "grup camaba"
     ],
     "title": "Alur Daftar Ulang Calon Mahasiswa Baru UCIC",
-    "content": "Alur daftar ulang calon mahasiswa baru UCIC adalah sebagai berikut: isi registrasi lengkap di https://pmb.cic.ac.id/, lakukan pembayaran biaya registrasi, perlengkapan, dan tahap 1, kirim bukti transfer jika menggunakan rekening, tunggu verifikasi oleh tim PMB, upload berkas seperti ijazah dan KTP, masuk ke grup calon mahasiswa baru, lalu menunggu informasi lanjutan dari kampus."
+    "content": "Alur daftar ulang calon mahasiswa baru UCIC:\n1. Calon mahasiswa mengisi registrasi lengkap di https://pmb.cic.ac.id/ atau https://pmb.cic.ac.id/register.\n2. Calon mahasiswa melakukan pembayaran biaya registrasi, perlengkapan, dan pembayaran tahap 1 sesuai tagihan.\n3. Jika menggunakan rekening/transfer, calon mahasiswa mengirim bukti transfer ke nomor PMB.\n4. Tim PMB melakukan verifikasi.\n5. Calon mahasiswa mengunggah berkas seperti ijazah/SKL, KTP, KK, akta kelahiran, dan pas foto.\n6. Calon mahasiswa masuk ke grup CAMABA.\n7. Calon mahasiswa menunggu informasi lanjutan dari kampus."
   },
   {
     "id": "pembayaran_pmb_verifikasi",
@@ -1076,10 +1385,11 @@
       "bayar pendaftaran",
       "tagihan pmb",
       "menu pembayaran",
-      "bukti transfer"
+      "bukti transfer",
+      "paid"
     ],
     "title": "Alur Pembayaran dan Verifikasi PMB UCIC",
-    "content": "Setelah login ke sistem registrasi PMB, calon mahasiswa memilih menu pembayaran untuk melihat nominal tagihan, lalu melakukan transfer sesuai metode pembayaran yang dipilih. Setelah itu, bukti pembayaran dikirim ke nomor PMB untuk proses verifikasi. Jika sudah diverifikasi oleh admin PMB, status pembayaran pada sistem akan berubah menjadi \"paid\"."
+    "content": "Alur pembayaran dan verifikasi PMB UCIC:\n1. Calon mahasiswa login ke sistem registrasi PMB.\n2. Pilih menu pembayaran.\n3. Lihat nominal tagihan yang muncul di sistem.\n4. Lakukan pembayaran sesuai metode yang dipilih.\n5. Jika memakai rekening/transfer, kirim bukti pembayaran ke nomor PMB.\n6. Admin PMB melakukan verifikasi pembayaran.\n7. Setelah diverifikasi admin PMB, status pembayaran di sistem akan berubah menjadi \"paid\"."
   },
   {
     "id": "faq_calon_mahasiswa",
@@ -1091,10 +1401,11 @@
       "bisa cicilan",
       "kapan mulai kuliah",
       "tanya pmb",
-      "faq pmb"
+      "faq pmb",
+      "kuliah september"
     ],
     "title": "FAQ Calon Mahasiswa UCIC",
-    "content": "Pertanyaan yang sering diajukan calon mahasiswa:\n- Apakah bisa daftar online? Ya, pendaftaran bisa dilakukan melalui website resmi UCIC atau datang langsung ke kampus.\n- Apakah ada kelas sore? Ada, tersedia kelas sore pukul 18.30-21.30.\n- Apakah biaya kuliah bisa dicicil? Bisa, tersedia skema pembayaran bertahap atau cicilan 3 bulan.\n- Kapan mulai kuliah? Informasi dari PMB menyebut perkuliahan dimulai sekitar bulan September, namun jadwal final mengikuti pengumuman resmi kampus."
+    "content": "Pertanyaan yang sering diajukan calon mahasiswa:\n\nQ: Apakah bisa daftar online?\nA: Ya, pendaftaran bisa dilakukan melalui website resmi PMB UCIC atau calon mahasiswa bisa datang langsung ke kampus.\n\nQ: Apakah ada kelas sore?\nA: Ada. Kelas sore tersedia pukul 18.30-21.30.\n\nQ: Apakah biaya kuliah bisa dicicil?\nA: Bisa. Tersedia skema pembayaran bertahap, termasuk bayar 3 bulan, 1 semester, dan 1 tahun.\n\nQ: Kapan mulai kuliah?\nA: Perkuliahan dimulai sekitar bulan September. Jadwal final mengikuti pengumuman kampus."
   },
   {
     "id": "faq_orang_tua_mahasiswa",
@@ -1105,10 +1416,12 @@
       "akreditasi kampus",
       "peluang kerja lulusan",
       "kampus mana",
-      "kelas reguler"
+      "kelas reguler",
+      "kampus 1",
+      "kampus 2"
     ],
-    "title": "FAQ Orang Tua Mahasiswa UCIC",
-    "content": "Pertanyaan yang sering diajukan orang tua calon mahasiswa:\n- Apakah kampus sudah terakreditasi? Ya, UCIC memiliki akreditasi resmi dari BAN-PT.\n- Apakah ada peluang kerja setelah lulus? Ada. UCIC memiliki program magang dan kerja sama industri yang membantu kesiapan karier mahasiswa.\n- Nanti belajarnya di kampus mana? Untuk kelas reguler, perkuliahan bisa berlangsung secara mobile di Kampus 1 maupun Kampus 2 sesuai kebutuhan jadwal dan kebijakan kampus."
+    "title": "FAQ Orang Tua Calon Mahasiswa UCIC",
+    "content": "Pertanyaan yang sering diajukan orang tua calon mahasiswa:\n\nQ: Apakah kampus sudah terakreditasi?\nA: Ya, UCIC memiliki akreditasi resmi dari BAN-PT.\n\nQ: Apakah ada peluang kerja setelah lulus?\nA: Ada. UCIC memiliki program magang dan kerja sama industri yang mendukung kesiapan karier mahasiswa.\n\nQ: Nanti belajarnya di kampus mana?\nA: Untuk kelas reguler, perkuliahan bisa mobile atau berpindah sesuai jadwal, baik di Kampus 1 maupun Kampus 2."
   },
   {
     "id": "layanan_cs_pmb",
@@ -1120,10 +1433,12 @@
       "bantuan login",
       "promo pmb",
       "diskon pmb",
-      "jadwal orientasi"
+      "jadwal orientasi",
+      "customer service",
+      "jadwal kuliah"
     ],
     "title": "Layanan yang Ditangani Customer Service PMB UCIC",
-    "content": "Customer Service PMB UCIC dapat membantu memberikan informasi terkait status pendaftaran calon mahasiswa, reset akun PMB, bantuan teknis login, informasi promo dan diskon, serta jadwal kuliah atau orientasi mahasiswa baru."
+    "content": "Customer Service PMB UCIC dapat membantu calon mahasiswa terkait:\n- Status pendaftaran calon mahasiswa.\n- Reset akun PMB.\n- Bantuan teknis login.\n- Informasi promo dan diskon.\n- Informasi jadwal kuliah.\n- Informasi orientasi mahasiswa baru.\n- Bantuan verifikasi pembayaran dan arahan lanjutan setelah daftar."
   },
   {
     "id": "alasan_memilih_ucic",
@@ -1134,10 +1449,12 @@
       "kelebihan ucic",
       "keunggulan ucic",
       "ucic bagus gak",
-      "why ucic"
+      "why ucic",
+      "kampus kerja",
+      "kampus magang"
     ],
     "title": "Alasan Memilih UCIC",
-    "content": "Beberapa alasan memilih UCIC antara lain: kurikulum yang disusun sesuai kebutuhan dunia kerja, peluang magang dan relasi industri, biaya kuliah yang terjangkau serta bisa dicicil, pilihan kelas yang fleksibel termasuk kelas pagi, sore, dan RPL, dosen praktisi yang berpengalaman, fasilitas pendukung pembelajaran, serta fokus kampus pada pengembangan karier dan masa depan mahasiswa."
+    "content": "Beberapa alasan memilih UCIC:\n- Kurikulum sesuai dunia kerja: materi perkuliahan disusun mengikuti kebutuhan industri, fokus pada skill praktis, proyek nyata, dan studi kasus.\n- Kerja sama industri dan peluang magang: mahasiswa berkesempatan mengikuti magang sebelum lulus dan membangun peluang kerja setelah kuliah.\n- Biaya terjangkau dan bisa dicicil: tersedia sistem cicilan dan informasi bantuan/promo tertentu melalui PMB.\n- Fleksibel untuk berbagai kondisi: tersedia kelas pagi, kelas sore, dan RPL untuk yang sudah bekerja.\n- Dosen praktisi dan berpengalaman: pembelajaran lebih relevan dengan kebutuhan dunia kerja.\n- Fasilitas pendukung pembelajaran: tersedia laboratorium komputer, akses teknologi pendukung, dan lingkungan belajar yang nyaman.\n- Fokus pada karier dan masa depan: ada dukungan pengembangan soft skill dan prospek kerja yang jelas di setiap jurusan."
   },
   {
     "id": "identitas_promosi_prodi",
@@ -1148,10 +1465,11 @@
       "bahan promosi",
       "jurusan ucic",
       "karakter prodi",
-      "kelebihan jurusan"
+      "kelebihan jurusan",
+      "tagline jurusan"
     ],
     "title": "Identitas dan Tagline Program Studi UCIC",
-    "content": "Identitas singkat beberapa program studi UCIC:\n- Teknik Informatika: \"Jadi Developer Profesional di Era Digital\". Fokus pada programming, AI, dan pengembangan sistem.\n- Sistem Informasi: \"Penghubung Teknologi & Bisnis\". Menggabungkan IT dan manajemen bisnis untuk analisis sistem dan solusi perusahaan.\n- Manajemen Informatika: \"Ahli IT Siap Kerja Cepat\". Lebih praktis dan aplikatif dengan fokus pada database, jaringan, dan web.\n- DKV: \"Kreativitas Tanpa Batas di Dunia Visual\". Fokus pada desain grafis, branding, multimedia, dan konten digital.\n- Bisnis Digital: \"Bangun Bisnis di Era Online\". Fokus pada digital marketing, e-commerce, dan strategi bisnis berbasis teknologi.\n- Manajemen Bisnis: \"Siap Jadi Pebisnis & Profesional\". Fokus pada manajemen, marketing, SDM, dan pengembangan usaha.\n- Manajemen: \"Siap Jadi Pebisnis & Profesional di Dunia Kerja\". Mempelajari pengelolaan bisnis, tim, strategi organisasi, marketing, keuangan, dan SDM.\n- PKOR: \"Dari Hobi Jadi Profesi di Dunia Olahraga\". Fokus pada kepelatihan dan ilmu olahraga dengan peluang karier sebagai pelatih, instruktur, atau tenaga profesional olahraga.\n\nUntuk prospek kerja yang lebih lengkap per program studi, referensi promosi kampus juga mengarahkan ke katalog digital: https://s.id/Katalog-Digital-UCIC"
+    "content": "Identitas singkat beberapa program studi UCIC:\n\n- Teknik Informatika: \"Jadi Developer Profesional di Era Digital\". Fokus pada programming, AI, dan pengembangan sistem. Mahasiswa belajar membuat aplikasi web, mobile, dan software. Cocok untuk yang ingin berkarier di bidang teknologi.\n\n- Sistem Informasi: \"Penghubung Teknologi & Bisnis\". Menggabungkan IT dan manajemen bisnis, fokus pada analisis sistem dan solusi perusahaan. Cocok untuk yang ingin menjadi IT Consultant atau System Analyst.\n\n- Manajemen Informatika: \"Ahli IT Siap Kerja Cepat\". Lebih praktis dan aplikatif, dengan fokus pada skill teknis seperti database, jaringan, web, media digital, dan konten digital. Cocok untuk yang ingin cepat masuk dunia kerja.\n\n- DKV: \"Kreativitas Tanpa Batas di Dunia Visual\". Fokus pada desain grafis, branding, multimedia, ilustrasi, dan konten digital. Cocok untuk yang suka desain, ilustrasi, dan dunia kreatif.\n\n- Bisnis Digital: \"Bangun Bisnis di Era Online\". Fokus pada digital marketing, e-commerce, teknologi bisnis, startup, dan strategi bisnis digital. Cocok untuk calon entrepreneur dan pekerja startup.\n\n- Manajemen Bisnis: \"Siap Jadi Pebisnis & Profesional\". Mempelajari ilmu bisnis yang fleksibel dan luas, termasuk manajemen, marketing, SDM, operasional, dan pengembangan usaha. Cocok untuk yang ingin bekerja di perusahaan atau membuka usaha.\n\n- Manajemen: \"Siap Jadi Pebisnis & Profesional di Dunia Kerja\". Mempelajari cara mengelola bisnis, tim, dan strategi organisasi, dengan fokus pada manajemen, marketing, keuangan, dan SDM. Jurusan ini fleksibel dengan peluang kerja luas.\n\n- Pendidikan Kepelatihan Olahraga: \"Dari Hobi Jadi Profesi di Dunia Olahraga\". Fokus pada kepelatihan dan ilmu olahraga. Cocok untuk yang aktif, suka olahraga, dan ingin menjadi pelatih, instruktur, guru olahraga, atau tenaga profesional olahraga."
   },
   {
     "id": "faq_awam_syarat_daftar",
@@ -1177,10 +1495,14 @@
       "bisa dana gak",
       "bisa gopay gak",
       "uang masuk berapa",
-      "bayar daftar kuliah"
+      "bayar daftar kuliah",
+      "biaya daftar",
+      "biaya pendaftaran",
+      "bayar 3 bulan",
+      "cicilan kuliah"
     ],
     "title": "Kalau Bayar Kuliah atau Daftar, Bisa Lewat Mana?",
-    "content": "Pembayaran di UCIC bisa melalui transfer bank seperti BCA, Mandiri, BNI, dan BRI, Virtual Account Midtrans, e-wallet seperti OVO, GoPay, dan DANA, atau langsung ke kampus. Untuk biaya awal, nominalnya menyesuaikan program studi, sedangkan biaya pendaftaran tercatat Rp200.000."
+    "content": "Pembayaran di UCIC bisa melalui transfer bank BCA, Mandiri, BNI, dan BRI, Virtual Account Midtrans, e-wallet seperti OVO, GoPay, dan DANA, atau langsung ke kampus. Biaya pendaftaran TA 2026/2027 adalah Rp250.000 dan biaya perlengkapan Rp500.000. Untuk pembayaran kuliah tersedia pilihan bayar 3 bulan, bayar 1 semester, atau bayar 1 tahun. Nominal totalnya berbeda sesuai program studi, kelas reguler, kelas sore, atau RPL."
   },
   {
     "id": "faq_awam_kelas_pekerja",
@@ -1191,10 +1513,11 @@
       "kelas malam ada ga",
       "kelas sore buat kerja",
       "kuliah buat yang udah kerja",
-      "kelas karyawan"
+      "kelas karyawan",
+      "rpl"
     ],
     "title": "Kalau Sudah Kerja, Ada Kelas yang Cocok?",
-    "content": "Ada. UCIC menyediakan kelas sore sekitar pukul 18.30-21.30 dan juga jalur RPL untuk yang sudah bekerja. Jadi calon mahasiswa yang sambil kerja tetap punya opsi jadwal yang lebih fleksibel."
+    "content": "Ada. UCIC menyediakan kelas sore pukul 18.30-21.30 dan jalur RPL (Rekognisi Pembelajaran Lampau) untuk mahasiswa yang sudah bekerja. Jadi calon mahasiswa yang ingin kuliah sambil kerja bisa memilih opsi jadwal yang lebih fleksibel."
   },
   {
     "id": "faq_awam_jurusan_rekomendasi",
@@ -1204,10 +1527,12 @@
       "kalau suka desain masuk mana",
       "jurusan buat bisnis apa",
       "kalau bingung pilih jurusan",
-      "rekomendasi jurusan awam"
+      "rekomendasi jurusan awam",
+      "minat bakat",
+      "simulasi jurusan"
     ],
-    "title": "Kalau Bingung Pilih Jurusan, Cocoknya ke Mana?",
-    "content": "Kalau suka komputer, biasanya cocok ke Teknik Informatika atau Sistem Informasi. Kalau suka desain, pilihannya DKV. Kalau suka bisnis, bisa pertimbangkan Manajemen atau Bisnis Digital. Kalau suka olahraga, pilihannya PKOR."
+    "title": "Rekomendasi Jurusan Sesuai Minat Calon Mahasiswa",
+    "content": "Semua jurusan di UCIC bisa direkomendasikan sesuai minat dan bakat calon mahasiswa. Jika calon mahasiswa sudah mantap dengan pilihan jurusannya, CS tidak memaksa untuk memilih jurusan lain. Jika masih bingung, rekomendasi dapat diarahkan dari minat dan bakat:\n- Suka komputer, coding, aplikasi, AI, atau teknologi: Teknik Informatika atau Sistem Informasi.\n- Suka desain, ilustrasi, konten visual, branding, atau multimedia: DKV.\n- Suka bisnis, marketing, organisasi, atau usaha: Manajemen, Bisnis Digital, atau D3 Manajemen Bisnis.\n- Suka administrasi bisnis, ritel, operasional, dan pemasaran: D3 Manajemen Bisnis.\n- Suka olahraga, kepelatihan, atau aktivitas fisik: Pendidikan Kepelatihan Olahraga.\n- Ingin jalur IT terapan yang cepat kerja: D3 Manajemen Informatika."
   },
   {
     "id": "faq_awam_kontak_admin",
@@ -1220,7 +1545,7 @@
       "kontak daftar kuliah"
     ],
     "title": "Kalau Mau Hubungi Admin Kampus, Ke Mana?",
-    "content": "Kalau butuh bantuan pendaftaran atau kendala PMB, calon mahasiswa bisa menghubungi Admin PMB UCIC melalui WhatsApp di +6281216700519. Untuk kontak umum kampus, UCIC juga memiliki email info@ucic.ac.id dan alamat di Jl. Kesambi, Cirebon."
+    "content": "Kalau butuh bantuan pendaftaran atau ingin bertanya tentang PMB UCIC, hubungi Admin PMB melalui WhatsApp 0812 1670 0519. Pendaftaran online tersedia di https://pmb.cic.ac.id/register. Instagram UCIC dan PMB: universitas_cic / pmb_ucic."
   },
   {
     "id": "faq_awam_lokasi_kampus",
@@ -1233,7 +1558,7 @@
       "kalau mau datang ke kampus"
     ],
     "title": "Kalau Mau Datang ke Kampus, Lokasinya di Mana?",
-    "content": "UCIC memiliki dua lokasi kampus di Kota Cirebon. Kampus 1 berada di Jalan Kesambi No. 202, sedangkan Kampus 2 berada di Jalan Kesambi No. 58A. Untuk urusan pendaftaran, calon mahasiswa biasanya diarahkan ke Kampus 2 atau website PMB resmi."
+    "content": "UCIC berada di Jl. Kesambi No. 58A dan Jl. Kesambi No. 202, Kesambi, Kota Cirebon. Kedua lokasi berada di area strategis Kota Cirebon. Untuk informasi kunjungan atau pendaftaran, hubungi WhatsApp PMB 0812 1670 0519."
   },
   {
     "id": "faq_awam_setelah_daftar",
@@ -1246,7 +1571,7 @@
       "habis registrasi"
     ],
     "title": "Kalau Sudah Daftar, Setelah Itu Apa Lagi?",
-    "content": "Setelah daftar, calon mahasiswa biasanya melanjutkan pembayaran biaya registrasi atau tahap awal, mengirim bukti transfer jika diperlukan, menunggu verifikasi dari tim PMB, lalu mengunggah berkas yang diminta. Setelah itu, calon mahasiswa akan menerima informasi lanjutan dari kampus."
+    "content": "Setelah daftar online melalui https://pmb.cic.ac.id/register, calon mahasiswa mengikuti arahan lanjutan dari tim PMB untuk proses verifikasi dan tahapan berikutnya. Jika ada kendala, hubungi WhatsApp PMB 0812 1670 0519."
   },
   {
     "id": "baak_kalender_akademik",
@@ -1259,10 +1584,11 @@
       "periode uts",
       "periode uas",
       "jadwal sidang",
-      "jadwal seminar"
+      "jadwal seminar",
+      "rektorat"
     ],
     "title": "Kalender Akademik UCIC",
-    "content": "Kalender akademik UCIC berisi jadwal kegiatan pendidikan dalam dua semester, termasuk pendaftaran mahasiswa baru, heregistrasi atau daftar ulang, perkuliahan, perkuliahan pengganti, UTS, UAS, seminar proyek, seminar tugas akhir atau skripsi, sidang tugas akhir atau skripsi, dan wisuda. Kalender akademik disusun dengan memperhatikan kalender nasional dan kebutuhan kegiatan akademik kampus."
+    "content": "Kalender akademik UCIC diproses di bagian rektorat. Kalender ini memutuskan awal perkuliahan, menyesuaikan kegiatan akademik dengan kalender tahunan berjalan, serta mengatur pembelajaran dalam satu semester.\n\nDalam satu semester, perkuliahan mencakup UTS dan UAS dengan pola umum 7 pertemuan sebelum UTS dan 7 pertemuan sebelum UAS. Kalender akademik juga menjadwalkan periode seminar proyek, seminar tugas akhir/skripsi, dan sidang tugas akhir/skripsi."
   },
   {
     "id": "baak_beban_studi_sks",
@@ -1277,7 +1603,7 @@
       "program d3"
     ],
     "title": "Beban Studi dan Masa Studi UCIC",
-    "content": "UCIC menggunakan Sistem Kredit Semester (SKS). Program S1 memiliki beban studi sekurang-kurangnya 144 SKS dan sebanyak-banyaknya 148 SKS, dijadwalkan 8 semester, dengan batas masa studi maksimal 14 semester. Program D3 memiliki beban studi sekurang-kurangnya 108 SKS dan sebanyak-banyaknya 118 SKS, dijadwalkan 6 semester. Pada pedoman akademik, batas studi D3 dijelaskan mengikuti ketentuan masing-masing program."
+    "content": "UCIC menggunakan Sistem Kredit Semester (SKS). Program S1 memiliki beban studi sekurang-kurangnya 144 SKS dan sebanyak-banyaknya 148 SKS, dijadwalkan 8 semester, dengan batas masa studi maksimal 14 semester. Program D3 memiliki beban studi sekurang-kurangnya 108 SKS dan sebanyak-banyaknya 118 SKS, dijadwalkan 6 semester. Batas studi D3 mengikuti ketentuan masing-masing program."
   },
   {
     "id": "baak_jadwal_perkuliahan",
@@ -1292,7 +1618,7 @@
       "kontrak belajar"
     ],
     "title": "Jadwal dan Ketentuan Perkuliahan UCIC",
-    "content": "Perkuliahan UCIC dilaksanakan berdasarkan jadwal dari fakultas dan kalender akademik. Semester gasal umumnya berlangsung September sampai Februari, sedangkan semester genap Maret sampai Agustus. Hari kuliah diatur dalam sesi mulai sekitar pukul 07.00 sampai 21.00. Setiap semester memiliki 14 kali tatap muka; mata kuliah 2 SKS sekitar 100 menit dan mata kuliah 3 SKS sekitar 150 menit. Sebelum perkuliahan dimulai, dosen dan perwakilan kelas membuat kontrak belajar."
+    "content": "Perkuliahan UCIC mengikuti jadwal dari fakultas dan kalender akademik. Semester gasal umumnya berlangsung September sampai Februari, sedangkan semester genap Maret sampai Agustus. Hari kuliah diatur dalam sesi mulai sekitar pukul 07.00 sampai 21.00. Setiap semester memiliki 14 kali tatap muka; mata kuliah 2 SKS sekitar 100 menit dan mata kuliah 3 SKS sekitar 150 menit. Sebelum perkuliahan dimulai, dosen dan perwakilan kelas membuat kontrak belajar."
   },
   {
     "id": "baak_kehadiran_perkuliahan",
@@ -1336,10 +1662,11 @@
       "daftar ulang",
       "registrasi ulang",
       "siakad",
-      "dosen wali"
+      "dosen wali",
+      "regonline"
     ],
     "title": "Alur Herregistrasi dan Pengisian KRS",
-    "content": "Alur herregistrasi dan KRS UCIC: mahasiswa melakukan pembayaran biaya studi atau UKT/semester sesuai jadwal melalui bank mitra, lalu melakukan aktivasi atau registrasi online melalui portal kampus. Setelah status aktif, mahasiswa login ke SIAKAD atau My CIC, berkonsultasi dengan dosen wali, menginput mata kuliah sesuai hasil konsultasi, dan memastikan KRS sudah divalidasi atau disetujui. Mahasiswa lama mendapat akses KRS setelah melunasi administrasi kemahasiswaan dan BPP. Jumlah SKS mahasiswa lama disesuaikan dengan IPS dan aturan program studi."
+    "content": "Alur herregistrasi dan KRS UCIC:\n\n1. Herregistrasi atau registrasi ulang:\n- Mahasiswa melakukan pembayaran biaya studi/UKT atau biaya semester sesuai jadwal yang ditentukan melalui bank mitra.\n- Mahasiswa melakukan aktivasi atau registrasi online melalui portal registrasi, misalnya regonline.cic.ac.id, menggunakan NIM dan password untuk mengaktifkan status sebagai mahasiswa aktif.\n\n2. Pengisian KRS:\n- Mahasiswa login ke SIAKAD setelah herregistrasi selesai.\n- Mahasiswa berkonsultasi dengan dosen wali secara online atau offline untuk menyetujui mata kuliah yang akan diambil.\n- Mahasiswa menginput mata kuliah di SIAKAD sesuai hasil konsultasi.\n- Mahasiswa memastikan KRS sudah disetujui atau valid oleh dosen wali agar terdaftar aktif dalam perkuliahan."
   },
   {
     "id": "baak_pedoman_pengambilan_sks",
@@ -1352,8 +1679,8 @@
       "maksimal sks",
       "pengambilan krs"
     ],
-    "title": "Pedoman Pengambilan Jumlah SKS",
-    "content": "Pedoman jumlah SKS program D3 dan S1 berdasarkan IPS: IPS lebih dari 3,00 dapat mengambil 21-24 SKS; IPS 2,50-2,99 dapat mengambil 18-20 SKS; IPS 2,00-2,49 dapat mengambil 15-17 SKS; dan IPS di bawah 2,00 dapat mengambil 14 SKS. Ketentuan akhir tetap mengikuti persyaratan mata kuliah, prasyarat, dan kebijakan program studi."
+    "title": "Ketentuan Pengambilan Jumlah SKS",
+    "content": "Ketentuan jumlah SKS program D3 dan S1 mengikuti IPS: IPS lebih dari 3,00 dapat mengambil 21-24 SKS; IPS 2,50-2,99 dapat mengambil 18-20 SKS; IPS 2,00-2,49 dapat mengambil 15-17 SKS; dan IPS di bawah 2,00 dapat mengambil 14 SKS. Ketentuan akhir tetap mengikuti persyaratan mata kuliah, prasyarat, dan kebijakan program studi."
   },
   {
     "id": "baak_cuti_akademik",
@@ -1364,10 +1691,11 @@
       "mengajukan cuti",
       "form cuti",
       "semester cuti",
-      "biaya cuti"
+      "biaya cuti",
+      "minimal semester 3"
     ],
     "title": "Alur Pengajuan Cuti Akademik",
-    "content": "Mahasiswa yang ingin cuti akademik mengajukan permohonan ke BAAK dan mengisi formulir cuti. Cuti akademik dapat diajukan setelah mahasiswa memasuki minimal semester 3 dan hanya disetujui jika tidak mengganggu batas masa studi. Hak cuti maksimal 2 semester. Form cuti harus mendapat persetujuan Kaprodi, Dekan, dan Kepala BAAK atau pejabat akademik terkait, lalu mahasiswa menyelesaikan biaya administrasi cuti di bagian keuangan. Salinan form yang sudah disetujui dapat dipegang mahasiswa sebagai bukti cuti."
+    "content": "Alur pengajuan cuti kuliah:\n1. Mahasiswa mengajukan permohonan cuti ke BAAK.\n2. BAAK melakukan pengecekan syarat cuti, yaitu minimal semester 3.\n3. BAAK memberikan form pengajuan cuti.\n4. Mahasiswa mengisi form pengajuan cuti dan meminta persetujuan Kaprodi, Dekan, dan Kepala BAAK.\n5. Setelah form lengkap, mahasiswa menyerahkan form ke bagian keuangan untuk melakukan pembayaran biaya administrasi cuti.\n6. Form yang sudah disetujui bagian keuangan diserahkan kembali ke BAAK, dan fotokopi form dipegang mahasiswa sebagai bukti cuti."
   },
   {
     "id": "baak_aktif_kembali_nonaktif",
@@ -1379,10 +1707,14 @@
       "mahasiswa non aktif",
       "tidak isi krs",
       "drop out",
-      "do"
+      "do",
+      "mahasiswa nonaktif",
+      "cuti",
+      "keluar",
+      "tanpa keterangan"
     ],
-    "title": "Aktif Kembali Setelah Cuti atau Nonaktif",
-    "content": "Mahasiswa yang tidak mengisi KRS dan tidak mengajukan cuti akademik dapat tercatat sebagai mahasiswa dicutikan atau nonaktif. Mahasiswa dapat mengajukan aktif kembali ke BAAK dengan mengisi form persetujuan aktif kembali, selama sisa masa studi masih memungkinkan. Mahasiswa perlu melakukan daftar ulang, melunasi biaya nonaktif atau dicutikan sesuai ketentuan, membayar BPP semester berjalan, lalu mengisi KRS dengan berkonsultasi kepada Kaprodi. Mahasiswa dapat dikenakan drop out jika tidak daftar ulang selama 3 semester berturut-turut atau tidak berturut-turut, tidak memenuhi syarat akademik minimum, melewati batas masa studi, atau melanggar tata tertib berat."
+    "title": "Nonaktif dan Aktif Kembali Mahasiswa",
+    "content": "Status nonaktif mahasiswa perlu dilihat dari alasan atau penyebabnya, misalnya keluar, cuti, atau tanpa keterangan. Mahasiswa yang ingin aktif kembali setelah cuti atau nonaktif perlu berkoordinasi dengan BAAK untuk pengecekan status akademik, kewajiban administrasi, dan arahan proses aktif kembali sesuai ketentuan kampus."
   },
   {
     "id": "baak_pindah_kelas_jadwal",
@@ -1396,7 +1728,7 @@
       "baak pindah kelas"
     ],
     "title": "Alur Pindah Kelas atau Jadwal",
-    "content": "Alur pindah kelas atau jadwal: mahasiswa melapor langsung ke staff BAAK, lalu BAAK mengecek ketersediaan kelas atau jadwal. Jika memungkinkan dan sesuai ketentuan akademik, BAAK memindahkan jadwal secara digital. Setelah perubahan selesai, mahasiswa melanjutkan perkuliahan sesuai kelas atau jadwal terbaru."
+    "content": "Alur pindah kelas atau jadwal:\n1. Mahasiswa melapor langsung ke staff BAAK.\n2. BAAK mengecek ketersediaan kelas atau jadwal.\n3. Jika memungkinkan, BAAK memindahkan jadwal secara digital.\n4. Mahasiswa melanjutkan perkuliahan sesuai kelas atau jadwal terbaru."
   },
   {
     "id": "baak_pindah_prodi",
@@ -1410,7 +1742,7 @@
       "perpindahan mahasiswa"
     ],
     "title": "Alur Pindah Program Studi",
-    "content": "Mahasiswa yang ingin pindah program studi mengajukan perpindahan ke Kaprodi awal, mengisi form perpindahan program studi untuk prodi awal dan prodi tujuan, lalu menyerahkan form ke BAAK. BAAK bersama operator PDDIKTI memproses perpindahan mahasiswa. Berdasarkan pedoman akademik, pindah program studi memerlukan persetujuan Dekan yang ditinggalkan dan persetujuan Kaprodi serta Dekan prodi tujuan untuk pengakuan mata kuliah. Umumnya perpindahan hanya dapat dilakukan satu kali, berlaku untuk mahasiswa aktif semester 1 atau 2, dan dilakukan paling lambat batas akhir batal tambah semester berjalan."
+    "content": "Alur pindah program studi:\n1. Mahasiswa mengajukan pindah prodi ke Kaprodi awal.\n2. Mahasiswa mengisi form perpindahan prodi untuk prodi awal dan prodi baru.\n3. Mahasiswa menyerahkan form ke BAAK.\n4. BAAK bersama operator PDDIKTI memproses perpindahan mahasiswa sesuai ketentuan akademik."
   },
   {
     "id": "baak_layanan_dokumen_akademik",
@@ -1439,7 +1771,7 @@
       "baak kegiatan"
     ],
     "title": "Alur Surat Keterangan atau Rencana Kegiatan Mahasiswa",
-    "content": "Untuk surat terkait kegiatan mahasiswa, mahasiswa mengajukan surat rencana kegiatan ke BAAK. BAAK meninjau jenis kegiatan dan menyesuaikannya dengan kondisi serta fasilitas kampus. Setelah ditinjau, BAAK dapat menyetujui atau tidak menyetujui pengajuan tersebut sesuai ketentuan dan kesiapan kampus."
+    "content": "Alur pengajuan surat kegiatan mahasiswa:\n1. Mahasiswa mengajukan surat rencana kegiatan ke BAAK.\n2. BAAK meninjau jenis kegiatan dan menyesuaikannya dengan kondisi serta fasilitas kampus.\n3. BAAK menyetujui atau tidak menyetujui pengajuan sesuai ketentuan dan kesiapan kampus."
   },
   {
     "id": "baak_khs_transkrip_kartu_ujian",
@@ -1454,7 +1786,7 @@
       "tanda tangan baak"
     ],
     "title": "KHS, Transkrip, dan Kartu Ujian",
-    "content": "Mahasiswa dapat mencetak sendiri KHS, transkrip, atau kartu ujian melalui sistem kampus seperti My CIC sesuai jadwal dan akses yang berlaku. Jika dokumen membutuhkan tanda tangan atau cap resmi, mahasiswa dapat meminta bantuan ke bagian BAAK. KHS berisi nilai mata kuliah, IPS, dan IPK, serta dapat diperoleh setelah ujian sesuai jadwal kalender akademik."
+    "content": "Mahasiswa UCIC dapat mencetak sendiri KHS, transkrip, atau kartu ujian melalui sistem kampus sesuai akses yang tersedia. Jika dokumen membutuhkan tanda tangan dan cap resmi, mahasiswa dapat meminta bantuan ke bagian BAAK."
   },
   {
     "id": "baak_protes_nilai",
@@ -1480,10 +1812,11 @@
       "alumni legalisir",
       "cap ijazah",
       "forlap",
-      "pddikti"
+      "pddikti",
+      "1x24 jam"
     ],
     "title": "Alur Legalisir Ijazah dan Transkrip",
-    "content": "Alur legalisir untuk alumni: alumni membawa fotokopi ijazah atau transkrip yang akan dilegalisir, menunjukkan ijazah atau transkrip asli kepada staff BAAK, lalu BAAK mengecek data di database akademik/PDDIKTI. Berdasarkan data alur layanan, proses legalisir dapat memerlukan sekitar 1 x 24 jam, sedangkan pedoman akademik menyebut permohonan legalisir masuk proses verifikasi sebelum 10 hari kerja. Legalisir hanya dapat dilakukan jika lulusan terdaftar di FORLAP/PDDIKTI dengan status lulus dan menunjukkan dokumen asli."
+    "content": "Alur legalisir untuk alumni UCIC:\n1. Alumni membawa fotokopi ijazah atau transkrip yang akan dilegalisir.\n2. Alumni menunjukkan ijazah atau transkrip asli kepada staff BAAK.\n3. BAAK mengecek data alumni di database akademik.\n4. Proses legalisir membutuhkan sekitar 1 x 24 jam.\n5. Alumni mengambil hasil legalisir setelah proses selesai."
   },
   {
     "id": "baak_skripsi_tugas_akhir",
@@ -1498,7 +1831,7 @@
       "bimbingan skripsi"
     ],
     "title": "Alur Skripsi atau Tugas Akhir",
-    "content": "Alur skripsi atau tugas akhir: mahasiswa membayar biaya skripsi/tugas akhir, mengambil mata kuliah skripsi atau tugas akhir saat KRS, lalu mengajukan proposal ke Kaprodi. Kaprodi memvalidasi proposal dan membagi dosen pembimbing. Setelah validasi, BAAK menginput dosen pembimbing. Mahasiswa melanjutkan bimbingan dengan dosen pembimbing dan mencatat proses bimbingan. Pedoman akademik menyebut pengajuan skripsi mensyaratkan mahasiswa sudah menyelesaikan sekitar 132 SKS, IPK minimal 2, dan tidak memiliki nilai D. Setelah memenuhi syarat, mahasiswa dapat mengikuti seminar proposal, seminar hasil, dan sidang akhir sesuai jadwal."
+    "content": "Alur skripsi atau tugas akhir:\n1. Mahasiswa membayar biaya skripsi atau tugas akhir.\n2. Pada saat KRS, mahasiswa mengambil mata kuliah skripsi atau tugas akhir.\n3. Mahasiswa mengajukan proposal tugas akhir atau skripsi ke Kaprodi.\n4. Kaprodi memvalidasi proposal dan membagi dosen pembimbing.\n5. Setelah divalidasi Kaprodi, BAAK menginput dosen pembimbing.\n6. Mahasiswa melanjutkan bimbingan dengan dosen pembimbing.\n7. Setelah memenuhi syarat, mahasiswa dapat melaksanakan seminar skripsi/tugas akhir dan sidang akhir sesuai jadwal."
   },
   {
     "id": "baak_syarat_sidang_skripsi",
@@ -1510,10 +1843,11 @@
       "daftar sidang",
       "bebas pustaka",
       "bebas keuangan",
-      "toefl"
+      "toefl",
+      "sks sidang"
     ],
     "title": "Syarat Sidang Skripsi atau Tugas Akhir",
-    "content": "Syarat sidang skripsi atau tugas akhir meliputi persyaratan akademik dan administrasi. Mahasiswa harus telah menempuh SKS minimal sesuai jenjang, tidak memiliki nilai E, memiliki nilai D dalam batas aturan prodi, telah melaksanakan seminar skripsi/tugas akhir, memenuhi minimal bimbingan dengan bukti ACC di portal atau form bimbingan, serta memiliki bukti bebas pustaka dan bebas administrasi keuangan. Persyaratan lain yang tercantum pada pedoman meliputi pelunasan biaya sidang, biaya perpustakaan/laboratorium/SKS, biaya wisuda, transkrip nilai, foto sesuai ketentuan, naskah skripsi, draft publikasi ilmiah, dan sertifikat TOEFL Bahasa Inggris 450 jika diwajibkan. Kaprodi memberikan jadwal sidang, BAAK mengatur jadwal, lalu mahasiswa melaksanakan sidang."
+    "content": "Syarat sidang skripsi atau tugas akhir meliputi syarat akademik dan administrasi:\n- Telah menempuh SKS minimal sesuai jenjang, umumnya sekitar 130-138 SKS untuk S1 dan 106-110 SKS untuk D3.\n- Tidak memiliki nilai E.\n- Nilai D hanya diperbolehkan dalam batas aturan prodi.\n- Telah melaksanakan seminar skripsi atau tugas akhir.\n- Telah memenuhi minimal bimbingan dengan bukti ACC di portal atau form bimbingan.\n- Memiliki bukti bebas pustaka.\n- Bebas administrasi keuangan atau sudah melunasi SPP/UKT semester akhir.\n\nSetelah syarat terpenuhi, Kaprodi memberikan jadwal sidang, BAAK mengatur jadwal sidang, lalu mahasiswa melaksanakan sidang."
   },
   {
     "id": "baak_yudisium",
@@ -1528,7 +1862,7 @@
       "lldikti"
     ],
     "title": "Syarat dan Alur Yudisium",
-    "content": "Syarat yudisium: mahasiswa sudah menyelesaikan tugas akhir atau skripsi, sudah disidangkan, direvisi, dan ditandatangani oleh dosen pembimbing serta penguji. Mahasiswa juga harus melunasi seluruh kewajiban keuangan termasuk semester berjalan. Alurnya: mahasiswa mengisi form lembar yudisium, memvalidasi data pada form dengan melampirkan dokumen seperti fotokopi akta kelahiran, kartu keluarga, dan ijazah terakhir, lalu menandatangani di atas materai. Kaprodi memvalidasi form yudisium, mahasiswa menyerahkan form dan lampiran ke BAAK, BAAK mengecek data di portal BAAK, kemudian operator LLDIKTI menyinkronkan data ke portal LLDIKTI."
+    "content": "Syarat dan alur yudisium:\n1. Mahasiswa sudah menyelesaikan tugas akhir atau skripsi, sudah disidangkan, direvisi, dan ditandatangani oleh dosen pembimbing serta penguji.\n2. Mahasiswa melunasi seluruh kewajiban keuangan, termasuk UKT semester berjalan.\n3. Mahasiswa mengisi form lembar yudisium.\n4. Mahasiswa memvalidasi data pada form lembar yudisium dengan melampirkan fotokopi akta kelahiran, kartu keluarga, dan ijazah terakhir, lalu menandatangani di atas materai.\n5. Kaprodi memvalidasi data di form yudisium.\n6. Mahasiswa menyerahkan form yudisium beserta lampirannya ke BAAK.\n7. BAAK mengecek data dari form ke portal BAAK.\n8. Operator LLDIKTI menyinkronkan data ke portal LLDIKTI."
   },
   {
     "id": "baak_wisuda_ijazah_alumni",
@@ -1540,10 +1874,11 @@
       "ambil ijazah",
       "pendataan alumni",
       "career center",
-      "tracer study"
+      "tracer study",
+      "sks lulus"
     ],
     "title": "Wisuda, Pengambilan Ijazah, dan Pendataan Alumni",
-    "content": "Mahasiswa dapat mengikuti wisuda setelah dinyatakan lulus semua mata kuliah, menyerahkan perbaikan tugas akhir atau skripsi yang sudah ditandatangani penguji dan pembimbing, bebas kewajiban keuangan, bebas pinjaman perpustakaan, dan menyerahkan jurnal ilmiah yang disetujui fakultas jika diwajibkan. Wisuda dilaksanakan sesuai kalender akademik. Ijazah dan transkrip dibagikan saat wisuda. Jika mahasiswa tidak mengikuti wisuda dan belum menerima ijazah, pengambilan ijazah diberi batas waktu sampai 1 tahun dari tanggal wisuda. Pendataan alumni dikelola Career Center; lulusan wajib mengisi formulir alumni dan dapat mengikuti tracer study, survei pengguna alumni, serta pendampingan karier."
+    "content": "Mahasiswa dapat mengikuti wisuda setelah memenuhi syarat kelulusan. Syarat utama wisuda adalah nilai akademik dan SKS sudah sesuai standar kelulusan, serta mahasiswa telah menyelesaikan seluruh kewajiban biaya ke bagian keuangan.\n\nSetelah dinyatakan lulus dan mengikuti proses akhir studi sesuai ketentuan kampus, mahasiswa dapat mengikuti wisuda dan proses pengambilan ijazah/transkrip sesuai jadwal serta arahan kampus."
   },
   {
     "id": "baak_pengunduran_diri",
@@ -1554,10 +1889,13 @@
       "keluar kuliah",
       "mutasi mahasiswa",
       "berhenti kuliah",
-      "surat pengunduran diri"
+      "surat pengunduran diri",
+      "undur diri",
+      "bebas pustaka",
+      "bebas administrasi"
     ],
     "title": "Alur Pengunduran Diri Mahasiswa",
-    "content": "Alur pengunduran diri mahasiswa: mahasiswa mengajukan surat permohonan pengunduran diri ke BAAK dengan mencantumkan alasan dan diketahui oleh wali atau orang tua. Mahasiswa menyerahkan bukti bebas pustaka dan bebas administrasi keuangan. BAAK memproses pengunduran diri dengan menerbitkan surat keterangan mutasi mahasiswa dan transkrip berdasarkan surat pengunduran diri, lalu meneruskan proses ke operator LLDIKTI sesuai ketentuan."
+    "content": "Alur pengunduran diri mahasiswa:\n1. Mahasiswa mengajukan surat permohonan pengunduran diri ke BAAK dengan mencantumkan alasan dan diketahui oleh wali atau orang tua.\n2. Mahasiswa menyerahkan bukti bebas pustaka dan bebas administrasi keuangan.\n3. BAAK memproses pengunduran diri dengan menerbitkan surat keterangan mutasi mahasiswa dan transkrip setelah menerima surat pengunduran diri.\n4. BAAK meneruskan proses ke operator LLDIKTI."
   },
   {
     "id": "baak_pmb_pindahan",
@@ -1602,8 +1940,8 @@
       "tahun 1999",
       "tahun 2019"
     ],
-    "title": "Sejarah Lengkap UCIC dari Pedoman Akademik",
-    "content": "Sejarah UCIC dimulai dari lembaga kursus komputer Cirebon Institute of Computer pada tahun 1984. Pada tahun 1994 berdiri Akademi Perdagangan Widya Dharma (APWD) berdasarkan SK Mendikbud Nomor 085/U/O/1994. Yayasan Catur Insan Cendekia berdiri pada 13 Januari 1999, kemudian STMIK CIC memperoleh izin pendirian berdasarkan SK Mendikbud RI Nomor 123/D/O/1999 tanggal 15 Juli 1999 untuk Program Studi S1 Teknik Informatika dan D3 Manajemen Informatika. Tahun 2001 dibuka S1 Sistem Informasi dan D3 Komputerisasi Akuntansi. Tahun 2006 APWD berubah menjadi Akademi Perdagangan CIC. Tahun 2017 STMIK CIC membuka Program Studi Desain Komunikasi Visual. Tahun 2019 STMIK CIC dan AP CIC bergabung menjadi Universitas Catur Insan Cendekia berdasarkan SK Kemenristekdikti Nomor 952/KPT/I/2019."
+    "title": "Sejarah Lengkap UCIC",
+    "content": "Sejarah UCIC dimulai dari lembaga kursus komputer Cirebon Institute of Computer pada tahun 1984. Pada tahun 1994 berdiri Akademi Perdagangan Widya Dharma (APWD) melalui SK Mendikbud Nomor 085/U/O/1994. Yayasan Catur Insan Cendekia berdiri pada 13 Januari 1999, kemudian STMIK CIC memperoleh izin pendirian melalui SK Mendikbud RI Nomor 123/D/O/1999 tanggal 15 Juli 1999 untuk Program Studi S1 Teknik Informatika dan D3 Manajemen Informatika. Tahun 2001 dibuka S1 Sistem Informasi dan D3 Komputerisasi Akuntansi. Tahun 2006 APWD berubah menjadi Akademi Perdagangan CIC. Tahun 2017 STMIK CIC membuka Program Studi Desain Komunikasi Visual. Tahun 2019 STMIK CIC dan AP CIC bergabung menjadi Universitas Catur Insan Cendekia melalui SK Kemenristekdikti Nomor 952/KPT/I/2019.\n\nProgram studi aktif saat ini untuk PMB UCIC: S1 Teknik Informatika, S1 Sistem Informasi, S1 Desain Komunikasi Visual, D3 Manajemen Informatika, S1 Manajemen, S1 Akuntansi, S1 Bisnis Digital, D3 Manajemen Bisnis, dan S1 Pendidikan Kepelatihan Olahraga."
   },
   {
     "id": "pedoman_nilai_cic",
@@ -1629,8 +1967,8 @@
       "berbasis teknologi informasi",
       "tujuan universitas cic"
     ],
-    "title": "Visi, Misi, dan Tujuan UCIC Menurut Pedoman Akademik",
-    "content": "Visi UCIC dalam pedoman akademik adalah menjadi universitas yang unggul dan berprestasi di tingkat nasional berbasis teknologi informasi dan berjiwa technopreneur pada tahun 2030. Misinya meliputi penyelenggaraan pendidikan berbasis teknologi informasi yang bermutu dan unggul, penelitian berbasis teknologi informasi yang berkualitas, pengabdian masyarakat berbasis teknologi informasi yang bermanfaat, serta kerja sama dengan industri dan UMKM untuk mengembangkan bakat dan keterampilan technopreneur sivitas akademika. Tujuannya antara lain menghasilkan mahasiswa unggul, sistem pembelajaran bermutu, penelitian berkualitas, suasana akademik kondusif, kontribusi pengabdian masyarakat, kerja sama bermanfaat, dan sivitas akademika yang mampu mengembangkan technopreneurship."
+    "title": "Visi, Misi, dan Tujuan UCIC 2030",
+    "content": "Visi UCIC adalah menjadi universitas yang unggul dan berprestasi di tingkat nasional berbasis teknologi informasi dan berjiwa technopreneur pada tahun 2030. Misinya meliputi penyelenggaraan pendidikan berbasis teknologi informasi yang bermutu dan unggul, penelitian berbasis teknologi informasi yang berkualitas, pengabdian masyarakat berbasis teknologi informasi yang bermanfaat, serta kerja sama dengan industri dan UMKM untuk mengembangkan bakat dan keterampilan technopreneur sivitas akademika. Tujuannya antara lain menghasilkan mahasiswa unggul, sistem pembelajaran bermutu, penelitian berkualitas, suasana akademik kondusif, kontribusi pengabdian masyarakat, kerja sama bermanfaat, dan sivitas akademika yang mampu mengembangkan technopreneurship."
   },
   {
     "id": "pedoman_pimpinan_ucic_2020",
@@ -1645,7 +1983,7 @@
       "kepala perpustakaan"
     ],
     "title": "Profil Pimpinan UCIC dalam Pedoman Akademik 2020",
-    "content": "Pedoman Akademik 2020 mencatat beberapa pimpinan UCIC saat itu: Ketua Yayasan Catur Insan Cendekia Magdalena Amperani; Rektor Dr. Chandra Lukita, MM; Warek II Bidang Keuangan Aditya Kurniawan Chandra, B.Com (Fin&Acc). M.M; Ketua Badan Pengendalian Mutu Sudadi Pranata, SE., M.Si; Dekan FEB Ingrid Panjaitan, SE., M.Sc., Ak., CA; Kaprodi Akuntansi Dewi Anggun Puspitarini, SE., M.Ak; Kaprodi Manajemen Isti Riana Dewi, SE., MM; Kaprodi Manajemen Bisnis Sitta Nur Hajjiah, S.Ab., M.Si; Dekan Fakultas Teknologi dan Informatika Marsani Asfi., M.Si; Kaprodi Teknik Informatika Kusnadi., M.Kom; Kaprodi Sistem Informasi Rifqi Fahruddin, M.Kom; Kaprodi DKV Ine Rahmawati, M.Sn; Ketua Program Manajemen Informatika Chairun Naas, M.Kom; Ketua Program Studi Komputer Akuntansi Suwandi, SE., MM; Kepala Pusdatin Muh. Hatta, M.Kom; Kepala Bidang Kemahasiswaan Amroni, SE., MM; Ketua LPPM Lena Magdalena, M.MSI; Kepala BAAK Febryan Ervan, S.Kom; Kepala HRD dan GA Kristian Cahyo Kurnia, S.Psi; Kepala Perpustakaan Muthia Fariza, M.M. Data ini berasal dari pedoman lama sehingga posisi terbaru perlu dikonfirmasi ke kampus."
+    "content": "Pedoman Akademik 2020 mencatat beberapa pimpinan UCIC saat itu: Ketua Yayasan Catur Insan Cendekia Magdalena Amperani; Rektor Dr. Chandra Lukita, MM; Warek II Bidang Keuangan Aditya Kurniawan Chandra, B.Com (Fin&Acc). M.M; Ketua Badan Pengendalian Mutu Sudadi Pranata, SE., M.Si; Dekan FEB Ingrid Panjaitan, SE., M.Sc., Ak., CA; Kaprodi Akuntansi Dewi Anggun Puspitarini, SE., M.Ak; Kaprodi Manajemen Isti Riana Dewi, SE., MM; Kaprodi Manajemen Bisnis Sitta Nur Hajjiah, S.Ab., M.Si; Dekan Fakultas Teknologi dan Informatika Marsani Asfi., M.Si; Kaprodi Teknik Informatika Kusnadi., M.Kom; Kaprodi Sistem Informasi Rifqi Fahruddin, M.Kom; Kaprodi DKV Ine Rahmawati, M.Sn; Ketua Program Manajemen Informatika Chairun Naas, M.Kom; Ketua Program Studi Komputer Akuntansi Suwandi, SE., MM; Kepala Pusdatin Muh. Hatta, M.Kom; Kepala Bidang Kemahasiswaan Amroni, SE., MM; Ketua LPPM Lena Magdalena, M.MSI; Kepala BAAK Febryan Ervan, S.Kom; Kepala HRD dan GA Kristian Cahyo Kurnia, S.Psi; Kepala Perpustakaan Muthia Fariza, M.M. Posisi pimpinan terbaru perlu dikonfirmasi ke kampus."
   },
   {
     "id": "pedoman_pmb_layanan_jam",
@@ -1659,7 +1997,7 @@
       "pameran"
     ],
     "title": "Layanan dan Jam Operasional PMB UCIC dalam Pedoman",
-    "content": "Dalam Pedoman Akademik UCIC, PMB atau Penerimaan Mahasiswa Baru berada di gedung depan gedung Farmasi. Jam layanan PMB tercatat Senin-Jumat pukul 09.00-18.30 WIB dan Sabtu pukul 09.00-17.00 WIB. Layanan PMB meliputi informasi cara pendaftaran mahasiswa baru serta informasi kunjungan ke sekolah dan pameran."
+    "content": "Layanan PMB UCIC dapat diakses melalui pendaftaran online di https://pmb.cic.ac.id/register. Untuk bertanya tentang pendaftaran, pilihan prodi, kelas karyawan, atau kendala registrasi, calon mahasiswa dapat menghubungi WhatsApp PMB 0812 1670 0519. Alamat kampus UCIC berada di Jl. Kesambi No. 58A dan Jl. Kesambi No. 202, Kesambi, Kota Cirebon."
   },
   {
     "id": "pedoman_pmb_usm_dokumen",
@@ -1675,7 +2013,7 @@
       "biodata my cic"
     ],
     "title": "Seleksi PMB, USM, dan Dokumen Akademik Calon Mahasiswa",
-    "content": "Menurut pedoman akademik, UCIC menyelenggarakan seleksi mahasiswa baru pada semester ganjil dan genap. Calon mahasiswa wajib membayar biaya pendaftaran sesuai ketentuan. Calon mahasiswa dengan rata-rata rapor di atas 7,5 tidak perlu mengikuti Ujian Saringan Masuk (USM). S1 Akuntansi, S1 Manajemen, dan D3 Manajemen Bisnis menerima SMA/SMK/MA sederajat semua jurusan dengan materi USM IPS Terpadu. S1 Teknik Informatika, S1 Sistem Informasi, S1 DKV, D3 Manajemen Informasi, dan D3 Komputer Akuntansi menerima SMA/MA IPA atau SMK Teknik dengan materi USM IPA Terpadu. Dokumen administrasi akademik meliputi fotokopi ijazah/STTB terakhir dilegalisir 1 lembar dengan menunjukkan ijazah asli, fotokopi transkrip/SKHUN/STK 1 lembar, fotokopi akta kelahiran/surat kenal lahir/KTP 1 lembar, dan pas foto warna 3x4 sebanyak 3 lembar. Biodata My CIC yang wajib lengkap mencakup nama, NIK, RT/RW, kelurahan, kode pos, kecamatan, tempat dan tanggal lahir, kewarganegaraan, agama, dan nama ibu kandung."
+    "content": "Program studi aktif UCIC terdiri dari S1 Teknik Informatika, S1 Sistem Informasi, S1 Desain Komunikasi Visual, D3 Manajemen Informatika, S1 Manajemen, S1 Akuntansi, S1 Bisnis Digital, D3 Manajemen Bisnis, dan S1 Pendidikan Kepelatihan Olahraga. Untuk ketentuan seleksi, dokumen pendaftaran, dan proses verifikasi terbaru, calon mahasiswa dapat mengikuti arahan pada sistem PMB di https://pmb.cic.ac.id/register atau menghubungi WhatsApp PMB 0812 1670 0519."
   },
   {
     "id": "pedoman_career_center",
@@ -2072,5 +2410,119 @@
     ],
     "title": "FAQ Perpustakaan UCIC: Jam Layanan dan Kontak",
     "content": "Jam layanan Perpustakaan UCIC mengikuti kebijakan kampus; contoh jam yang tercantum dalam FAQ adalah Senin-Jumat pukul 08.00-16.00 WIB. Informasi terbaru dapat dilihat di media resmi perpustakaan. Perpustakaan dapat dihubungi melalui email perpustakaan@cic.ac.id, Instagram @perpustakaan_ucic, atau datang langsung ke lokasi Perpustakaan UCIC di Jl. Kesambi No. 202, Kota Cirebon."
+  },
+  {
+    "id": "pmb_upload_berkas",
+    "category": "pendaftaran",
+    "keywords": [
+      "upload berkas",
+      "unggah dokumen",
+      "dokumen pmb",
+      "berkas pmb",
+      "ijazah",
+      "ktp",
+      "kk",
+      "akta",
+      "pas foto",
+      "skl"
+    ],
+    "title": "Upload Berkas Pendaftaran PMB UCIC",
+    "content": "Setelah proses pendaftaran awal dan pembayaran diverifikasi, calon mahasiswa mengunggah berkas pendaftaran melalui sistem registrasi PMB. Berkas yang perlu disiapkan meliputi pas foto formal, KTP, Kartu Keluarga, akta kelahiran, serta ijazah atau SKL.\n\nFormat berkas yang digunakan:\n- Pas foto formal background merah, pakaian bebas sopan, format JPEG, nama file: Foto_Nama.\n- KTP format PDF, nama file: KTP_Nama.\n- Kartu Keluarga (KK) format PDF, nama file: KK_Nama.\n- Akta kelahiran format PDF, nama file: Akta_Nama.\n- Ijazah atau SKL format PDF, nama file: Ijazah_Nama.\n\nJika calon mahasiswa mengalami kendala saat upload berkas, calon mahasiswa dapat menghubungi CS/Admin PMB."
+  },
+  {
+    "id": "pmb_metode_pembayaran",
+    "category": "biaya",
+    "keywords": [
+      "metode pembayaran",
+      "cara bayar",
+      "transfer bank",
+      "bca",
+      "mandiri",
+      "bni",
+      "bri",
+      "virtual account",
+      "midtrans",
+      "e-wallet",
+      "ovo",
+      "gopay",
+      "dana",
+      "bayar langsung"
+    ],
+    "title": "Metode Pembayaran PMB dan Kuliah UCIC",
+    "content": "Metode pembayaran yang tersedia di UCIC meliputi:\n- Transfer bank melalui BCA, Mandiri, BNI, atau BRI.\n- Virtual Account Midtrans.\n- E-wallet seperti OVO, GoPay, dan DANA.\n- Pembayaran langsung ke kampus.\n\nSetelah melakukan pembayaran, calon mahasiswa mengikuti instruksi verifikasi dari admin PMB, terutama jika pembayaran dilakukan melalui transfer rekening."
+  },
+  {
+    "id": "pmb_rincian_biaya_detail",
+    "category": "biaya",
+    "keywords": [
+      "biaya",
+      "uang kuliah",
+      "spp",
+      "ukt",
+      "bayar",
+      "cicilan",
+      "3 bulan",
+      "1 semester",
+      "1 tahun",
+      "pmb 2026",
+      "ta 2026 2027",
+      "rincian biaya",
+      "biaya per prodi",
+      "biaya per jurusan",
+      "biaya lengkap",
+      "biaya kelas sore",
+      "biaya reguler",
+      "biaya rpl",
+      "early bird",
+      "skema 55"
+    ],
+    "title": "Rincian Biaya Per Program Studi UCIC TA 2026/2027",
+    "content": "Rincian biaya UCIC TA 2026/2027 skema Early Bird standar:\n- S1 Teknik Informatika: 3 bulan Rp2.820.000, 1 semester Rp4.720.000, 1 tahun Rp8.690.000.\n- S1 Teknik Informatika (Kelas Sore): 3 bulan Rp2.970.000, 1 semester Rp5.020.000, 1 tahun Rp9.290.000.\n- S1 Sistem Informasi: 3 bulan Rp2.820.000, 1 semester Rp4.720.000, 1 tahun Rp8.690.000.\n- S1 Sistem Informasi (Kelas Sore): 3 bulan Rp2.970.000, 1 semester Rp5.020.000, 1 tahun Rp9.290.000.\n- S1 Desain Komunikasi Visual: 3 bulan Rp2.820.000, 1 semester Rp4.720.000, 1 tahun Rp8.690.000.\n- S1 Desain Komunikasi Visual (Kelas Sore): 3 bulan Rp2.970.000, 1 semester Rp5.020.000, 1 tahun Rp9.290.000.\n- S1 Manajemen: 3 bulan Rp2.535.000, 1 semester Rp4.150.000, 1 tahun Rp7.550.000.\n- S1 Manajemen (Kelas Sore): 3 bulan Rp2.685.000, 1 semester Rp4.450.000, 1 tahun Rp8.150.000.\n- S1 Manajemen (RPL): 3 bulan Rp2.850.000, 1 semester Rp4.780.000, 1 tahun Rp8.810.000.\n- S1 Akuntansi: 3 bulan Rp2.535.000, 1 semester Rp4.150.000, 1 tahun Rp7.550.000.\n- S1 Akuntansi (Kelas Sore): 3 bulan Rp2.685.000, 1 semester Rp4.450.000, 1 tahun Rp8.150.000.\n- S1 Pendidikan Kepelatihan Olahraga: 3 bulan Rp2.040.000, 1 semester Rp3.160.000, 1 tahun Rp5.570.000.\n- S1 Bisnis Digital: 3 bulan Rp2.040.000, 1 semester Rp3.160.000, 1 tahun Rp5.570.000.\n- S1 Bisnis Digital (Kelas Sore): 3 bulan Rp2.190.000, 1 semester Rp3.460.000, 1 tahun Rp6.170.000.\n- D3 Manajemen Bisnis: 3 bulan Rp1.845.000, 1 semester Rp2.770.000, 1 tahun Rp4.790.000.\n- D3 Manajemen Informatika: 3 bulan Rp1.845.000, 1 semester Rp2.770.000, 1 tahun Rp4.790.000.\n- D3 Manajemen Informatika (Kelas Sore): 3 bulan Rp1.995.000, 1 semester Rp3.070.000, 1 tahun Rp5.390.000.\n\nRincian biaya UCIC TA 2026/2027 skema Early Bird 55%:\n- S1 Teknik Informatika: 3 bulan Rp4.000.000, 1 semester Rp7.080.000, 1 tahun Rp13.410.000.\n- S1 Teknik Informatika (Kelas Sore): 3 bulan Rp4.240.000, 1 semester Rp7.560.000, 1 tahun Rp14.370.000.\n- S1 Sistem Informasi: 3 bulan Rp4.000.000, 1 semester Rp7.080.000, 1 tahun Rp13.410.000.\n- S1 Sistem Informasi (Kelas Sore): 3 bulan Rp4.240.000, 1 semester Rp7.560.000, 1 tahun Rp14.370.000.\n- S1 Desain Komunikasi Visual: 3 bulan Rp4.000.000, 1 semester Rp7.080.000, 1 tahun Rp13.410.000.\n- S1 Desain Komunikasi Visual (Kelas Sore): 3 bulan Rp4.240.000, 1 semester Rp7.560.000, 1 tahun Rp14.370.000.\n- S1 Manajemen: 3 bulan Rp3.555.000, 1 semester Rp6.190.000, 1 tahun Rp11.630.000.\n- S1 Manajemen (Kelas Sore): 3 bulan Rp3.790.000, 1 semester Rp6.660.000, 1 tahun Rp12.570.000.\n- S1 Manajemen (RPL): 3 bulan Rp3.450.000, 1 semester Rp5.980.000, 1 tahun Rp11.210.000.\n- S1 Akuntansi: 3 bulan Rp3.555.000, 1 semester Rp6.190.000, 1 tahun Rp11.630.000.\n- S1 Akuntansi (Kelas Sore): 3 bulan Rp3.790.000, 1 semester Rp6.660.000, 1 tahun Rp12.570.000.\n- S1 Pendidikan Kepelatihan Olahraga: 3 bulan Rp2.775.000, 1 semester Rp4.630.000, 1 tahun Rp8.510.000.\n- S1 Bisnis Digital: 3 bulan Rp2.775.000, 1 semester Rp4.630.000, 1 tahun Rp8.510.000.\n- S1 Bisnis Digital (Kelas Sore): 3 bulan Rp3.015.000, 1 semester Rp5.110.000, 1 tahun Rp9.470.000.\n- D3 Manajemen Bisnis: 3 bulan Rp2.470.000, 1 semester Rp4.020.000, 1 tahun Rp7.290.000.\n- D3 Manajemen Informatika: 3 bulan Rp2.470.000, 1 semester Rp4.020.000, 1 tahun Rp7.290.000.\n- D3 Manajemen Informatika (Kelas Sore): 3 bulan Rp2.710.000, 1 semester Rp4.500.000, 1 tahun Rp8.250.000.\n\nNominal di atas adalah total pembayaran awal sesuai opsi 3 bulan, 1 semester, atau 1 tahun."
+  },
+  {
+    "id": "prospek_kerja_per_prodi_cs",
+    "category": "karir",
+    "keywords": [
+      "prospek kerja per prodi",
+      "prospek kerja jurusan",
+      "kerja lulusan",
+      "karir lulusan",
+      "peluang kerja",
+      "pekerjaan setelah lulus"
+    ],
+    "title": "Prospek Kerja per Program Studi UCIC",
+    "content": "Prospek kerja per program studi UCIC:\n\nS1 Teknik Informatika:\n- Software Engineer / Programmer\n- Web & Mobile Developer\n- Cyber Security Analyst\n- AI / Machine Learning Engineer\n- System Architect\n\nS1 Sistem Informasi:\n- System Analyst\n- Data Analyst\n- IT Consultant\n- ERP Specialist\n- Project Manager IT\n\nD3 Manajemen Informatika:\n- IT Support Specialist\n- Database Administrator\n- Web Administrator\n- Network Administrator\n- Junior Programmer\n\nS1 Desain Komunikasi Visual (DKV):\n- Graphic Designer\n- UI/UX Designer\n- Illustrator\n- Creative Director\n- Content Creator / Multimedia Specialist\n\nS1 Manajemen:\n- Marketing\n- HRD\n- Entrepreneur\n\nS1 Akuntansi:\n- Auditor\n- Tax Consultant\n- Finance Staff\n\nS1 Bisnis Digital:\n- Digital Marketing Specialist\n- Social Media Manager\n- E-commerce Specialist\n- Business Development\n- Startup Founder\n\nD3 Manajemen Bisnis:\n- Marketing Manager\n- Human Resource Development (HRD)\n- Business Analyst\n- Entrepreneur\n- Operations Manager\n\nS1 Pendidikan Kepelatihan Olahraga:\n- Pelatih Profesional\n- Personal Trainer\n- Instruktur Fitness\n- Guru Olahraga\n- Manajer Tim / Klub Olahraga"
+  },
+  {
+    "id": "baak_mbkm_magang_akademik",
+    "category": "akademik",
+    "keywords": [
+      "mbkm",
+      "magang akademik",
+      "magang",
+      "alur mbkm",
+      "magang mahasiswa",
+      "kampus merdeka"
+    ],
+    "title": "Alur MBKM atau Magang Akademik",
+    "content": "Alur MBKM atau magang akademik mengikuti arahan akademik, BAAK, dan program studi. Jika MBKM atau magang dipegang bagian akademik, mahasiswa perlu mengikuti arahan prodi/BAAK terkait periode, persyaratan, pembimbing, dan administrasi yang harus dipenuhi. Detail teknis program dapat berbeda sesuai kebijakan kampus dan program studi."
+  },
+  {
+    "id": "faq_mahasiswa_aktif_akhir",
+    "category": "akademik",
+    "keywords": [
+      "faq mahasiswa aktif",
+      "faq mahasiswa akhir",
+      "mahasiswa aktif",
+      "mahasiswa tingkat akhir",
+      "skripsi",
+      "sidang",
+      "yudisium",
+      "legalisir",
+      "krs",
+      "cuti"
+    ],
+    "title": "FAQ Mahasiswa Aktif dan Mahasiswa Tingkat Akhir",
+    "content": "FAQ mahasiswa aktif dan mahasiswa tingkat akhir:\n\nQ: Bagaimana alur KRS dan herregistrasi?\nA: Mahasiswa membayar biaya studi, melakukan aktivasi registrasi online, login SIAKAD, konsultasi dengan dosen wali, menginput KRS, lalu memastikan KRS sudah divalidasi.\n\nQ: Bagaimana jika ingin cuti kuliah?\nA: Mahasiswa mengajukan permohonan cuti ke BAAK, minimal semester 3, mengisi form, meminta persetujuan Kaprodi/Dekan/Kepala BAAK, menyelesaikan administrasi keuangan, lalu menyerahkan form ke BAAK.\n\nQ: Bagaimana jika ingin pindah kelas atau jadwal?\nA: Mahasiswa melapor ke BAAK. BAAK mengecek ketersediaan kelas/jadwal dan memindahkan jadwal secara digital jika memungkinkan.\n\nQ: Bagaimana alur skripsi atau tugas akhir?\nA: Mahasiswa membayar biaya skripsi/TA, mengambil mata kuliah skripsi/TA saat KRS, mengajukan proposal ke Kaprodi, mendapat validasi dan dosen pembimbing, lalu melakukan bimbingan sampai memenuhi syarat seminar dan sidang.\n\nQ: Apa syarat sidang skripsi atau tugas akhir?\nA: Mahasiswa harus memenuhi SKS minimal, tidak memiliki nilai E, nilai D sesuai batas aturan prodi, sudah seminar, memenuhi bimbingan, bebas pustaka, dan bebas administrasi keuangan.\n\nQ: Bagaimana alur yudisium?\nA: Mahasiswa menyelesaikan skripsi/TA, melunasi kewajiban keuangan, mengisi form yudisium, validasi data dan lampiran, mendapat validasi Kaprodi, menyerahkan form ke BAAK, lalu data disinkronkan ke LLDIKTI.\n\nQ: Bagaimana legalisir ijazah atau transkrip untuk alumni?\nA: Alumni membawa fotokopi ijazah/transkrip, menunjukkan dokumen asli ke BAAK, BAAK mengecek data akademik, proses sekitar 1 x 24 jam, lalu alumni mengambil hasil legalisir."
   }
 ]

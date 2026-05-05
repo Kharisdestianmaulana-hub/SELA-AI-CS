@@ -1402,15 +1402,21 @@ function scoreDatasetItem(item, tokens, topicHints = [], userQuery = "") {
 function retrieveCampusContext(userQuery, fuseResults = [], topicState = null) {
   const tokens = getSearchTokens(userQuery);
   const baseTokens = getBaseSearchTokens(userQuery);
-  const topicHints = [
+  const explicitTopics = [
     ...new Set([
+      classifyCampusIntent(userQuery),
       ...detectTopicHints(userQuery),
       ...getAliasBoostTopics(userQuery),
-      ...(topicState?.orderedTopics || []).slice(0, 2),
-    ]),
+    ].filter(Boolean)),
   ];
-  const intent =
-    classifyCampusIntent(userQuery) || topicState?.activeTopic || null;
+  const topicHints = [
+    ...new Set(
+      explicitTopics.length > 0
+        ? explicitTopics
+        : (topicState?.orderedTopics || []).slice(0, 2),
+    ),
+  ];
+  const intent = explicitTopics[0] || topicState?.activeTopic || null;
   const fuseRank = new Map(
     fuseResults.map((result, index) => [
       result.item.id,
@@ -1519,12 +1525,12 @@ function buildRetrievalQuery(
 ) {
   const latestTokens = getBaseSearchTokens(userQuery);
   const latestNormalized = normalizeText(userQuery);
-  const latestTopics = [
+  const explicitLatestTopics = [
     ...new Set([
+      classifyCampusIntent(userQuery),
       ...detectTopicHints(userQuery),
       ...getAliasBoostTopics(userQuery),
-      ...(topicState?.orderedTopics || []).slice(0, 2),
-    ]),
+    ].filter(Boolean)),
   ];
   const hasReferentialWords = latestNormalized
     .split(" ")
@@ -1532,7 +1538,7 @@ function buildRetrievalQuery(
   const genericFollowUp =
     latestTokens.length <= 2 ||
     hasReferentialWords ||
-    latestTopics.length === 0;
+    explicitLatestTopics.length === 0;
 
   const previousUserMessages = [...messageHistory]
     .slice(0, -1)
@@ -1540,7 +1546,7 @@ function buildRetrievalQuery(
     .filter((message) => message.role === "user" && message.content)
     .slice(0, 2);
 
-  if (!genericFollowUp && latestTopics.length > 0) return userQuery;
+  if (!genericFollowUp && explicitLatestTopics.length > 0) return userQuery;
   if (previousUserMessages.length === 0) return userQuery;
 
   const previousContext = previousUserMessages
@@ -1549,7 +1555,7 @@ function buildRetrievalQuery(
     .join(" ");
 
   const historyTopics = detectTopicHints(previousContext).filter(
-    (topic) => !latestTopics.includes(topic),
+    (topic) => !explicitLatestTopics.includes(topic),
   );
   const topicSuffix =
     historyTopics.length > 0 ? ` ${historyTopics.join(" ")}` : "";

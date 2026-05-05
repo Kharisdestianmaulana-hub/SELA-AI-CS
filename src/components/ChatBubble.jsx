@@ -7,6 +7,7 @@ const URL_PATTERN = /(https?:\/\/[^\s]+)/g
 const TRAILING_PUNCTUATION = /[.,!?;:)\]]$/
 const SELA_ALIASES = new Set(['cela', 'sela', 'zela', 'selah', 'sella'])
 const BOLD_PATTERN = /(\*\*[^*]+\*\*)/g
+const PROTECTED_TOKEN_PREFIX = '__SELA_PROTECTED_'
 
 function isSelaAlias(word) {
   return SELA_ALIASES.has(word.toLowerCase())
@@ -55,8 +56,51 @@ function splitTextByLinks(text = '') {
   return parts
 }
 
+function withProtectedLinks(text = '', formatter) {
+  const links = []
+  const protectedText = String(text || '').replace(URL_PATTERN, (url) => {
+    const token = `${PROTECTED_TOKEN_PREFIX}${links.length}__`
+    links.push(url)
+    return token
+  })
+
+  const formatted = formatter(protectedText)
+  return formatted.replace(
+    new RegExp(`${PROTECTED_TOKEN_PREFIX}(\\d+)__`, 'g'),
+    (_, index) => links[Number(index)] || ''
+  )
+}
+
+function normalizeMarkdownStructure(text = '') {
+  return withProtectedLinks(text, (value) => {
+    let normalized = value
+      .replace(/\r/g, '')
+      .replace(/[ \t]+/g, ' ')
+      .replace(/[ \t]+\n/g, '\n')
+      .replace(/\n[ \t]+/g, '\n')
+
+    // Jika AI menulis "A: 1. ... 2. ..." atau "A: - ... - ...",
+    // ubah menjadi list markdown yang bisa dirender rapi.
+    normalized = normalized
+      .replace(/:\s+(?=(?:[-*]\s+|(?:[1-9]|[1-9]\d)[.)]\s+))/g, ':\n')
+      .replace(/([^\n])\s+((?:[1-9]|[1-9]\d)[.)]\s+)/g, '$1\n$2')
+      .replace(/([^\n\d])\s+([-*]\s+(?=[A-Za-z(]))/g, '$1\n$2')
+
+    // Label bagian yang sering muncul dari dataset dibuat sebagai baris sendiri
+    // agar "Program S1:" tidak menempel dengan paragraf sebelumnya.
+    normalized = normalized.replace(
+      /([.!?])\s+((?:Program|Fakultas|Syarat|Langkah|Biaya|Fasilitas|Beasiswa|Kontak|Lokasi)\b[^:\n]{0,60}:)/gi,
+      '$1\n\n$2'
+    )
+
+    return normalized
+      .replace(/\n{3,}/g, '\n\n')
+      .trim()
+  })
+}
+
 function splitMarkdownBlocks(text = '') {
-  const lines = String(text || '').replace(/\r/g, '').split('\n')
+  const lines = normalizeMarkdownStructure(text).split('\n')
   const blocks = []
   let paragraphLines = []
   let activeList = null
@@ -108,7 +152,7 @@ function splitMarkdownBlocks(text = '') {
       return
     }
 
-    const orderedMatch = trimmed.match(/^(\d+)\.\s+(.*)$/)
+    const orderedMatch = trimmed.match(/^(\d+)[.)]\s+(.*)$/)
     if (orderedMatch) {
       flushParagraph()
       if (!activeList || activeList.type !== 'ordered-list') {
