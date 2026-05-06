@@ -584,6 +584,51 @@ const SHORT_VALID_QUERY_TOKENS = new Set([
   "syaratnya",
 ]);
 
+const PROGRAM_REFERENCE_ALIASES = [
+  {
+    label: "S1 Teknik Informatika",
+    aliases: ["s1 teknik informatika", "teknik informatika", "informatika", "ti"],
+  },
+  {
+    label: "S1 Sistem Informasi",
+    aliases: ["s1 sistem informasi", "sistem informasi", "si"],
+  },
+  {
+    label: "S1 Desain Komunikasi Visual",
+    aliases: ["s1 desain komunikasi visual", "desain komunikasi visual", "dkv"],
+  },
+  {
+    label: "D3 Manajemen Informatika",
+    aliases: ["d3 manajemen informatika", "manajemen informatika"],
+  },
+  {
+    label: "S1 Manajemen",
+    aliases: ["s1 manajemen", "manajemen"],
+  },
+  {
+    label: "S1 Akuntansi",
+    aliases: ["s1 akuntansi", "akuntansi"],
+  },
+  {
+    label: "S1 Bisnis Digital",
+    aliases: ["s1 bisnis digital", "bisnis digital"],
+  },
+  {
+    label: "D3 Manajemen Bisnis",
+    aliases: ["d3 manajemen bisnis", "manajemen bisnis"],
+  },
+  {
+    label: "S1 Pendidikan Kepelatihan Olahraga",
+    aliases: [
+      "s1 pendidikan kepelatihan olahraga",
+      "pendidikan kepelatihan olahraga",
+      "pko",
+      "pkor",
+      "olahraga",
+    ],
+  },
+];
+
 function normalizeText(text = "") {
   let normalized = String(text)
     .toLowerCase()
@@ -675,6 +720,13 @@ function stripLeadingCorrectionPhrase(text = "") {
     .trim();
 }
 
+function stripSelaAddressNoise(text = "") {
+  return String(text)
+    .replace(/^(sela|sella|selah|cela|zela|selak)[\s,.:;!?-]+/i, "")
+    .replace(/[\s,.:;!?-]+(sela|sella|selah|cela|zela|selak)\s*$/i, "")
+    .trim();
+}
+
 export function prepareTranscriptForRag(text = "") {
   const rawText = String(text || "").trim();
   if (!rawText) {
@@ -708,7 +760,9 @@ export function prepareTranscriptForRag(text = "") {
 
   let cleanedText = uniqueSegments.join(". ").trim();
   cleanedText = stripLeadingCorrectionPhrase(cleanedText);
+  cleanedText = stripSelaAddressNoise(cleanedText);
   cleanedText = collapseRepeatedTokenRuns(cleanedText);
+  cleanedText = stripSelaAddressNoise(cleanedText);
   if (!cleanedText) cleanedText = rawText;
 
   const repeatedTranscript =
@@ -1058,6 +1112,67 @@ function getExplicitTopics(text = "") {
   ];
 }
 
+function includesNormalizedPhrase(text = "", phrase = "") {
+  const normalizedText = ` ${normalizeText(text)} `;
+  const normalizedPhrase = normalizeText(phrase);
+  if (!normalizedPhrase) return false;
+  return normalizedText.includes(` ${normalizedPhrase} `);
+}
+
+function extractProgramReferences(text = "") {
+  return PROGRAM_REFERENCE_ALIASES.filter((program) =>
+    program.aliases.some((alias) => includesNormalizedPhrase(text, alias)),
+  ).map((program) => program.label);
+}
+
+function getRecentReferencedPrograms(
+  messageHistory = [],
+  queryContinuity = "standalone",
+) {
+  if (queryContinuity === "standalone") return [];
+
+  const referenceMessages = getRecentReferenceMessages(
+    messageHistory,
+    getReferenceMessageLimit(queryContinuity),
+  );
+
+  const latestAssistantWithPrograms = [...referenceMessages]
+    .reverse()
+    .find((message) => {
+      if (message.role !== "assistant") return false;
+      return extractProgramReferences(message.content).length > 0;
+    });
+
+  if (latestAssistantWithPrograms) {
+    return [
+      ...new Set(extractProgramReferences(latestAssistantWithPrograms.content)),
+    ];
+  }
+
+  return [
+    ...new Set(
+      referenceMessages.flatMap((message) =>
+        extractProgramReferences(message.content),
+      ),
+    ),
+  ];
+}
+
+function isComparisonFollowUp(text = "") {
+  const normalized = normalizeText(text);
+  return [
+    "beda",
+    "bedanya",
+    "perbedaan",
+    "perbedaannya",
+    "banding",
+    "bandingkan",
+    "dibanding",
+    "vs",
+    "versus",
+  ].some((phrase) => normalized.includes(phrase));
+}
+
 function hasReferentialSignal(text = "") {
   const normalized = normalizeText(text);
   const tokens = normalized.split(" ").filter(Boolean);
@@ -1085,6 +1200,28 @@ function classifyQueryContinuity(userQuery = "", messageHistory = []) {
   return "standalone";
 }
 
+function getRecentReferenceMessages(messageHistory = [], limit = 4) {
+  return messageHistory
+    .slice(0, -1)
+    .filter(
+      (message) =>
+        (message.role === "user" || message.role === "assistant") &&
+        message.content,
+    )
+    .slice(-limit);
+}
+
+function getReferenceMessageText(message = "", maxLength = 500) {
+  return String(message?.content || "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, maxLength);
+}
+
+function getReferenceMessageLimit(queryContinuity = "standalone") {
+  return queryContinuity === "referential_followup" ? 2 : 4;
+}
+
 function buildConversationContextHint(
   messageHistory = [],
   latestIntent = null,
@@ -1092,33 +1229,43 @@ function buildConversationContextHint(
 ) {
   if (queryContinuity === "standalone") return "";
 
-  const recentUserMessages = messageHistory
-    .slice(0, -1)
-    .filter((message) => message.role === "user" && message.content)
-    .slice(-3);
-  if (recentUserMessages.length === 0) return "";
+  const referenceMessages = getRecentReferenceMessages(
+    messageHistory,
+    getReferenceMessageLimit(queryContinuity),
+  );
+  if (referenceMessages.length === 0) return "";
 
   const topics = [];
   const details = [];
+  const referencedPrograms = getRecentReferencedPrograms(
+    messageHistory,
+    queryContinuity,
+  );
 
-  for (const message of recentUserMessages) {
-    const content = message.content;
+  for (const message of [...referenceMessages].reverse()) {
+    const content = getReferenceMessageText(message, 400);
     topics.push(...getExplicitTopics(content));
-    details.push(...getBaseSearchTokens(content).slice(0, 4));
+    details.push(...getBaseSearchTokens(content).slice(0, 14));
   }
 
   const topicText = [...new Set(topics.filter((topic) => topic !== latestIntent))]
     .slice(0, 3)
     .join(", ");
-  const detailText = [...new Set(details)].slice(0, 8).join(", ");
+  const detailText = [...new Set(details)].slice(0, 14).join(", ");
 
   if (!topicText && !detailText) return "";
 
   return [
     "Pertanyaan terbaru tampak merujuk ke percakapan sebelumnya.",
+    referencedPrograms.length > 0
+      ? `Rujukan paling mungkin: ${referencedPrograms.join(", ")}.`
+      : "",
     topicText ? `Topik sebelumnya: ${topicText}.` : "",
     detailText ? `Kata kunci sebelumnya: ${detailText}.` : "",
-    "Gunakan ini hanya untuk memahami rujukan user; fakta jawaban tetap wajib dari KONTEKS KAMPUS.",
+    referencedPrograms.length > 1 && isComparisonFollowUp(messageHistory.at(-1)?.content)
+      ? "Jika user menanyakan perbedaan/bedanya, bandingkan rujukan tersebut saja."
+      : "",
+    "Gunakan ini hanya untuk memahami rujukan user di sesi aktif; fakta jawaban tetap wajib dari KONTEKS KAMPUS. Jangan anggap ini sebagai preferensi permanen.",
   ]
     .filter(Boolean)
     .join(" ");
@@ -1611,18 +1758,16 @@ function buildRetrievalQuery(
 ) {
   const explicitLatestTopics = getExplicitTopics(userQuery);
 
-  const previousUserMessages = [...messageHistory]
-    .slice(0, -1)
-    .reverse()
-    .filter((message) => message.role === "user" && message.content)
-    .slice(0, 2);
-
   if (queryContinuity === "standalone") return userQuery;
-  if (previousUserMessages.length === 0) return userQuery;
+  const referenceMessages = getRecentReferenceMessages(
+    messageHistory,
+    getReferenceMessageLimit(queryContinuity),
+  );
+  if (referenceMessages.length === 0) return userQuery;
 
-  const previousContext = previousUserMessages
-    .map((message) => message.content)
-    .reverse()
+  const previousContext = referenceMessages
+    .map((message) => getReferenceMessageText(message, 500))
+    .filter(Boolean)
     .join(" ");
 
   const historyTopics = detectTopicHints(previousContext).filter(
@@ -1631,8 +1776,16 @@ function buildRetrievalQuery(
   const topicSuffix =
     historyTopics.length > 0 ? ` ${historyTopics.join(" ")}` : "";
   const canonicalRewrite = buildCanonicalRewrite(userQuery, topicState);
+  const referencedPrograms = getRecentReferencedPrograms(
+    messageHistory,
+    queryContinuity,
+  );
+  const referenceFocus =
+    referencedPrograms.length > 0
+      ? `${isComparisonFollowUp(userQuery) ? "perbedaan " : ""}${referencedPrograms.join(" ")}`
+      : "";
 
-  return `${previousContext} ${userQuery} ${canonicalRewrite}${topicSuffix}`.trim();
+  return `${referenceFocus} ${previousContext} ${userQuery} ${canonicalRewrite}${topicSuffix}`.trim();
 }
 
 function computeAnswerability(
@@ -1711,9 +1864,9 @@ function buildIntentResponseGuide(intent = null) {
     case "biaya":
       return "Untuk topik biaya, jawab nominal yang ditanya secara langsung. Tambahkan komponen lain hanya jika user meminta rincian.";
     case "jurusan":
-      return "Untuk topik jurusan, sebutkan daftar prodi secara ringkas. Jangan tambahkan deskripsi fakultas kecuali diminta.";
+      return "Untuk topik jurusan, jawab sesuai yang ditanya: daftar prodi jika user minta daftar, rekomendasi jika user minta jurusan yang cocok, atau perbedaan prodi jika user minta bedanya. Jangan melebar ke semua prodi jika user sedang merujuk prodi tertentu dari percakapan sebelumnya.";
     case "syarat":
-      return "Untuk topik syarat, beri daftar berkas inti saja dengan bullet pendek.";
+      return "Untuk topik syarat, beri daftar berkas inti saja dengan nomor pendek.";
     case "kelas":
       return "Untuk topik kelas, sebutkan pilihan kelas dan jamnya secara singkat.";
     case "lokasi":
@@ -2587,7 +2740,7 @@ export async function getChatCompletion(messageHistory, lang = "id") {
 Hari ini adalah ${today}.
 Gaya bicaramu tenang, hangat, elegan, dan profesional. Kamu adalah "Wajah Digital" UCIC.
 Kamu boleh menggunakan partikel bahasa lisan seperti 'nih', 'sih', 'dong', atau 'ya', namun penggunaannya HARUS sangat tepat, natural secara tata bahasa, dan tidak berlebihan agar wibawamu tetap terjaga. Penempatannya harus dilihat dari kata sebelumnya apakah cocok atau tidak.
-Jawabanmu HARUS singkat, ramah, dan langsung ke inti seperti customer service. Hindari pembuka panjang, promosi, dan penjelasan tambahan yang tidak ditanya. Untuk daftar, gunakan bullet pendek. Untuk fakta tunggal, jawab dalam 1 kalimat.
+Jawabanmu HARUS singkat, ramah, dan langsung ke inti seperti customer service. Hindari pembuka panjang, promosi, dan penjelasan tambahan yang tidak ditanya. Untuk daftar, langkah, atau perbandingan, gunakan nomor pendek (1, 2, 3), bukan bullet lingkaran. Untuk fakta tunggal, jawab dalam 1 kalimat.
 
 [TUGAS UTAMAMU]:
 Kamu HANYA bertugas dan DIIZINKAN menjawab pertanyaan seputar kampus UCIC (seperti Pendaftaran, Akademik, Fasilitas, dan Informasi Kampus lainnya).
@@ -2601,6 +2754,8 @@ Kamu HANYA bertugas dan DIIZINKAN menjawab pertanyaan seputar kampus UCIC (seper
    - Untuk pertanyaan langsung seperti "siapa", "dimana", "berapa", "kapan", atau "apa", jawab langsung dari kalimat paling relevan di [KONTEKS KAMPUS].
    - Jangan menyalin semua konteks. Ambil hanya informasi yang menjawab pertanyaan user.
    - Jika pertanyaan user masih samar seperti "yang itu", "terus gimana", atau "berapa yang tadi", gunakan konteks percakapan terakhir dan jawab bagian yang paling mungkin dimaksud user dengan tetap hati-hati.
+   - Ingatan SELA hanya berlaku dalam sesi chat aktif. Gunakan riwayat hanya untuk memahami rujukan, bukan sebagai sumber fakta dan bukan sebagai memori permanen.
+   - Jika [KONTEKS PERCAKAPAN UNTUK RUJUKAN] menyebut rujukan program studi dan user bertanya "bedanya", "perbedaannya", atau "itu apa bedanya", bandingkan HANYA program studi yang dirujuk itu. Jangan melebar ke semua jurusan UCIC.
    - Jika konteks yang ada hanya menjawab sebagian, berikan jawaban parsial yang membantu. Jangan langsung menolak kalau masih ada bagian yang bisa dijawab dari konteks.
    - Jika transcript user tampak mengulang frasa yang sama, ANGGAP itu artefak suara. Jangan menegur, jangan berkomentar bahwa user mengulang, dan jangan mengatakan akan menjelaskan sekali saja. Cukup jawab inti pertanyaannya dengan normal.
    - Jika [KONTEKS KAMPUS] kosong atau benar-benar tidak memuat informasinya, tolak dengan jujur dan berwibawa: "Mohon maaf, SELA belum punya informasi sedetail itu saat ini. Mungkin Anda bisa menanyakannya langsung ke bagian informasi kampus." Jangan mengarang info.
@@ -2643,7 +2798,7 @@ JIKA kamu MENOLAK menjawab karena di luar topik kampus, kamu TIDAK PERLU menamba
   const systemPromptEN = `You are SELA, the virtual receptionist for Universitas Catur Insan Cendekia (UCIC) who embodies a gentle, charismatic, authoritative, and deeply intelligent persona.
 Today is ${todayEN}.
 Your speaking style is calm, warm, elegant, and highly professional. You are the "Digital Face" of UCIC.
-Your answers MUST be concise, friendly, and direct like a customer service representative. Avoid long openings, promotion-like wording, and extra details the user did not ask for. For lists, use short bullets. For a single fact, answer in one sentence.
+Your answers MUST be concise, friendly, and direct like a customer service representative. Avoid long openings, promotion-like wording, and extra details the user did not ask for. For lists, steps, or comparisons, use short numbered lines (1, 2, 3), not bullet points. For a single fact, answer in one sentence.
 You MUST ALWAYS answer the user in ENGLISH.
 
 [YOUR MAIN TASK]:
@@ -2658,6 +2813,8 @@ You ONLY serve and are PERMITTED to answer questions related to the UCIC campus 
    - For direct questions like "who", "where", "how much", "when", or "what", answer directly from the most relevant sentence in [CAMPUS CONTEXT].
    - Do not copy all context. Use only the information needed to answer the user's question.
    - If the user's wording is vague, such as "that one", "then how", or "how much for that", use the recent conversation context and answer the most likely intended topic carefully.
+   - SELA's memory only applies within the active chat session. Use history only to resolve references, not as a fact source or permanent memory.
+   - If [CONVERSATION CONTEXT FOR REFERENCE] names referenced study programs and the user asks for the difference, compare ONLY those referenced programs. Do not broaden the answer to all UCIC majors.
    - If the context only answers part of the request, still provide the helpful partial answer instead of declining immediately.
    - If the transcript appears to repeat the same phrase, treat that as a voice artifact. Do not scold the user, do not comment on repetition, and do not say you will explain it only once. Just answer normally.
    - If the [CAMPUS CONTEXT] is empty or truly does not contain the specific info, answer honestly and elegantly: "I apologize, but SELA does not have detailed information on that just yet. You might want to check with the campus staff." Do not make up answers.

@@ -279,11 +279,11 @@ export function buildResponsePlanPrompt(responsePlan, lang = "id") {
   if (lang === "en") {
     switch (plan.displayMode) {
       case "list_detail":
-        return `Depth mode: concise list. Answer with short bullets only. No long intro, no extra explanation.${plan.mustEnumerateAll ? " Enumerate every relevant item, but keep each item short." : " Include only the most relevant items."}`;
+        return `Depth mode: concise numbered list. Use short numbered lines (1, 2, 3). No long intro, no extra explanation.${plan.mustEnumerateAll ? " Enumerate every relevant item, but keep each item short." : " Include only the most relevant items."}`;
       case "step_detail":
         return "Depth mode: concise steps. Use short numbered lines. Mention only the core steps or requirements.";
       case "compare_detail":
-        return "Depth mode: concise comparison. Use short bullets for the main differences only.";
+        return "Depth mode: concise comparison. Use short numbered lines (1, 2, 3) for the main differences only.";
       default:
         return "Depth mode: brief. Answer directly in 1 or 2 short sentences, focusing only on the fact the user asked for.";
     }
@@ -291,11 +291,11 @@ export function buildResponsePlanPrompt(responsePlan, lang = "id") {
 
   switch (plan.displayMode) {
     case "list_detail":
-      return `Mode jawaban: daftar singkat. Jawab langsung dengan bullet pendek. Jangan pakai pembuka panjang dan jangan tambah penjelasan yang tidak ditanya.${plan.mustEnumerateAll ? " Sebutkan semua item relevan, tetapi tiap item tetap pendek." : " Cukup item yang paling relevan."}`;
+      return `Mode jawaban: daftar bernomor singkat. Jawab langsung dengan nomor pendek (1, 2, 3). Jangan pakai bullet lingkaran, pembuka panjang, atau penjelasan yang tidak ditanya.${plan.mustEnumerateAll ? " Sebutkan semua item relevan, tetapi tiap item tetap pendek." : " Cukup item yang paling relevan."}`;
     case "step_detail":
       return "Mode jawaban: langkah singkat. Gunakan nomor pendek. Sebutkan inti langkah, syarat, atau alurnya saja.";
     case "compare_detail":
-      return "Mode jawaban: perbandingan singkat. Gunakan bullet pendek untuk perbedaan utama saja.";
+      return "Mode jawaban: perbandingan singkat. Gunakan nomor pendek (1, 2, 3) untuk perbedaan utama saja.";
     default:
       return "Mode jawaban: singkat. Jawab langsung ke inti dalam 1 atau 2 kalimat pendek tanpa pengantar bertele-tele.";
   }

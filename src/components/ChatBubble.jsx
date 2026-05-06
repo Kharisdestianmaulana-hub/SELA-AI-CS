@@ -5,9 +5,10 @@ import { t } from '../lib/translations'
 
 const URL_PATTERN = /(https?:\/\/[^\s]+)/g
 const TRAILING_PUNCTUATION = /[.,!?;:)\]]$/
-const SELA_ALIASES = new Set(['cela', 'sela', 'zela', 'selah', 'sella'])
+const SELA_ALIASES = new Set(['cela', 'sela', 'zela', 'selah', 'sella', 'selak'])
 const BOLD_PATTERN = /(\*\*[^*]+\*\*)/g
 const PROTECTED_TOKEN_PREFIX = '__SELA_PROTECTED_'
+const FOLLOW_UP_PATTERN = /(?:^|\s)((?:\[[^\]\n]*\?]\s*(?:\|\s*)?){1,2})\s*$/
 
 function isSelaAlias(word) {
   return SELA_ALIASES.has(word.toLowerCase())
@@ -83,8 +84,9 @@ function normalizeMarkdownStructure(text = '') {
     // ubah menjadi list markdown yang bisa dirender rapi.
     normalized = normalized
       .replace(/:\s+(?=(?:[-*]\s+|(?:[1-9]|[1-9]\d)[.)]\s+))/g, ':\n')
-      .replace(/([^\n])\s+((?:[1-9]|[1-9]\d)[.)]\s+)/g, '$1\n$2')
-      .replace(/([^\n\d])\s+([-*]\s+(?=[A-Za-z(]))/g, '$1\n$2')
+      .replace(/(^|\n)((?:[1-9]|[1-9]\d)[.)])(?=\S)/g, '$1$2 ')
+      .replace(/([^\n])[\s,;]+((?:[1-9]|[1-9]\d)[.)]\s+)/g, '$1\n$2')
+      .replace(/([^\n\d])[\s,;]+([-*]\s+(?=[A-Za-z0-9(]))/g, '$1\n$2')
 
     // Label bagian yang sering muncul dari dataset dibuat sebagai baris sendiri
     // agar "Program S1:" tidak menempel dengan paragraf sebelumnya.
@@ -97,6 +99,24 @@ function normalizeMarkdownStructure(text = '') {
       .replace(/\n{3,}/g, '\n\n')
       .trim()
   })
+}
+
+function splitFollowUpSuggestions(text = '') {
+  const value = String(text || '').trim()
+  const match = value.match(FOLLOW_UP_PATTERN)
+  if (!match) return { answerText: value, suggestions: [] }
+
+  const rawSuggestions = match[1]
+  const suggestions = [...rawSuggestions.matchAll(/\[([^\]\n]*\?)]/g)]
+    .map((item) => item[1].trim())
+    .filter(Boolean)
+
+  if (suggestions.length === 0) return { answerText: value, suggestions: [] }
+
+  return {
+    answerText: value.slice(0, match.index).trim(),
+    suggestions
+  }
 }
 
 function splitMarkdownBlocks(text = '') {
@@ -144,9 +164,9 @@ function splitMarkdownBlocks(text = '') {
     const unorderedMatch = trimmed.match(/^[-*]\s+(.*)$/)
     if (unorderedMatch) {
       flushParagraph()
-      if (!activeList || activeList.type !== 'unordered-list') {
+      if (!activeList || activeList.type !== 'ordered-list') {
         flushList()
-        activeList = { type: 'unordered-list', items: [] }
+        activeList = { type: 'ordered-list', items: [] }
       }
       activeList.items.push(unorderedMatch[1])
       return
@@ -271,62 +291,72 @@ function QrLinkCard({ url, visibleMs = null }) {
 }
 
 function ChatContent({ text, qrVisibleMs = null }) {
-  const blocks = splitMarkdownBlocks(text)
+  const { answerText, suggestions } = splitFollowUpSuggestions(text)
+  const blocks = splitMarkdownBlocks(answerText)
 
   if (blocks.length === 0) {
     return (
-      <span className="whitespace-pre-wrap break-words">
-        {renderInlineMarkdown(text, 'fallback', qrVisibleMs)}
-      </span>
+      <ChatSuggestionLayout suggestions={suggestions}>
+        <span className="whitespace-pre-wrap break-words">
+          {renderInlineMarkdown(answerText, 'fallback', qrVisibleMs)}
+        </span>
+      </ChatSuggestionLayout>
     )
   }
 
   return (
-    <div className="space-y-2 break-words">
-      {blocks.map((block, blockIndex) => {
-        if (block.type === 'heading') {
-          const headingClass =
-            block.level === 1
-              ? 'text-base font-semibold text-gray-900 dark:text-white'
-              : 'text-sm font-semibold text-gray-800 dark:text-gray-100'
+    <ChatSuggestionLayout suggestions={suggestions}>
+      <div className="space-y-2 break-words">
+        {blocks.map((block, blockIndex) => {
+          if (block.type === 'heading') {
+            const headingClass =
+              block.level === 1
+                ? 'text-base font-semibold text-gray-900 dark:text-white'
+                : 'text-sm font-semibold text-gray-800 dark:text-gray-100'
+
+            return (
+              <p key={`heading-${blockIndex}`} className={headingClass}>
+                {renderInlineMarkdown(block.content, `heading-${blockIndex}`, qrVisibleMs)}
+              </p>
+            )
+          }
+
+          if (block.type === 'ordered-list') {
+            return (
+              <ol key={`ol-${blockIndex}`} className="list-decimal space-y-1.5 pl-5 leading-relaxed">
+                {block.items.map((item, itemIndex) => (
+                  <li key={`ol-${blockIndex}-${itemIndex}`} className="whitespace-pre-wrap pl-0.5">
+                    {renderInlineMarkdown(item, `ol-${blockIndex}-${itemIndex}`, qrVisibleMs)}
+                  </li>
+                ))}
+              </ol>
+            )
+          }
 
           return (
-            <p key={`heading-${blockIndex}`} className={headingClass}>
-              {renderInlineMarkdown(block.content, `heading-${blockIndex}`, qrVisibleMs)}
+            <p key={`p-${blockIndex}`} className="whitespace-pre-wrap break-words">
+              {renderInlineMarkdown(block.content, `p-${blockIndex}`, qrVisibleMs)}
             </p>
           )
-        }
+        })}
+      </div>
+    </ChatSuggestionLayout>
+  )
+}
 
-        if (block.type === 'unordered-list') {
-          return (
-            <ul key={`ul-${blockIndex}`} className="list-disc space-y-1 pl-5">
-              {block.items.map((item, itemIndex) => (
-                <li key={`ul-${blockIndex}-${itemIndex}`} className="whitespace-pre-wrap">
-                  {renderInlineMarkdown(item, `ul-${blockIndex}-${itemIndex}`, qrVisibleMs)}
-                </li>
-              ))}
-            </ul>
-          )
-        }
-
-        if (block.type === 'ordered-list') {
-          return (
-            <ol key={`ol-${blockIndex}`} className="list-decimal space-y-1 pl-5">
-              {block.items.map((item, itemIndex) => (
-                <li key={`ol-${blockIndex}-${itemIndex}`} className="whitespace-pre-wrap">
-                  {renderInlineMarkdown(item, `ol-${blockIndex}-${itemIndex}`, qrVisibleMs)}
-                </li>
-              ))}
-            </ol>
-          )
-        }
-
-        return (
-          <p key={`p-${blockIndex}`} className="whitespace-pre-wrap break-words">
-            {renderInlineMarkdown(block.content, `p-${blockIndex}`, qrVisibleMs)}
-          </p>
-        )
-      })}
+function ChatSuggestionLayout({ children, suggestions = [] }) {
+  return (
+    <div className="space-y-2 break-words">
+      {children}
+      {suggestions.length > 0 && (
+        <div className="border-t border-gray-100 pt-2 text-xs leading-snug text-gray-500 dark:border-white/10 dark:text-gray-400">
+          <div className="space-y-1">
+            {suggestions.map((suggestion, index) => (
+              <p key={`suggestion-${index}`}>{suggestion}</p>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -359,7 +389,7 @@ export default function ChatBubble({ role, text, lang = 'id', isLoading = false,
         {isUser ? t[lang].you : t[lang].sela}
       </span>
       <div
-        className={`max-w-[320px] px-4 py-3 rounded-2xl text-sm leading-relaxed shadow-sm transition-colors
+        className={`max-w-[min(380px,85vw)] px-4 py-3 rounded-2xl text-sm leading-relaxed shadow-sm transition-colors
           ${isUser
             ? 'bg-blue-50/90 dark:bg-blue-900/40 text-gray-700 dark:text-blue-100 rounded-tr-sm border border-blue-100/60 dark:border-blue-800/50'
             : 'bg-white/90 dark:bg-slate-800/90 text-gray-600 dark:text-gray-200 rounded-tl-sm border border-gray-100/80 dark:border-white/5'
