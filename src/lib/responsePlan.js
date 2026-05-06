@@ -6,9 +6,10 @@ const LIST_DETAIL_TOPICS = new Set([
   "pembayaran",
 ]);
 
-const BRIEF_INTENTS = new Set(["rektor", "lokasi", "kontak"]);
+const BRIEF_INTENTS = new Set(["profil", "rektor", "lokasi", "kontak"]);
 
 const AGGREGATE_PRIORITY_IDS = {
+  profil: ["profil_ucic"],
   jurusan: ["jurusan_ucic", "jurusan_fti", "jurusan_feb", "jurusan_fps"],
   beasiswa: ["beasiswa"],
   fasilitas: ["fasilitas_kampus_lengkap"],
@@ -278,25 +279,25 @@ export function buildResponsePlanPrompt(responsePlan, lang = "id") {
   if (lang === "en") {
     switch (plan.displayMode) {
       case "list_detail":
-        return `Depth mode: list detail. Show all relevant items from context, not just examples. Use clean markdown: put each group title on its own line, and put every item on a separate bullet or numbered line.${plan.mustEnumerateAll ? " You must enumerate every relevant item found in context." : ""}`;
+        return `Depth mode: concise list. Answer with short bullets only. No long intro, no extra explanation.${plan.mustEnumerateAll ? " Enumerate every relevant item, but keep each item short." : " Include only the most relevant items."}`;
       case "step_detail":
-        return "Depth mode: step detail. Present the answer in clean markdown with each requirement, step, or condition on its own line. Use numbered lines for ordered steps and bullets for unordered requirements.";
+        return "Depth mode: concise steps. Use short numbered lines. Mention only the core steps or requirements.";
       case "compare_detail":
-        return "Depth mode: compare detail. Compare the relevant options fairly in clean markdown. Use short grouped lines or bullets so differences, strengths, and suitable use cases are easy to scan.";
+        return "Depth mode: concise comparison. Use short bullets for the main differences only.";
       default:
-        return "Depth mode: brief. Answer directly in 1 to 3 sentences, focusing only on the main fact the user asked for.";
+        return "Depth mode: brief. Answer directly in 1 or 2 short sentences, focusing only on the fact the user asked for.";
     }
   }
 
   switch (plan.displayMode) {
     case "list_detail":
-      return `Mode jawaban: detail daftar. Tampilkan semua item relevan dari konteks, jangan hanya memberi contoh. Gunakan markdown rapi: judul kelompok di baris sendiri, lalu setiap item di baris bullet atau nomor sendiri.${plan.mustEnumerateAll ? " Kamu wajib menyebut semua item relevan yang ada di konteks." : ""}`;
+      return `Mode jawaban: daftar singkat. Jawab langsung dengan bullet pendek. Jangan pakai pembuka panjang dan jangan tambah penjelasan yang tidak ditanya.${plan.mustEnumerateAll ? " Sebutkan semua item relevan, tetapi tiap item tetap pendek." : " Cukup item yang paling relevan."}`;
     case "step_detail":
-      return "Mode jawaban: detail langkah. Tampilkan langkah, syarat, atau alur dengan markdown rapi. Setiap langkah, syarat, atau ketentuan harus berada di baris sendiri. Gunakan nomor untuk urutan langkah dan bullet untuk syarat.";
+      return "Mode jawaban: langkah singkat. Gunakan nomor pendek. Sebutkan inti langkah, syarat, atau alurnya saja.";
     case "compare_detail":
-      return "Mode jawaban: detail perbandingan. Bandingkan opsi yang relevan secara adil dengan markdown rapi. Gunakan baris pendek atau bullet supaya perbedaan, kekuatan, dan kecocokan mudah dipindai.";
+      return "Mode jawaban: perbandingan singkat. Gunakan bullet pendek untuk perbedaan utama saja.";
     default:
-      return "Mode jawaban: singkat. Jawab langsung ke inti dalam 1 sampai 3 kalimat tanpa pengantar yang bertele-tele.";
+      return "Mode jawaban: singkat. Jawab langsung ke inti dalam 1 atau 2 kalimat pendek tanpa pengantar bertele-tele.";
   }
 }
 

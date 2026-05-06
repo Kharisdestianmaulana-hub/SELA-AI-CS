@@ -59,7 +59,7 @@ const DATASET_CATEGORY_ALIASES = {
   kegiatan: ["kegiatan", "ukm", "organisasi", "hmp", "ekskul", "pkkmb", "ospek"],
   kurikulum: ["kurikulum", "mata kuliah", "semester", "matkul", "curriculum"],
   nilai: ["nilai", "budaya", "karakter", "great", "commitment", "integrity"],
-  profil: ["profil", "sejarah", "pimpinan", "rektor", "yayasan", "ucic"],
+  profil: ["profil", "sejarah", "pimpinan", "rektor", "yayasan"],
   visi_misi: ["visi", "misi", "tujuan", "arah", "2030"],
 };
 
@@ -374,6 +374,14 @@ const TOPIC_HINTS = {
 };
 
 const INTENT_PATTERNS = {
+  profil: [
+    "profil",
+    "profile",
+    "tentang ucic",
+    "apa itu ucic",
+    "ucic itu apa",
+    "universitas catur insan cendekia",
+  ],
   pendaftaran: [
     "daftar",
     "pendaftaran",
@@ -482,6 +490,7 @@ const AWAM_TOPIC_ALIASES = {
 };
 
 const CANONICAL_REWRITE_MAP = {
+  profil: "profil universitas catur insan cendekia ucic",
   pendaftaran: "cara pendaftaran mahasiswa baru ucic",
   syarat: "syarat berkas pendaftaran mahasiswa baru ucic",
   biaya: "biaya kuliah dan metode pembayaran ucic",
@@ -1039,6 +1048,82 @@ function getBaseSearchTokens(text = "") {
     .filter((token) => token.length > 1 && !RAG_STOPWORDS.has(token));
 }
 
+function getExplicitTopics(text = "") {
+  return [
+    ...new Set([
+      classifyCampusIntent(text),
+      ...detectTopicHints(text),
+      ...getAliasBoostTopics(text),
+    ].filter(Boolean)),
+  ];
+}
+
+function hasReferentialSignal(text = "") {
+  const normalized = normalizeText(text);
+  const tokens = normalized.split(" ").filter(Boolean);
+  return tokens.some(
+    (token) =>
+      REFERENTIAL_TOKENS.has(token) ||
+      (token.length > 4 && token.endsWith("nya")),
+  );
+}
+
+function classifyQueryContinuity(userQuery = "", messageHistory = []) {
+  const previousUserMessages = messageHistory
+    .slice(0, -1)
+    .filter((message) => message.role === "user" && message.content);
+  if (previousUserMessages.length === 0) return "standalone";
+
+  const baseTokens = getBaseSearchTokens(userQuery);
+  const explicitTopics = getExplicitTopics(userQuery);
+  const referential = hasReferentialSignal(userQuery);
+
+  if (referential) return "referential_followup";
+  if (baseTokens.length <= 1 && explicitTopics.length === 0)
+    return "ambiguous_followup";
+
+  return "standalone";
+}
+
+function buildConversationContextHint(
+  messageHistory = [],
+  latestIntent = null,
+  queryContinuity = "standalone",
+) {
+  if (queryContinuity === "standalone") return "";
+
+  const recentUserMessages = messageHistory
+    .slice(0, -1)
+    .filter((message) => message.role === "user" && message.content)
+    .slice(-3);
+  if (recentUserMessages.length === 0) return "";
+
+  const topics = [];
+  const details = [];
+
+  for (const message of recentUserMessages) {
+    const content = message.content;
+    topics.push(...getExplicitTopics(content));
+    details.push(...getBaseSearchTokens(content).slice(0, 4));
+  }
+
+  const topicText = [...new Set(topics.filter((topic) => topic !== latestIntent))]
+    .slice(0, 3)
+    .join(", ");
+  const detailText = [...new Set(details)].slice(0, 8).join(", ");
+
+  if (!topicText && !detailText) return "";
+
+  return [
+    "Pertanyaan terbaru tampak merujuk ke percakapan sebelumnya.",
+    topicText ? `Topik sebelumnya: ${topicText}.` : "",
+    detailText ? `Kata kunci sebelumnya: ${detailText}.` : "",
+    "Gunakan ini hanya untuk memahami rujukan user; fakta jawaban tetap wajib dari KONTEKS KAMPUS.",
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
 function detectTopicHints(text = "") {
   const normalized = normalizeText(text);
   const tokens = getBaseSearchTokens(text);
@@ -1522,23 +1607,9 @@ function buildRetrievalQuery(
   messageHistory = [],
   userQuery = "",
   topicState = null,
+  queryContinuity = "standalone",
 ) {
-  const latestTokens = getBaseSearchTokens(userQuery);
-  const latestNormalized = normalizeText(userQuery);
-  const explicitLatestTopics = [
-    ...new Set([
-      classifyCampusIntent(userQuery),
-      ...detectTopicHints(userQuery),
-      ...getAliasBoostTopics(userQuery),
-    ].filter(Boolean)),
-  ];
-  const hasReferentialWords = latestNormalized
-    .split(" ")
-    .some((token) => REFERENTIAL_TOKENS.has(token));
-  const genericFollowUp =
-    latestTokens.length <= 2 ||
-    hasReferentialWords ||
-    explicitLatestTopics.length === 0;
+  const explicitLatestTopics = getExplicitTopics(userQuery);
 
   const previousUserMessages = [...messageHistory]
     .slice(0, -1)
@@ -1546,7 +1617,7 @@ function buildRetrievalQuery(
     .filter((message) => message.role === "user" && message.content)
     .slice(0, 2);
 
-  if (!genericFollowUp && explicitLatestTopics.length > 0) return userQuery;
+  if (queryContinuity === "standalone") return userQuery;
   if (previousUserMessages.length === 0) return userQuery;
 
   const previousContext = previousUserMessages
@@ -1636,17 +1707,17 @@ function buildConfidenceRouting(answerability, decomposedQueries, topicState) {
 function buildIntentResponseGuide(intent = null) {
   switch (intent) {
     case "pendaftaran":
-      return "Untuk topik pendaftaran, jawab langkah inti dulu secara runtut: cara daftar online/offline, langkah berikutnya, lalu arahkan ke syarat atau pembayaran bila relevan.";
+      return "Untuk topik pendaftaran, jawab cara daftar dan langkah inti saja. Jangan jelaskan detail lain kecuali diminta.";
     case "biaya":
-      return "Untuk topik biaya, sebutkan minimal biaya pendaftaran, contoh biaya awal beberapa prodi jika ada, lalu metode pembayaran atau cicilan jika tersedia. Boleh sampai 4 kalimat pendek agar tetap jelas.";
+      return "Untuk topik biaya, jawab nominal yang ditanya secara langsung. Tambahkan komponen lain hanya jika user meminta rincian.";
     case "jurusan":
-      return "Untuk topik jurusan atau program studi, jika user menanyakan daftar umum, sebutkan semua fakultas dan program studi yang tersedia dari konteks. Jika user menanyakan satu prodi tertentu, fokus ke prodi itu.";
+      return "Untuk topik jurusan, sebutkan daftar prodi secara ringkas. Jangan tambahkan deskripsi fakultas kecuali diminta.";
     case "syarat":
-      return "Untuk topik syarat, utamakan daftar berkas yang perlu disiapkan. Boleh memakai format daftar ringan dalam satu jawaban bila itu membuat isi lebih jelas.";
+      return "Untuk topik syarat, beri daftar berkas inti saja dengan bullet pendek.";
     case "kelas":
-      return "Untuk topik kelas, sebutkan pilihan kelas yang tersedia dan jam pentingnya terlebih dahulu.";
+      return "Untuk topik kelas, sebutkan pilihan kelas dan jamnya secara singkat.";
     case "lokasi":
-      return "Untuk topik lokasi, jawab alamat kampus secara langsung. Jika konteks memuat lebih dari satu kampus, sebutkan semua lokasi kampus yang tersedia dengan ringkas.";
+      return "Untuk topik lokasi, jawab alamat langsung. Jika ada dua kampus, sebutkan keduanya secara singkat.";
     case "akademik":
       return "Untuk topik akademik, jawab sesuai prosedur BAAK atau pedoman akademik di konteks. Sebutkan syarat, alur, atau batasan penting yang memang tertulis.";
     case "kurikulum":
@@ -1662,7 +1733,7 @@ function buildIntentResponseGuide(intent = null) {
     case "rektor":
       return "Untuk topik rektor atau pimpinan, jawab nama rektor secara langsung sesuai konteks. Jangan meminta user menghubungi kampus jika nama rektor ada di konteks.";
     default:
-      return "Jawab tetap ringkas, jelas, dan fokus ke inti informasi yang memang ada di konteks.";
+      return "Jawab ringkas, ramah, dan langsung ke inti informasi yang ditanya.";
   }
 }
 
@@ -1685,31 +1756,6 @@ function looksLikeUnavailableAnswer(text = "") {
   return UNAVAILABLE_RESPONSE_PATTERNS.some((pattern) =>
     pattern.test(String(text || "")),
   );
-}
-
-function looksTooBriefForResponsePlan(text = "", responsePlan = null) {
-  if (!responsePlan || responsePlan.displayMode === "brief") return false;
-
-  const normalized = String(text || "").trim();
-  if (!normalized) return true;
-
-  const lineCount = normalized.split("\n").filter(Boolean).length;
-  const structuredCount =
-    normalized.match(/(?:^|\n)\s*(?:[-*]|\d+\.)\s+/g)?.length || 0;
-
-  if (responsePlan.displayMode === "list_detail") {
-    if (normalized.length < 120) return true;
-    if (responsePlan.mustEnumerateAll && lineCount < 3 && structuredCount < 2) {
-      return true;
-    }
-    return false;
-  }
-
-  if (responsePlan.displayMode === "step_detail") {
-    return normalized.length < 110 || structuredCount === 0;
-  }
-
-  return false;
 }
 
 function truncateForVoice(text = "", maxLength = 650) {
@@ -1937,11 +1983,13 @@ async function getFuse() {
 async function resolveRetrievalState(messageHistory = [], userQuery = "") {
   const cappedHistory = messageHistory.slice(-10);
   const topicState = deriveConversationTopicState(cappedHistory);
+  const queryContinuity = classifyQueryContinuity(userQuery, cappedHistory);
   const decomposedQueries = decomposeUserQuery(userQuery, topicState);
   const retrievalQuery = buildRetrievalQuery(
     cappedHistory,
     userQuery,
     topicState,
+    queryContinuity,
   );
   const canonicalRewrite = buildCanonicalRewrite(userQuery, topicState);
   const f = await getFuse();
@@ -1955,6 +2003,7 @@ async function resolveRetrievalState(messageHistory = [], userQuery = "") {
   let contextStr = "";
   let mediaResults = [];
   let responsePlan = buildResponsePlan(userQuery, { intent: initialIntent });
+  let conversationContextHint = "";
   let answerability = {
     level: "none",
     reason: "no_match",
@@ -1980,6 +2029,11 @@ async function resolveRetrievalState(messageHistory = [], userQuery = "") {
       catalog: ragDataset,
     });
     answerability = computeAnswerability(finalMatches, userQuery, topicState);
+    conversationContextHint = buildConversationContextHint(
+      cappedHistory,
+      intent,
+      queryContinuity,
+    );
 
     if (finalMatches.length > 0) {
       ragScore =
@@ -1999,6 +2053,8 @@ async function resolveRetrievalState(messageHistory = [], userQuery = "") {
 
   return {
     cappedHistory,
+    queryContinuity,
+    conversationContextHint,
     topicState,
     decomposedQueries,
     retrievalQuery,
@@ -2438,9 +2494,10 @@ export async function getChatCompletion(messageHistory, lang = "id") {
   const userQuery = preparedQuery.cleanedText || rawUserQuery;
   const retrievalState = await resolveRetrievalState(messageHistory, userQuery);
   const {
-    cappedHistory,
     topicState,
     decomposedQueries,
+    queryContinuity,
+    conversationContextHint,
     retrievalQuery,
     canonicalRewrite,
     matches,
@@ -2467,12 +2524,14 @@ export async function getChatCompletion(messageHistory, lang = "id") {
     retrievalQuery,
     canonicalRewrite,
     responsePlan,
+    queryContinuity,
     answerability: answerability.level,
     route: confidenceRouting.route,
     transcriptMarker: preparedQuery.marker,
     intent,
     topicHints,
     topicState,
+    conversationContextHint,
     matches: matches.map((r) => ({
       id: r.item.id,
       score: Number(r.score.toFixed(2)),
@@ -2528,7 +2587,7 @@ export async function getChatCompletion(messageHistory, lang = "id") {
 Hari ini adalah ${today}.
 Gaya bicaramu tenang, hangat, elegan, dan profesional. Kamu adalah "Wajah Digital" UCIC.
 Kamu boleh menggunakan partikel bahasa lisan seperti 'nih', 'sih', 'dong', atau 'ya', namun penggunaannya HARUS sangat tepat, natural secara tata bahasa, dan tidak berlebihan agar wibawamu tetap terjaga. Penempatannya harus dilihat dari kata sebelumnya apakah cocok atau tidak.
-Panjang jawabanmu HARUS adaptif mengikuti jenis pertanyaan user. Untuk pertanyaan fakta tunggal, jawab singkat. Untuk pertanyaan daftar, syarat, alur, atau perbandingan, jawab lebih lengkap dan terstruktur agar nyaman dibaca di layar.
+Jawabanmu HARUS singkat, ramah, dan langsung ke inti seperti customer service. Hindari pembuka panjang, promosi, dan penjelasan tambahan yang tidak ditanya. Untuk daftar, gunakan bullet pendek. Untuk fakta tunggal, jawab dalam 1 kalimat.
 
 [TUGAS UTAMAMU]:
 Kamu HANYA bertugas dan DIIZINKAN menjawab pertanyaan seputar kampus UCIC (seperti Pendaftaran, Akademik, Fasilitas, dan Informasi Kampus lainnya).
@@ -2538,7 +2597,9 @@ Kamu HANYA bertugas dan DIIZINKAN menjawab pertanyaan seputar kampus UCIC (seper
    - Jawab menggunakan DARI [KONTEKS KAMPUS] di bawah ini sebagai FAKTA MUTLAK.
    - Jika [KONTEKS KAMPUS] memuat informasi yang ditanyakan, WAJIB jawab berdasarkan konteks tersebut. Jangan mengatakan belum punya informasi kalau jawabannya ada di konteks.
    - Jika [KONTEKS KAMPUS] tidak kosong, kamu DILARANG menjawab "maaf belum punya informasi", "hubungi kampus", atau penolakan sejenis sebelum memakai informasi yang tersedia.
+   - Riwayat chat BUKAN sumber fakta. Jika riwayat chat berbeda dengan [KONTEKS KAMPUS], abaikan riwayat chat dan ikuti [KONTEKS KAMPUS].
    - Untuk pertanyaan langsung seperti "siapa", "dimana", "berapa", "kapan", atau "apa", jawab langsung dari kalimat paling relevan di [KONTEKS KAMPUS].
+   - Jangan menyalin semua konteks. Ambil hanya informasi yang menjawab pertanyaan user.
    - Jika pertanyaan user masih samar seperti "yang itu", "terus gimana", atau "berapa yang tadi", gunakan konteks percakapan terakhir dan jawab bagian yang paling mungkin dimaksud user dengan tetap hati-hati.
    - Jika konteks yang ada hanya menjawab sebagian, berikan jawaban parsial yang membantu. Jangan langsung menolak kalau masih ada bagian yang bisa dijawab dari konteks.
    - Jika transcript user tampak mengulang frasa yang sama, ANGGAP itu artefak suara. Jangan menegur, jangan berkomentar bahwa user mengulang, dan jangan mengatakan akan menjelaskan sekali saja. Cukup jawab inti pertanyaannya dengan normal.
@@ -2557,6 +2618,9 @@ Kamu HANYA bertugas dan DIIZINKAN menjawab pertanyaan seputar kampus UCIC (seper
 [KONTEKS KAMPUS]:
 ${contextStr || "Kosong"}
 
+[KONTEKS PERCAKAPAN UNTUK RUJUKAN]:
+${conversationContextHint || "Tidak ada. Pertanyaan terbaru berdiri sendiri."}
+
 [ATURAN KEDALAMAN JAWABAN]:
 ${buildResponsePlanPrompt(responsePlan, "id")}
 
@@ -2570,7 +2634,7 @@ ${confidenceRouting.instruction}
 ${buildIntentResponseGuide(intent)}
 
 [PERTANYAAN LANJUTAN]:
-Setelah menjawab pertanyaan SEPUTAR UCIC, SELALU berikan 2 saran pertanyaan lanjutan yang BISA DITANYAKAN OLEH USER.
+Setelah menjawab pertanyaan SEPUTAR UCIC, berikan maksimal 2 saran pertanyaan lanjutan yang pendek dan relevan.
 Saran ini HARUS DITULIS DARI SUDUT PANDANG USER (seolah-olah user yang sedang bertanya), BUKAN AI yang bertanya kepada user.
 Gunakan format di AKHIR jawaban: [Pertanyaan 1?] | [Pertanyaan 2?]
 Contoh: "Pendaftaran dibuka bulan Maret. [Bagaimana cara mendaftar ke UCIC?] | [Apa saja syarat pendaftarannya?]"
@@ -2579,7 +2643,7 @@ JIKA kamu MENOLAK menjawab karena di luar topik kampus, kamu TIDAK PERLU menamba
   const systemPromptEN = `You are SELA, the virtual receptionist for Universitas Catur Insan Cendekia (UCIC) who embodies a gentle, charismatic, authoritative, and deeply intelligent persona.
 Today is ${todayEN}.
 Your speaking style is calm, warm, elegant, and highly professional. You are the "Digital Face" of UCIC.
-Your answer length MUST adapt to the user's question type. For single facts, stay brief. For lists, requirements, procedures, or comparisons, answer more fully and structure the response clearly for on-screen reading.
+Your answers MUST be concise, friendly, and direct like a customer service representative. Avoid long openings, promotion-like wording, and extra details the user did not ask for. For lists, use short bullets. For a single fact, answer in one sentence.
 You MUST ALWAYS answer the user in ENGLISH.
 
 [YOUR MAIN TASK]:
@@ -2590,7 +2654,9 @@ You ONLY serve and are PERMITTED to answer questions related to the UCIC campus 
    - Answer using the [CAMPUS CONTEXT] below as ABSOLUTE FACT.
    - If the [CAMPUS CONTEXT] contains the requested information, you MUST answer from that context. Do not say the information is unavailable when it exists in the context.
    - If [CAMPUS CONTEXT] is not empty, you are FORBIDDEN from saying the information is unavailable, telling the user to check with campus staff, or refusing before using the available context.
+   - Chat history is NOT a fact source. If chat history conflicts with [CAMPUS CONTEXT], ignore chat history and follow [CAMPUS CONTEXT].
    - For direct questions like "who", "where", "how much", "when", or "what", answer directly from the most relevant sentence in [CAMPUS CONTEXT].
+   - Do not copy all context. Use only the information needed to answer the user's question.
    - If the user's wording is vague, such as "that one", "then how", or "how much for that", use the recent conversation context and answer the most likely intended topic carefully.
    - If the context only answers part of the request, still provide the helpful partial answer instead of declining immediately.
    - If the transcript appears to repeat the same phrase, treat that as a voice artifact. Do not scold the user, do not comment on repetition, and do not say you will explain it only once. Just answer normally.
@@ -2609,6 +2675,9 @@ You ONLY serve and are PERMITTED to answer questions related to the UCIC campus 
 [CAMPUS CONTEXT]:
 ${contextStr || "Empty"}
 
+[CONVERSATION CONTEXT FOR REFERENCE]:
+${conversationContextHint || "None. The latest question is standalone."}
+
 [RESPONSE DEPTH RULE]:
 ${buildResponsePlanPrompt(responsePlan, "en")}
 
@@ -2622,7 +2691,7 @@ ${confidenceRouting.instruction}
 ${buildIntentResponseGuide(intent)}
 
 [FOLLOW-UP QUESTIONS]:
-After answering a UCIC-RELATED question, ALWAYS add 2 relevant follow-up questions at the END of your answer that the USER CAN ASK NEXT.
+After answering a UCIC-RELATED question, add up to 2 short relevant follow-up questions at the END that the USER CAN ASK NEXT.
 These suggestions MUST BE WRITTEN FROM THE USER'S PERSPECTIVE (as if the user is asking), NOT as the AI asking the user.
 Use the format: [Question 1?] | [Question 2?]
 Example: "Registration opens in March. [How do I apply to UCIC?] | [What are the admission requirements?]"
@@ -2633,7 +2702,10 @@ IF you DECLINE to answer because the topic is unrelated to the campus, DO NOT ad
       role: "system",
       content: effectiveLang === "en" ? systemPromptEN : systemPromptID,
     },
-    ...cappedHistory,
+    {
+      role: "user",
+      content: userQuery,
+    },
   ];
 
   const res = await fetch("/api/chat", {
@@ -2674,14 +2746,10 @@ IF you DECLINE to answer because the topic is unrelated to the campus, DO NOT ad
     effectiveLang,
     responsePlan,
   );
-  const shouldFallbackForDepth =
-    responsePlan.displayMode !== "brief" &&
-    responsePlan.displayMode !== "compare_detail" &&
-    looksTooBriefForResponsePlan(cleanText, responsePlan);
   const shouldUseDatasetFallback =
     datasetFallbackAnswer &&
     finalMatches.length > 0 &&
-    (looksLikeUnavailableAnswer(cleanText) || shouldFallbackForDepth);
+    looksLikeUnavailableAnswer(cleanText);
   const displayText =
     (shouldUseDatasetFallback ? datasetFallbackAnswer : cleanText) ||
     "Maaf, SELA agak bingung. Bisa diulang?";
