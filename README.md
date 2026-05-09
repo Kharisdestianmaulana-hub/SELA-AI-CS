@@ -144,7 +144,8 @@ selaui/
 
 - Node.js 18+
 - npm
-- `GROQ_API_KEY`
+- `GROQ_API_KEY` untuk transcribe suara (Whisper)
+- `GEMINI_API_KEY` untuk jawaban chat SELA
 
 ### Setup
 
@@ -155,7 +156,9 @@ npm install
 Buat file `.env.local` / Create `.env.local`:
 
 ```bash
-echo "GROQ_API_KEY=your_key_here" > .env.local
+GROQ_API_KEY=your_groq_key_here
+GEMINI_API_KEY=your_gemini_key_here
+GEMINI_MODEL=gemini-1.5-flash
 ```
 
 Jalankan / Run:

@@ -19,6 +19,76 @@ app.use(cors());
 app.use(express.json());
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-1.5-flash";
+
+function buildGeminiPayload(messages = [], userQuery = "") {
+  const systemText = messages
+    .filter((message) => message?.role === "system" && message?.content)
+    .map((message) => message.content)
+    .join("\n\n");
+
+  const conversationContents = messages
+    .filter((message) => message?.role !== "system" && message?.content)
+    .map((message) => ({
+      role: message.role === "assistant" ? "model" : "user",
+      parts: [{ text: message.content }],
+    }));
+
+  const contents =
+    conversationContents.length > 0
+      ? conversationContents
+      : [
+          {
+            role: "user",
+            parts: [{ text: userQuery || "" }],
+          },
+        ];
+
+  return {
+    systemInstruction: systemText
+      ? {
+          parts: [{ text: systemText }],
+        }
+      : undefined,
+    contents,
+    generationConfig: {
+      temperature: 0.6,
+      maxOutputTokens: 280,
+    },
+  };
+}
+
+function extractGeminiText(data) {
+  return (
+    data?.candidates?.[0]?.content?.parts
+      ?.map((part) => part?.text || "")
+      .join("")
+      .trim() || ""
+  );
+}
+
+async function createGeminiChatCompletion(messages = [], userQuery = "") {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error("GEMINI_API_KEY belum diatur di .env.local");
+  }
+
+  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+  const response = await fetch(endpoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(buildGeminiPayload(messages, userQuery)),
+  });
+
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    const detail =
+      data?.error?.message || `Gemini API gagal dengan status ${response.status}`;
+    throw new Error(detail);
+  }
+
+  return extractGeminiText(data);
+}
 
 // ── Intent Detection ──────────────────────────────────────────────────────────
 // Klasifikasi pertanyaan sebelum diproses — menentukan jalur terbaik
@@ -244,19 +314,15 @@ app.post("/api/chat", async (req, res) => {
       });
     }
 
-    // Panggil LLM dengan messages komplit (System Prompt + RAG + Chat History)
-    const completion = await groq.chat.completions.create({
-      messages: messages,
-      model: "llama-3.3-70b-versatile",
-      temperature: 0.6,
-      max_tokens: 280,
-    });
-
-    const responseText = completion.choices[0]?.message?.content || "";
+    // Chat response memakai Gemini; transcribe suara tetap memakai Groq Whisper.
+    const responseText = await createGeminiChatCompletion(messages, userQuery);
 
     res.json({ text: responseText });
   } catch (err) {
-    console.error("Chat error:", err);
+    console.error("[SELA Chat] Gemini error:", {
+      message: err?.message,
+      stack: err?.stack,
+    });
     res.status(500).json({ error: "Gagal mendapat respons AI." });
   }
 });
