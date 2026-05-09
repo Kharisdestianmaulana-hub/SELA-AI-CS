@@ -158,7 +158,7 @@ Buat file `.env.local` / Create `.env.local`:
 ```bash
 GROQ_API_KEY=your_groq_key_here
 GEMINI_API_KEY=your_gemini_key_here
-GEMINI_MODEL=gemini-1.5-flash
+GEMINI_MODEL=gemini-2.0-flash
 ```
 
 Jalankan / Run:
