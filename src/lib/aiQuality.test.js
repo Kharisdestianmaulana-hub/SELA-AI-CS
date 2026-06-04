@@ -168,3 +168,18 @@ test("counselor quality fallback repairs dangling interest discovery answers", (
     /komputer atau coding, desain dan konten, bisnis, keuangan, atau olahraga\?/,
   );
 });
+
+test("counselor quality fallback keeps valid jurusan recommendation answers", () => {
+  const plan = buildResponsePlan(
+    "saya bingung pilih jurusan rekomendasikan dong",
+    { intent: "jurusan" },
+  );
+
+  assert.equal(
+    needsCounselorQualityFallback(
+      "Untuk minat di pro gaming, rekomendasi jurusan yang paling cocok di UCIC adalah S1 Teknik Informatika karena jurusan ini membekali mahasiswa dengan dasar pengembangan game dan teknologi informasi.",
+      plan,
+    ),
+    false,
+  );
+});

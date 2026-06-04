@@ -87,6 +87,17 @@ test("buildResponsePlan assigns admission counselor modes", () => {
     "Sistem Informasi",
   ]);
 
+  const gaming = buildResponsePlan(
+    "saya minatnya di pro gaming rekomendasi jurusan dong",
+    { intent: "jurusan" },
+  );
+  assert.equal(gaming.counselorMode, "program_recommendation");
+  assert.equal(gaming.nextAction, "recommend_program");
+  assert.deepEqual(gaming.leadSignals.recommendedPrograms, [
+    "Teknik Informatika",
+    "Sistem Informasi",
+  ]);
+
   const technology = buildResponsePlan("teknologi sih lebih tepatnya", {
     intent: "jurusan",
   });

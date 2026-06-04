@@ -6,7 +6,8 @@ import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-config({ path: join(__dirname, "..", ".env.local") });
+config({ path: join(__dirname, "..", ".env") });
+config({ path: join(__dirname, "..", ".env.local"), override: true });
 
 const app = express();
 const upload = multer({ storage: multer.memoryStorage() });

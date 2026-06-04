@@ -80,6 +80,7 @@ const DATASET_CATEGORY_ALIASES = {
 };
 
 const QUERY_PHRASE_ALIASES = [
+  [/\b(u\s*c\s*i\s*c|cahice|cahis|caice|chaice|ucik|uciic)\b/g, "ucic"],
   [/\bkelas karyawan\b/g, "kelas sore rpl"],
   [/\bbiaya masuk\b/g, "biaya pendaftaran"],
   [/\bdaftar ulang\b/g, "registrasi ulang"],
@@ -275,6 +276,12 @@ const GENERIC_REVERSE_SYNONYM_TOKENS = new Set([
 ]);
 
 const TYPO_TOKEN_MAP = {
+  cahice: "ucic",
+  cahis: "ucic",
+  caice: "ucic",
+  chaice: "ucic",
+  ucik: "ucic",
+  uciic: "ucic",
   dmn: "dimana",
   dmnnya: "dimana",
   gmn: "gimana",
@@ -672,6 +679,43 @@ const SHORT_VALID_QUERY_TOKENS = new Set([
   "biayanya",
   "syaratnya",
 ]);
+
+const JURUSAN_INTEREST_TERMS = [
+  "minat",
+  "tertarik",
+  "suka",
+  "bakat",
+  "hobi",
+  "cita cita",
+  "cita cita",
+  "programming",
+  "coding",
+  "ngoding",
+  "komputer",
+  "software",
+  "aplikasi",
+  "web",
+  "mobile",
+  "desain",
+  "bisnis",
+  "keuangan",
+  "manajemen",
+  "olahraga",
+];
+
+const JURUSAN_DECISION_TERMS = [
+  "jurusan",
+  "prodi",
+  "program studi",
+  "fakultas",
+  "rekomendasi",
+  "rekomendasi jurusan",
+  "saran",
+  "cocok",
+  "cocoknya",
+  "pilih",
+  "pilihin",
+];
 
 const PROGRAM_REFERENCE_ALIASES = [
   {
@@ -1389,8 +1433,24 @@ function detectTopicHints(text = "") {
   return [...hints];
 }
 
+function looksLikeJurusanInterestQuery(text = "") {
+  const normalized = normalizeText(text);
+  if (!normalized) return false;
+
+  const hasInterestSignal = JURUSAN_INTEREST_TERMS.some((term) =>
+    normalized.includes(term),
+  );
+  const hasDecisionSignal = JURUSAN_DECISION_TERMS.some((term) =>
+    normalized.includes(term),
+  );
+
+  return hasInterestSignal && hasDecisionSignal;
+}
+
 function classifyCampusIntent(text = "") {
   const normalized = normalizeText(text);
+  if (looksLikeJurusanInterestQuery(normalized)) return "jurusan";
+
   const directIntent = DIRECT_INTENT_PATTERNS.find(([, pattern]) =>
     pattern.test(normalized),
   )?.[0];
@@ -3250,7 +3310,11 @@ IF you DECLINE to answer because the topic is unrelated to the campus, DO NOT ad
 
   if (!res.ok)
     throw new Error("Maaf, otak SELA lagi loading nih. Coba tanya lagi ya.");
-  const { text } = await res.json();
+  const {
+    text,
+    provider = null,
+    incomplete = false,
+  } = await res.json();
 
   // Cek IGNORE_NOISE sebelum parsing, agar tidak muncul sebagai suggestion
   if (text?.trim().includes("[IGNORE_NOISE]")) {

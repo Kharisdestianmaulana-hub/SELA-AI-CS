@@ -4,6 +4,12 @@ function countListLines(text = "") {
     .filter((line) => /^\s*(?:\d+[.)]|[-*])\s+/.test(line)).length;
 }
 
+function containsProgramRecommendation(text = "") {
+  return /\b(teknik informatika|sistem informasi|dkv|desain komunikasi visual|bisnis digital|manajemen|akuntansi|pendidikan kepelatihan olahraga|manajemen informatika)\b/i.test(
+    String(text || ""),
+  );
+}
+
 export function needsCounselorQualityFallback(text = "", responsePlan = null) {
   const clean = String(text || "").replace(/\s+/g, " ").trim();
   if (!responsePlan || responsePlan.counselorMode === "answer_only") return false;
@@ -38,13 +44,14 @@ export function needsCounselorQualityFallback(text = "", responsePlan = null) {
 
   if (responsePlan.counselorMode === "interest_discovery") {
     const hasQuestion = /[?？]/.test(clean);
+    if (containsProgramRecommendation(clean)) return false;
     return clean.length < 80 || !hasQuestion;
   }
 
   if (responsePlan.counselorMode === "program_recommendation") {
     return (
       clean.length < 120 ||
-      !/teknik|sistem|dkv|bisnis|manajemen|akuntansi|olahraga/i.test(clean)
+      !containsProgramRecommendation(clean)
     );
   }
 
