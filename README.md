@@ -1,6 +1,6 @@
 # SELA
 
-> AI Receptionist and Campus Customer Service — Universitas Catur Insan Cendekia (UCIC)
+> AI Campus Customer Service — Universitas Catur Insan Cendekia (UCIC)
 
 ---
 
@@ -104,7 +104,7 @@ If information is not available in the dataset, SELA will respond honestly witho
 
 - Node.js
 - Express
-- Groq SDK
+- Gemini API
 
 ### Knowledge Base
 
@@ -144,8 +144,7 @@ selaui/
 
 - Node.js 18+
 - npm
-- `GROQ_API_KEY` untuk transcribe suara (Whisper)
-- `GEMINI_API_KEY` untuk jawaban chat SELA
+- `GEMINI_API_KEY` untuk transcribe suara dan jawaban chat SELA
 
 ### Setup
 
@@ -156,9 +155,27 @@ npm install
 Buat file `.env.local` / Create `.env.local`:
 
 ```bash
-GROQ_API_KEY=your_groq_key_here
 GEMINI_API_KEY=your_gemini_key_here
-GEMINI_MODEL=gemini-2.0-flash
+GEMINI_MODEL=gemini-2.5-flash
+
+# Optional chat fallback providers. Gemini tetap primary.
+CHAT_FALLBACK_PROVIDERS=groq,openrouter
+CHAT_TIMEOUT_MS=20000
+CHAT_PROVIDER_COOLDOWN_MS=60000
+GROQ_API_KEY=your_groq_key_here
+GROQ_MODEL=llama-3.3-70b-versatile
+GROQ_TRANSCRIBE_MODEL=whisper-large-v3-turbo
+OPENROUTER_API_KEY=your_openrouter_key_here
+OPENROUTER_MODEL=openai/gpt-oss-120b:free
+OPENROUTER_SITE_URL=http://localhost:5173
+OPENROUTER_APP_NAME=SELA AI CS
+
+# Voice transcription fallback. Groq lebih stabil untuk STT, Gemini jadi cadangan.
+TRANSCRIBE_PROVIDERS=groq,gemini
+GEMINI_TRANSCRIBE_MODEL=gemini-flash-latest
+GEMINI_TRANSCRIBE_FALLBACK_MODELS=gemini-2.5-flash-lite,gemini-2.5-flash,gemini-flash-lite-latest
+GEMINI_TRANSCRIBE_TIMEOUT_MS=8000
+GEMINI_TRANSCRIBE_MODEL_COOLDOWN_MS=60000
 ```
 
 Jalankan / Run:

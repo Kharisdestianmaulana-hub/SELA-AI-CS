@@ -1,9 +1,10 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import ChatBubble from "./ChatBubble";
 import LiveCaption from "./LiveCaption";
 import AvatarPlaceholder from "./AvatarPlaceholder";
 import SuggestionButtons from "./SuggestionButtons";
 import MediaCarousel from "./MediaCarousel";
+import AnswerCard from "./AnswerCard";
 import {
   transcribeAudio,
   getChatCompletion,
@@ -13,6 +14,11 @@ import {
   prepareTranscriptForRag,
   looksLikeShortValidQuery,
 } from "../lib/ai";
+import {
+  buildSpeechTimeline,
+  getDefaultViseme,
+  getSpeechFrame,
+} from "../lib/speechSync";
 
 // ── SVG Icons ────────────────────────────────────────────────────
 const IconMic = ({ size = "md" }) => {
@@ -93,9 +99,102 @@ const IconChevronDown = () => (
     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
   </svg>
 );
+
+const IconChat = () => (
+  <svg
+    className="w-5 h-5"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M8 10h8M8 14h5m7-2a8 8 0 11-14.32-4.9A8 8 0 0120 12z"
+    />
+  </svg>
+);
+
+const IconClose = () => (
+  <svg
+    className="w-5 h-5"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2.4}
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M6 6l12 12M18 6L6 18"
+    />
+  </svg>
+);
 // ─────────────────────────────────────────────────────────────────
 
 import { t } from "../lib/translations";
+
+const RECORDER_MIME_CANDIDATES = [
+  "audio/ogg;codecs=opus",
+  "audio/webm;codecs=opus",
+  "audio/webm",
+];
+
+function getSupportedRecorderMimeType() {
+  if (typeof MediaRecorder === "undefined") return "";
+  return (
+    RECORDER_MIME_CANDIDATES.find((mimeType) =>
+      MediaRecorder.isTypeSupported(mimeType),
+    ) || ""
+  );
+}
+
+function encodeWavBlob(channelChunks = [], sampleRate = 48000) {
+  const totalLength = channelChunks.reduce((sum, chunk) => sum + chunk.length, 0);
+  const samples = new Float32Array(totalLength);
+  let offset = 0;
+
+  channelChunks.forEach((chunk) => {
+    samples.set(chunk, offset);
+    offset += chunk.length;
+  });
+
+  const buffer = new ArrayBuffer(44 + samples.length * 2);
+  const view = new DataView(buffer);
+  const writeString = (byteOffset, value) => {
+    for (let index = 0; index < value.length; index++) {
+      view.setUint8(byteOffset + index, value.charCodeAt(index));
+    }
+  };
+
+  writeString(0, "RIFF");
+  view.setUint32(4, 36 + samples.length * 2, true);
+  writeString(8, "WAVE");
+  writeString(12, "fmt ");
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);
+  view.setUint16(22, 1, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * 2, true);
+  view.setUint16(32, 2, true);
+  view.setUint16(34, 16, true);
+  writeString(36, "data");
+  view.setUint32(40, samples.length * 2, true);
+
+  let dataOffset = 44;
+  for (let index = 0; index < samples.length; index++) {
+    const sample = Math.max(-1, Math.min(1, samples[index]));
+    view.setInt16(
+      dataOffset,
+      sample < 0 ? sample * 0x8000 : sample * 0x7fff,
+      true,
+    );
+    dataOffset += 2;
+  }
+
+  return new Blob([buffer], { type: "audio/wav" });
+}
 
 // Quick reply button definitions
 const quickReplies = {
@@ -131,6 +230,8 @@ const QUICK_COMMIT_MIN_SPEECH_MS = 500;
 const MIN_RMS_FOR_VALID_SPEECH = 8; // Minimum RMS level untuk dianggap speech, bukan noise
 const IDLE_SESSION_MS = 90 * 1000; // 90 detik tanpa interaksi -> reset sesi
 const FACE_LOST_END_MS = 12 * 1000; // 12 detik wajah hilang saat sesi aktif -> reset
+const LIVE_CAPTION_BOUNDARY_DELAY_MS = 150; // tahan subtitle sedikit supaya sinkron dengan suara
+const SCREEN_CARD_HOLD_MS = 9000;
 
 // Farewell detection
 const FAREWELL_KEYWORDS = [
@@ -170,9 +271,30 @@ export default function VoiceUI({
   const [langSelected, setLangSelected] = useState(false);
   const [awaitingLangSelect, setAwaitingLangSelect] = useState(false);
   const [isAtBottom, setIsAtBottom] = useState(true);
+  const [isPortraitChatOpen, setIsPortraitChatOpen] = useState(false);
+  const [liveCaptionCharIndex, setLiveCaptionCharIndex] = useState(null);
+  const [liveCaptionText, setLiveCaptionText] = useState("");
+  const [liveCaptionWordInterval, setLiveCaptionWordInterval] = useState(null);
+  const [speechTimeline, setSpeechTimeline] = useState(null);
+  const [speechCharIndex, setSpeechCharIndex] = useState(null);
+  const [activeViseme, setActiveViseme] = useState(getDefaultViseme());
+  const [activeScreen, setActiveScreen] = useState(null);
+  const [ttsEndSignal, setTtsEndSignal] = useState(0);
+  const [isDebugOpen, setIsDebugOpen] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return new URLSearchParams(window.location.search).has("debug");
+  });
+  const [lastTurnDebug, setLastTurnDebug] = useState(null);
+
+  const ttsEndSignalRef = useRef(0);
 
   const messagesEndRef = useRef(null);
   const chatScrollRef = useRef(null);
+  const liveCaptionBoundaryTimersRef = useRef(new Set());
+  const speechFrameRef = useRef(null);
+  const speechStartedAtRef = useRef(null);
+  const speechSessionIdRef = useRef(0);
+  const screenHoldTimerRef = useRef(null);
 
   // Refs — tidak pernah stale di dalam callback/closure
   const isListeningRef = useRef(false); // mic sedang merekam
@@ -223,6 +345,12 @@ export default function VoiceUI({
     langRef.current = lang;
   }, [lang]);
 
+  useEffect(() => {
+    if (mode !== "speak" || !activated) {
+      setIsPortraitChatOpen(false);
+    }
+  }, [mode, activated]);
+
   // Kiosk mode — jika URL mengandung ?kiosk=1, langsung unlock audio tanpa tap
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -259,15 +387,141 @@ export default function VoiceUI({
     setIsAtBottom(true);
   };
 
+  const clearLiveCaptionBoundaryTimers = () => {
+    liveCaptionBoundaryTimersRef.current.forEach((timer) =>
+      clearTimeout(timer),
+    );
+    liveCaptionBoundaryTimersRef.current.clear();
+  };
+
+  const clearScreenHoldTimer = () => {
+    if (screenHoldTimerRef.current) {
+      clearTimeout(screenHoldTimerRef.current);
+      screenHoldTimerRef.current = null;
+    }
+  };
+
+  const stopSpeechTimeline = useCallback(() => {
+    cancelAnimationFrame(speechFrameRef.current);
+    speechFrameRef.current = null;
+    speechStartedAtRef.current = null;
+    setActiveViseme(getDefaultViseme());
+  }, []);
+
+  const cancelActiveSpeech = useCallback(() => {
+    speechSessionIdRef.current++;
+    clearLiveCaptionBoundaryTimers();
+    clearScreenHoldTimer();
+    setActiveScreen(null);
+    stopSpeechTimeline();
+  }, [stopSpeechTimeline]);
+
+  useEffect(() => {
+    return () => {
+      clearLiveCaptionBoundaryTimers();
+      clearScreenHoldTimer();
+      stopSpeechTimeline();
+    };
+  }, [stopSpeechTimeline]);
+
   const speakWithAvatar = (text, speechLang = lang, onDone = null) => {
+    const speechSessionId = ++speechSessionIdRef.current;
+    clearLiveCaptionBoundaryTimers();
+    stopSpeechTimeline();
+    const timeline = buildSpeechTimeline(text, speechLang);
+    setLiveCaptionText(text);
+    setLiveCaptionCharIndex(0);
+    setSpeechCharIndex(0);
+    setSpeechTimeline(timeline);
+
+    const estimatedDuration = timeline.durationMs || text.length * 70;
+    const wordCount = timeline.words?.length || 0;
+    const wordIntervalMs =
+      wordCount > 0 ? Math.round(estimatedDuration / wordCount) : null;
+    setLiveCaptionWordInterval(wordIntervalMs);
+
+    const startTimelineLoop = () => {
+      speechStartedAtRef.current = Date.now();
+
+      const tick = () => {
+        if (!speechStartedAtRef.current) return;
+        const elapsed = Date.now() - speechStartedAtRef.current;
+        const frame = getSpeechFrame(timeline, elapsed);
+        setLiveCaptionCharIndex(frame.charIndex);
+        setSpeechCharIndex(frame.charIndex);
+        setActiveViseme(frame.viseme);
+
+        if (!frame.complete) {
+          speechFrameRef.current = requestAnimationFrame(tick);
+        }
+      };
+
+      speechFrameRef.current = requestAnimationFrame(tick);
+    };
+
+    const finishSpeech = () => {
+      if (speechSessionId !== speechSessionIdRef.current) return;
+      clearLiveCaptionBoundaryTimers();
+      stopSpeechTimeline();
+      setLiveCaptionCharIndex(null);
+      setSpeechCharIndex(text.length);
+      setLiveCaptionText("");
+      setAvatarState("idle");
+      // Signal TTS completion to ChatBubble for typewriter auto-complete
+      const now = Date.now();
+      ttsEndSignalRef.current = now;
+      setTtsEndSignal(now);
+      if (onDone) onDone();
+    };
+
     speakText(
       text,
-      () => setAvatarState("speaking"),
       () => {
-        setAvatarState("idle");
-        if (onDone) onDone();
+        if (speechSessionId !== speechSessionIdRef.current) return;
+        clearLiveCaptionBoundaryTimers();
+        setLiveCaptionText(text);
+        setLiveCaptionCharIndex(0);
+        setSpeechCharIndex(0);
+        setAvatarState("speaking");
+        startTimelineLoop();
+      },
+      () => {
+        if (speechSessionId !== speechSessionIdRef.current) return;
+        const elapsed = speechStartedAtRef.current
+          ? Date.now() - speechStartedAtRef.current
+          : 0;
+        const minSpeechMs = Math.max(900, estimatedDuration * 0.78);
+        const remainingMs = Math.max(0, minSpeechMs - elapsed);
+
+        if (remainingMs > 80) {
+          console.warn("[SELA TTS] Early end guarded", {
+            text: text.slice(0, 60),
+            elapsed,
+            minSpeechMs: Math.round(minSpeechMs),
+            delayMs: Math.round(remainingMs),
+          });
+          setTimeout(finishSpeech, remainingMs);
+          return;
+        }
+
+        finishSpeech();
       },
       speechLang,
+      (charIndex) => {
+        if (charIndex <= 0) {
+          setLiveCaptionCharIndex(0);
+          setSpeechCharIndex(0);
+          return;
+        }
+
+        const timer = setTimeout(() => {
+          liveCaptionBoundaryTimersRef.current.delete(timer);
+          setLiveCaptionCharIndex(charIndex);
+          setSpeechCharIndex(charIndex);
+        }, LIVE_CAPTION_BOUNDARY_DELAY_MS);
+
+        liveCaptionBoundaryTimersRef.current.add(timer);
+      },
     );
   };
 
@@ -289,6 +543,100 @@ export default function VoiceUI({
     playNext(0);
   };
 
+  const splitSpeechTextForTts = (text = "", speechLang = lang) => {
+    const normalized = String(text || "")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (!normalized) return [];
+
+    const maxChars = speechLang === "en" ? 170 : 150;
+    const minChars = speechLang === "en" ? 24 : 20;
+    const sentences = normalized
+      .split(/(?<=[.!?])\s+|(?<=:)\s+|(?<=;)\s+/)
+      .map((part) => part.trim())
+      .filter(Boolean);
+    const chunks = [];
+
+    for (const sentence of sentences.length ? sentences : [normalized]) {
+      if (sentence.length <= maxChars) {
+        chunks.push(sentence);
+        continue;
+      }
+
+      let current = "";
+      const parts = sentence
+        .split(/(?<=,)\s+|\s+(?=\d+\.)/)
+        .map((part) => part.trim())
+        .filter(Boolean);
+
+      for (const part of parts.length ? parts : [sentence]) {
+        if (!current) {
+          current = part;
+          continue;
+        }
+        if (`${current} ${part}`.length <= maxChars) {
+          current = `${current} ${part}`;
+        } else {
+          chunks.push(current);
+          current = part;
+        }
+      }
+      if (current) chunks.push(current);
+    }
+
+    const mergedChunks = [];
+    for (const chunk of chunks.map((item) => item.trim()).filter(Boolean)) {
+      const previous = mergedChunks[mergedChunks.length - 1];
+      if (!previous) {
+        mergedChunks.push(chunk);
+        continue;
+      }
+
+      if (
+        chunk.length < minChars ||
+        previous.length < minChars ||
+        /^[,;:)]/.test(chunk)
+      ) {
+        const combined = `${previous} ${chunk}`.trim();
+        if (combined.length <= maxChars + 35) {
+          mergedChunks[mergedChunks.length - 1] = combined;
+          continue;
+        }
+      }
+
+      mergedChunks.push(chunk);
+    }
+
+    return mergedChunks.map((chunk) => ({ text: chunk, lang: speechLang }));
+  };
+
+  const speakResponseWithAvatar = (text, speechLang = lang, onDone = null) => {
+    const chunks = splitSpeechTextForTts(text, speechLang);
+    console.log("[SELA TTS] response queue", {
+      chunks: chunks.length,
+      chars: String(text || "").length,
+      texts: chunks.map((chunk) => chunk.text),
+    });
+    if (chunks.length <= 1) {
+      speakWithAvatar(text, speechLang, onDone);
+      return;
+    }
+
+    speakSequenceWithAvatar(chunks, onDone);
+  };
+
+  const updateLastTurnDebug = (patch) => {
+    setLastTurnDebug((previous) => ({
+      ...(previous || {}),
+      ...patch,
+      updatedAt: new Date().toLocaleTimeString("id-ID", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      }),
+    }));
+  };
+
   const markSessionInteraction = () => {
     lastInteractionTimeRef.current = Date.now();
   };
@@ -299,6 +647,7 @@ export default function VoiceUI({
     sessionEndingRef.current = true;
     suppressRecorderOnStopRef.current = true;
     stopListening();
+    cancelActiveSpeech();
     window.speechSynthesis?.cancel();
 
     const chatSnapshot = currentChatRef.current;
@@ -314,8 +663,11 @@ export default function VoiceUI({
     isProcessingRef.current = false;
     activatedRef.current = false;
     setActivated(false);
-    setAvatarState("idle");
-    setLangSelected(false);
+      setAvatarState("idle");
+      setSpeechTimeline(null);
+      setSpeechCharIndex(null);
+      setActiveScreen(null);
+      setLangSelected(false);
     setAwaitingLangSelect(false);
     setFaceDetected(false);
     properFaceTimeRef.current = null;
@@ -325,6 +677,7 @@ export default function VoiceUI({
     setTimeout(() => {
       sessionEndingRef.current = false;
       suppressRecorderOnStopRef.current = false;
+      setIsPortraitChatOpen(false);
       markSessionInteraction();
     }, 250);
   };
@@ -625,9 +978,23 @@ export default function VoiceUI({
       analyser.fftSize = 1024;
       source.connect(analyser);
       analyserRef.current = analyser;
+      const pcmChunks = [];
+      const processor = audioCtx.createScriptProcessor(4096, 1, 1);
+      const silentGain = audioCtx.createGain();
+      silentGain.gain.value = 0;
+      processor.onaudioprocess = (event) => {
+        if (!isListeningRef.current) return;
+        pcmChunks.push(new Float32Array(event.inputBuffer.getChannelData(0)));
+      };
+      source.connect(processor);
+      processor.connect(silentGain);
+      silentGain.connect(audioCtx.destination);
 
       // MediaRecorder
-      const recorder = new MediaRecorder(stream);
+      const recorderMimeType = getSupportedRecorderMimeType();
+      const recorder = recorderMimeType
+        ? new MediaRecorder(stream, { mimeType: recorderMimeType })
+        : new MediaRecorder(stream);
       recorderRef.current = recorder;
       let chunks = [];
 
@@ -636,6 +1003,8 @@ export default function VoiceUI({
       };
 
       recorder.onstop = () => {
+        processor.disconnect();
+        silentGain.disconnect();
         if (suppressRecorderOnStopRef.current) {
           chunks = [];
           stopListening();
@@ -645,7 +1014,12 @@ export default function VoiceUI({
         const speechDuration = speechStartRef.current
           ? Date.now() - speechStartRef.current
           : 0;
-        const audioBlob = new Blob(chunks, { type: "audio/webm" });
+        const audioBlob =
+          pcmChunks.length > 0
+            ? encodeWavBlob(pcmChunks, audioCtx.sampleRate)
+            : new Blob(chunks, {
+                type: recorder.mimeType || recorderMimeType || "audio/webm",
+              });
         const hadSpeech = hasSpeechRef.current;
         console.log(
           "[SELA] recorder.onstop | hadSpeech:",
@@ -836,14 +1210,47 @@ export default function VoiceUI({
   // Juga disimpan di ref supaya startListening bisa memanggilnya
   const processAudioRef = useRef(null);
   processAudioRef.current = async (audioBlob) => {
+    const turnStartedAt = Date.now();
+    const turnId = `turn_${turnStartedAt.toString(36)}`;
+    const turnMetrics = {
+      turnId,
+      audioBytes: audioBlob?.size || 0,
+      lang,
+      sttMs: null,
+      aiMs: null,
+      ttsChunks: 0,
+      spokenChars: 0,
+    };
+    updateLastTurnDebug({
+      ...turnMetrics,
+      stage: "recorded",
+      avatarState: "thinking",
+    });
     isProcessingRef.current = true;
     setAvatarState("thinking");
     try {
+      const sttStartedAt = Date.now();
       const rawText = await transcribeAudio(audioBlob, lang);
+      turnMetrics.sttMs = Date.now() - sttStartedAt;
+      updateLastTurnDebug({
+        ...turnMetrics,
+        stage: "transcribed",
+        rawTranscript: rawText,
+      });
 
       // Check if server filtered out background audio
       if (!rawText || rawText.trim().length === 0) {
-        console.log("[SELA] Server filtered out background audio → retrying");
+        console.log("[SELA Turn] filtered transcription", {
+          ...turnMetrics,
+          totalMs: Date.now() - turnStartedAt,
+          reason: "empty_or_server_filtered",
+        });
+        updateLastTurnDebug({
+          ...turnMetrics,
+          stage: "filtered",
+          filterReason: "empty_or_server_filtered",
+          totalMs: Date.now() - turnStartedAt,
+        });
         isProcessingRef.current = false;
         setAvatarState("idle");
         setTimeout(() => startListeningRef.current?.(), 300);
@@ -869,7 +1276,19 @@ export default function VoiceUI({
           !looksLikeShortValidQuery(text));
 
       if (isNoise) {
-        console.log("[SELA] Diabaikan (terlalu pendek/noise):", text);
+        console.log("[SELA Turn] client filtered transcript", {
+          ...turnMetrics,
+          totalMs: Date.now() - turnStartedAt,
+          transcript: text,
+          reason: "short_or_noise",
+        });
+        updateLastTurnDebug({
+          ...turnMetrics,
+          stage: "filtered",
+          filterReason: "short_or_noise",
+          finalTranscript: text,
+          totalMs: Date.now() - turnStartedAt,
+        });
         isProcessingRef.current = false;
         setAvatarState("idle");
         setTimeout(() => startListeningRef.current?.(), 300);
@@ -891,7 +1310,10 @@ export default function VoiceUI({
         content: m.text,
       }));
       history.push({ role: "user", content: text });
+      const aiStartedAt = Date.now();
+      setAvatarState("processing");
       const response = await getChatCompletion(history, lang);
+      turnMetrics.aiMs = Date.now() - aiStartedAt;
       if (requestId !== aiRequestSeqRef.current) return;
       setIsWaitingAI(false);
       console.log("[SELA Voice] Query final ke RAG:", {
@@ -899,49 +1321,138 @@ export default function VoiceUI({
         final: text,
         transcriptMarker: preparedTranscript.marker,
       });
+      console.log("[SELA Voice] AI response payload", {
+        displayChars: response.text?.length || 0,
+        spokenChars: (response.spokenText || response.text || "").length,
+        displayText: response.text,
+        spokenText: response.spokenText || response.text,
+        screen: response.screen,
+        suggestions: response.suggestions,
+      });
+      updateLastTurnDebug({
+        ...turnMetrics,
+        stage: "answered",
+        finalTranscript: text,
+        displayChars: response.text?.length || 0,
+        spokenChars: (response.spokenText || response.text || "").length,
+        screenMode: response.screen?.mode || null,
+        chatProvider: response.debug?.chatProvider || null,
+        counselorMode: response.debug?.counselorMode || null,
+        nextAction: response.debug?.nextAction || null,
+        incompleteProviderAnswer:
+          response.debug?.incompleteProviderAnswer || false,
+      });
 
       // 2. Filter LLM-Side: SELA mendeteksi obrolan orang lewat
       if (response.text?.includes("[IGNORE_NOISE]")) {
         console.log(
           "[SELA] AI mendeteksi noise/obrolan acak, mengabaikan input.",
         );
+        setAvatarState("confused");
         isProcessingRef.current = false;
-        setAvatarState("idle");
-        setTimeout(() => startListeningRef.current?.(), 300);
+        setTimeout(() => {
+          setAvatarState("idle");
+          startListeningRef.current?.();
+        }, 500);
         return;
       }
 
       if (onReceive) onReceive(response);
+      setActiveScreen(response.screen || null);
+      clearScreenHoldTimer();
       markSessionInteraction();
 
       // Fallback: kalau TTS onEnd tidak pernah terpanggil (bug Chrome),
       // paksa restart listen setelah estimasi durasi + buffer
       const spokenText = response.spokenText || response.text;
-      const estDuration = Math.max(3000, spokenText.length * 80);
+      const ttsChunks = splitSpeechTextForTts(
+        spokenText,
+        response.detectedLang || lang,
+      );
+      turnMetrics.ttsChunks = Math.max(1, ttsChunks.length);
+      turnMetrics.spokenChars = spokenText.length;
+      console.log("[SELA Turn] ready to speak", {
+        ...turnMetrics,
+        totalBeforeTtsMs: Date.now() - turnStartedAt,
+        transcript: text,
+        screenMode: response.screen?.mode || null,
+      });
+      updateLastTurnDebug({
+        ...turnMetrics,
+        stage: "speaking",
+        finalTranscript: text,
+        totalBeforeTtsMs: Date.now() - turnStartedAt,
+        screenMode: response.screen?.mode || null,
+        chatProvider: response.debug?.chatProvider || null,
+        counselorMode: response.debug?.counselorMode || null,
+      });
+      const speechTimelineEstimate = buildSpeechTimeline(
+        spokenText,
+        response.detectedLang || lang,
+      );
+      const estDuration = Math.max(
+        3000,
+        speechTimelineEstimate.durationMs || spokenText.length * 75,
+      );
       const ttsFallback = setTimeout(() => {
         if (isProcessingRef.current) {
+          if (window.speechSynthesis?.speaking) {
+            console.warn(
+              "[SELA] TTS fallback reached while speech is still playing — extending watchdog",
+            );
+            return;
+          }
           console.warn("[SELA] TTS onEnd timeout — force restart listen");
           window.speechSynthesis?.cancel();
+          stopSpeechTimeline();
           setAvatarState("idle");
           isProcessingRef.current = false;
-          setTimeout(() => startListeningRef.current?.(), 800);
+          setTimeout(() => startListeningRef.current?.(), 350);
         }
-      }, estDuration + 2000);
+      }, Math.max(estDuration + 9000, 45000));
 
-      speakText(
+      speakResponseWithAvatar(
         spokenText,
-        () => setAvatarState("speaking"),
-        () => {
-          clearTimeout(ttsFallback);
-          setAvatarState("idle");
-          isProcessingRef.current = false;
-          // Delay 800ms — beri waktu speaker selesai bergema sebelum mic aktif lagi
-          setTimeout(() => startListeningRef.current?.(), 800);
-        },
         response.detectedLang || lang,
+        () => {
+          console.log("[SELA Turn] completed", {
+            ...turnMetrics,
+            totalMs: Date.now() - turnStartedAt,
+          });
+          updateLastTurnDebug({
+            ...turnMetrics,
+            stage: "completed",
+            totalMs: Date.now() - turnStartedAt,
+            screenMode: response.screen?.mode || null,
+            chatProvider: response.debug?.chatProvider || null,
+            counselorMode: response.debug?.counselorMode || null,
+          });
+          clearTimeout(ttsFallback);
+          isProcessingRef.current = false;
+          if (response.screen) {
+            clearScreenHoldTimer();
+            screenHoldTimerRef.current = setTimeout(() => {
+              setActiveScreen(null);
+              screenHoldTimerRef.current = null;
+            }, SCREEN_CARD_HOLD_MS);
+          }
+          // Delay 350ms — beri waktu speaker selesai bergema sebelum mic aktif lagi
+          setTimeout(() => startListeningRef.current?.(), 350);
+        },
       );
     } catch (error) {
       console.error(error);
+      console.log("[SELA Turn] failed", {
+        ...turnMetrics,
+        totalMs: Date.now() - turnStartedAt,
+        error: error?.message,
+      });
+      updateLastTurnDebug({
+        ...turnMetrics,
+        stage: "failed",
+        totalMs: Date.now() - turnStartedAt,
+        error: error?.message,
+      });
       setIsWaitingAI(false);
       if (onReceive) onReceive(t[lang].error_stt);
       setAvatarState("idle");
@@ -954,7 +1465,6 @@ export default function VoiceUI({
   useEffect(() => {
     if (mode !== "speak" || !activated) {
       stopListening();
-      window.speechSynthesis?.cancel();
       setAvatarState("idle");
       isProcessingRef.current = false;
       return;
@@ -963,10 +1473,16 @@ export default function VoiceUI({
     return () => {
       clearTimeout(timer);
       stopListening();
-      window.speechSynthesis?.cancel();
-      isProcessingRef.current = false;
     };
   }, [mode, activated]);
+
+  useEffect(() => {
+    if (mode === "speak" && activated) return;
+    cancelActiveSpeech();
+    window.speechSynthesis?.cancel();
+    setSpeechTimeline(null);
+    setSpeechCharIndex(null);
+  }, [mode, activated, cancelActiveSpeech]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -1018,31 +1534,29 @@ export default function VoiceUI({
       });
       isProcessingRef.current = false;
       activatedRef.current = false;
+      setIsPortraitChatOpen(false);
       setAvatarState("idle");
       setActivated(false);
       if (onReset) onReset();
     }, 6000);
 
-    speakWithAvatar(
-      msg,
-      lang,
-      () => {
-        clearTimeout(farewellFallback);
-        archiveConversationSession({
-          currentChat: farewellChat,
-          lang,
-          endedByFarewell: true,
-          endReason: "farewell",
-        });
-        isProcessingRef.current = false;
-        activatedRef.current = false;
-        setAvatarState("idle");
-        setActivated(false);
-        setLangSelected(false);
-        setAwaitingLangSelect(false);
-        if (onReset) onReset();
-      },
-    );
+    speakWithAvatar(msg, lang, () => {
+      clearTimeout(farewellFallback);
+      archiveConversationSession({
+        currentChat: farewellChat,
+        lang,
+        endedByFarewell: true,
+        endReason: "farewell",
+      });
+      isProcessingRef.current = false;
+      activatedRef.current = false;
+      setIsPortraitChatOpen(false);
+      setAvatarState("idle");
+      setActivated(false);
+      setLangSelected(false);
+      setAwaitingLangSelect(false);
+      if (onReset) onReset();
+    });
   };
 
   // ── Type mode ─────────────────────────────────────────────────
@@ -1108,7 +1622,7 @@ export default function VoiceUI({
       setIsWaitingAI(false);
       if (onReceive) onReceive(response);
       markSessionInteraction();
-      speakWithAvatar(
+      speakResponseWithAvatar(
         response.spokenText || response.text,
         response.detectedLang || lang,
         () => setAvatarState("idle"),
@@ -1128,7 +1642,7 @@ export default function VoiceUI({
     setLangSelected(true);
     setAwaitingLangSelect(false);
     window.speechSynthesis?.cancel();
-    isProcessingRef.current = false;
+    isProcessingRef.current = true;
     const langLabel = chosen === "id" ? "🇮🇩 Bahasa Indonesia" : "🇬🇧 English";
 
     // Use time-based greeting instead of static message
@@ -1139,13 +1653,10 @@ export default function VoiceUI({
       onSend(langLabel);
       if (onReceive) onReceive(confirm);
     }
-    speakWithAvatar(
-      confirm,
-      chosen,
-      () => {
-        startListeningRef.current?.();
-      },
-    );
+    speakWithAvatar(confirm, chosen, () => {
+      isProcessingRef.current = false;
+      startListeningRef.current?.();
+    });
   };
 
   // ── Mode Toggle ───────────────────────────────────────────────
@@ -1179,6 +1690,58 @@ export default function VoiceUI({
     </div>
   );
 
+  const DebugPanel = () => {
+    if (!lastTurnDebug) return null;
+
+    const rows = [
+      ["stage", lastTurnDebug.stage],
+      ["provider", lastTurnDebug.chatProvider || "-"],
+      ["mode", lastTurnDebug.counselorMode || "-"],
+      ["STT", lastTurnDebug.sttMs ? `${lastTurnDebug.sttMs}ms` : "-"],
+      ["AI", lastTurnDebug.aiMs ? `${lastTurnDebug.aiMs}ms` : "-"],
+      ["chunks", lastTurnDebug.ttsChunks || "-"],
+      ["chars", lastTurnDebug.spokenChars || "-"],
+      ["screen", lastTurnDebug.screenMode || "-"],
+    ];
+
+    return (
+      <div className="absolute left-4 top-20 z-30 w-64 rounded-2xl border border-slate-200/70 bg-white/90 p-3 text-[11px] text-slate-600 shadow-xl backdrop-blur-md dark:border-white/10 dark:bg-slate-950/85 dark:text-slate-300">
+        <div className="mb-2 flex items-center justify-between gap-2">
+          <span className="font-bold uppercase tracking-widest text-slate-400">
+            Debug Turn
+          </span>
+          <button
+            type="button"
+            onClick={() => setIsDebugOpen(false)}
+            className="rounded-full px-2 py-0.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-white/10"
+          >
+            tutup
+          </button>
+        </div>
+        <div className="grid grid-cols-2 gap-x-3 gap-y-1">
+          {rows.map(([label, value]) => (
+            <div key={label} className="contents">
+              <span className="uppercase tracking-wider text-slate-400">
+                {label}
+              </span>
+              <span className="truncate font-medium">{String(value)}</span>
+            </div>
+          ))}
+        </div>
+        {lastTurnDebug.finalTranscript && (
+          <p className="mt-2 line-clamp-2 border-t border-slate-200/70 pt-2 dark:border-white/10">
+            {lastTurnDebug.finalTranscript}
+          </p>
+        )}
+        {lastTurnDebug.error && (
+          <p className="mt-2 line-clamp-2 text-red-500">
+            {lastTurnDebug.error}
+          </p>
+        )}
+      </div>
+    );
+  };
+
   const statusLabel = () => {
     if (micDenied)
       return lang === "id"
@@ -1189,6 +1752,12 @@ export default function VoiceUI({
         return t[lang].listening;
       case "thinking":
         return lang === "id" ? "Sedang berpikir..." : "Thinking...";
+      case "processing":
+        return lang === "id" ? "Menyiapkan jawaban..." : "Preparing answer...";
+      case "confused":
+        return lang === "id" ? "Perlu diulang sebentar" : "Please repeat that";
+      case "happy":
+        return lang === "id" ? "Selesai membantu" : "Done helping";
       case "speaking":
         return lang === "id" ? "SELA sedang bicara..." : "SELA is speaking...";
       default:
@@ -1209,7 +1778,11 @@ export default function VoiceUI({
           {/* Avatar 3D Background - FULL SCREEN */}
           <div className="absolute inset-0 pointer-events-none z-0">
             <div className="pointer-events-auto w-full h-full">
-              <AvatarPlaceholder state="idle" theme={theme} />
+              <AvatarPlaceholder
+                state="idle"
+                theme={theme}
+                activeViseme={activeViseme}
+              />
             </div>
           </div>
 
@@ -1230,9 +1803,14 @@ export default function VoiceUI({
         {/* Avatar full screen */}
         <div className="absolute inset-0 pointer-events-none z-0">
           <div className="pointer-events-auto w-full h-full">
-            <AvatarPlaceholder state={avatarState} theme={theme} />
+            <AvatarPlaceholder
+              state={avatarState}
+              theme={theme}
+              activeViseme={activeViseme}
+            />
           </div>
         </div>
+        {isDebugOpen && <DebugPanel />}
 
         {/* Chat bubbles — landscape/wide mode only */}
         <div className="absolute top-0 right-0 bottom-28 w-[340px] hidden md:flex [@media(orientation:portrait)]:hidden flex-col justify-end pr-8 pb-6 pt-4 pointer-events-auto z-10 transition-colors overflow-hidden">
@@ -1254,8 +1832,16 @@ export default function VoiceUI({
                   <ChatBubble
                     role={msg.role}
                     text={msg.text}
+                    speechText={msg.spokenText || msg.text}
                     lang={lang}
                     isNew={msg.role === "assistant" && msg.id === latestSelaId}
+                    ttsEndSignal={ttsEndSignal}
+                    voiceMode={mode === "speak"}
+                    speechCharIndex={
+                      msg.role === "assistant" && msg.id === latestSelaId
+                        ? speechCharIndex
+                        : null
+                    }
                   />
                   {msg.role === "assistant" &&
                     msg.media &&
@@ -1263,7 +1849,14 @@ export default function VoiceUI({
                 </div>
               ))}
               {isWaitingAI && (
-                <ChatBubble role="assistant" text="" lang={lang} isLoading />
+                <ChatBubble
+                  role="assistant"
+                  text=""
+                  lang={lang}
+                  isLoading
+                  ttsEndSignal={ttsEndSignal}
+                  voiceMode={mode === "speak"}
+                />
               )}
               <div ref={messagesEndRef} />
             </div>
@@ -1282,43 +1875,106 @@ export default function VoiceUI({
           </button>
         )}
 
+        {isPortraitChatOpen && (
+          <div className="absolute inset-0 z-40 flex flex-col bg-white/95 text-gray-700 backdrop-blur-xl dark:bg-slate-950/95 dark:text-gray-100 md:hidden [@media(orientation:landscape)]:hidden animate-fade-in">
+            <div className="flex items-center justify-between border-b border-gray-200/80 px-4 py-3 dark:border-white/10">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">
+                  SELA
+                </p>
+                <h2 className="text-base font-semibold text-gray-800 dark:text-white">
+                  Riwayat Chat
+                </h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsPortraitChatOpen(false)}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-sm transition-all duration-150 hover:bg-gray-50 active:scale-95 dark:border-white/10 dark:bg-slate-900 dark:text-gray-300 dark:hover:bg-slate-800"
+                aria-label="Tutup riwayat chat"
+              >
+                <IconClose />
+              </button>
+            </div>
+
+            <div
+              ref={chatScrollRef}
+              onScroll={handleChatScroll}
+              className="flex-1 overflow-y-auto px-4 py-4 hide-scrollbar"
+            >
+              <div className="mx-auto flex min-h-full w-full max-w-md flex-col justify-end gap-1">
+                {messages.length === 0 && !isWaitingAI ? (
+                  <div className="flex flex-1 flex-col items-center justify-center gap-2 text-center text-gray-400 dark:text-gray-500">
+                    <IconSparkle />
+                    <p className="text-xs font-semibold uppercase tracking-widest">
+                      Belum ada chat
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    {messages.map((msg) => (
+                      <div key={msg.id}>
+                        <ChatBubble
+                          role={msg.role}
+                          text={msg.text}
+                          speechText={msg.spokenText || msg.text}
+                          lang={lang}
+                          qrVisibleMs={20000}
+                          isNew={
+                            msg.role === "assistant" && msg.id === latestSelaId
+                          }
+                          ttsEndSignal={ttsEndSignal}
+                          voiceMode={mode === "speak"}
+                          speechCharIndex={
+                            msg.role === "assistant" && msg.id === latestSelaId
+                              ? speechCharIndex
+                              : null
+                          }
+                        />
+                        {msg.role === "assistant" &&
+                          msg.media &&
+                          msg.media.length > 0 && (
+                            <MediaCarousel media={msg.media} />
+                          )}
+                      </div>
+                    ))}
+                    {isWaitingAI && (
+                      <ChatBubble
+                        role="assistant"
+                        text=""
+                        lang={lang}
+                        isLoading
+                        ttsEndSignal={ttsEndSignal}
+                        voiceMode={mode === "speak"}
+                      />
+                    )}
+                  </>
+                )}
+                <div ref={messagesEndRef} />
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="flex-1 pointer-events-none" />
 
         {/* Bottom content for speak mode */}
         <div className="flex flex-col items-center gap-3 pb-8 pt-2 px-4 relative z-20 pointer-events-auto">
           <div className="w-full max-w-sm md:hidden [@media(orientation:portrait)]:block">
-            {/* Portrait mode: Show LiveCaption when SELA is speaking */}
-            {avatarState === "speaking" && latestMsg?.role === "assistant" && (
-              <LiveCaption
-                text={latestMsg.text}
-                isLoading={false}
-                avatarState={avatarState}
-              />
-            )}
-            {/* Show loading when waiting for AI response */}
-            {isWaitingAI && avatarState !== "speaking" && (
-              <ChatBubble role="assistant" text="" lang={lang} isLoading />
-            )}
-            {/* Show latest message when not speaking and not waiting */}
-            {avatarState !== "speaking" && !isWaitingAI && latestMsg && (
-              <div className="animate-fade-in">
-                <ChatBubble
-                  role={latestMsg.role}
-                  text={latestMsg.text}
-                  lang={lang}
-                  qrVisibleMs={20000}
-                  isNew={
-                    latestMsg.role === "assistant" &&
-                    latestMsg.id === latestSelaId
-                  }
-                />
-                {latestMsg.role === "assistant" &&
-                  latestMsg.media &&
-                  latestMsg.media.length > 0 && (
-                    <MediaCarousel media={latestMsg.media} />
-                  )}
-              </div>
-            )}
+            <div className="flex flex-col items-center gap-2">
+              <AnswerCard screen={activeScreen} />
+              {avatarState === "speaking" &&
+                latestMsg?.role === "assistant" && (
+                  <LiveCaption
+                    text={liveCaptionText || latestMsg.text}
+                    isLoading={false}
+                    avatarState={avatarState}
+                    spokenCharIndex={liveCaptionCharIndex}
+                    wordIntervalMs={liveCaptionWordInterval}
+                    speechTimeline={speechTimeline}
+                    links={activeScreen ? [] : latestMsg.screen?.links || []}
+                  />
+                )}
+            </div>
           </div>
 
           <p className="text-xs text-gray-400 dark:text-gray-500 font-bold uppercase tracking-tighter text-center">
@@ -1338,25 +1994,50 @@ export default function VoiceUI({
           )}
 
           {/* Tombol pilihan bahasa — muncul setelah greeting bilingual selesai */}
-          {activated && awaitingLangSelect && !langSelected && avatarState === "idle" && (
-            <div className="flex gap-3 animate-fade-in">
-              <button
-                onClick={() => handleLangSelect("id")}
-                className="px-5 py-2 rounded-2xl text-sm font-semibold bg-blue-500 hover:bg-blue-600 active:scale-95 text-white shadow-md transition-all duration-150"
-              >
-                🇮🇩 Indonesia
-              </button>
-              <button
-                onClick={() => handleLangSelect("en")}
-                className="px-5 py-2 rounded-2xl text-sm font-semibold bg-white hover:bg-gray-50 active:scale-95 text-gray-700 border border-gray-200 shadow-md dark:bg-slate-700 dark:text-gray-100 dark:border-slate-600 transition-all duration-150"
-              >
-                🇬🇧 English
-              </button>
-            </div>
-          )}
+          {activated &&
+            awaitingLangSelect &&
+            !langSelected &&
+            avatarState === "idle" && (
+              <div className="flex gap-3 animate-fade-in">
+                <button
+                  onClick={() => handleLangSelect("id")}
+                  className="px-5 py-2 rounded-2xl text-sm font-semibold bg-blue-500 hover:bg-blue-600 active:scale-95 text-white shadow-md transition-all duration-150"
+                >
+                  🇮🇩 Indonesia
+                </button>
+                <button
+                  onClick={() => handleLangSelect("en")}
+                  className="px-5 py-2 rounded-2xl text-sm font-semibold bg-white hover:bg-gray-50 active:scale-95 text-gray-700 border border-gray-200 shadow-md dark:bg-slate-700 dark:text-gray-100 dark:border-slate-600 transition-all duration-150"
+                >
+                  🇬🇧 English
+                </button>
+              </div>
+            )}
 
           <ModeToggle />
         </div>
+
+        {(messages.length > 0 || isWaitingAI) && !isPortraitChatOpen && (
+          <button
+            type="button"
+            onClick={() => setIsPortraitChatOpen(true)}
+            className="absolute bottom-24 right-5 z-30 flex h-12 w-12 items-center justify-center rounded-full border border-white/60 bg-white/90 text-blue-500 shadow-lg backdrop-blur-md transition-all duration-150 hover:bg-white active:scale-95 dark:border-white/10 dark:bg-slate-900/90 dark:text-blue-300 md:hidden [@media(orientation:landscape)]:hidden"
+            aria-label="Buka riwayat chat"
+          >
+            <IconChat />
+          </button>
+        )}
+
+        {lastTurnDebug && !isDebugOpen && (
+          <button
+            type="button"
+            onClick={() => setIsDebugOpen(true)}
+            className="absolute bottom-24 left-5 z-30 rounded-full border border-white/60 bg-white/85 px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-500 shadow-lg backdrop-blur-md transition-all duration-150 hover:bg-white active:scale-95 dark:border-white/10 dark:bg-slate-900/85 dark:text-slate-300"
+            aria-label="Buka debug turn"
+          >
+            Debug
+          </button>
+        )}
       </main>
     );
   }

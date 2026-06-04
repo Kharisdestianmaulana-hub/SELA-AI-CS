@@ -26,6 +26,27 @@ const STATE_CONFIG = {
     dot: 'bg-indigo-500',
     pulse: true,
   },
+  processing: {
+    label: 'Processing',
+    color: 'from-sky-400/20 to-indigo-400/20',
+    ring: 'ring-sky-300/50',
+    dot: 'bg-sky-400',
+    pulse: true,
+  },
+  confused: {
+    label: 'Confused',
+    color: 'from-amber-300/20 to-orange-300/20',
+    ring: 'ring-amber-300/50',
+    dot: 'bg-amber-400',
+    pulse: false,
+  },
+  happy: {
+    label: 'Happy',
+    color: 'from-emerald-300/20 to-cyan-300/20',
+    ring: 'ring-emerald-300/50',
+    dot: 'bg-emerald-400',
+    pulse: false,
+  },
   speaking: {
     label: 'Speaking',
     color: 'from-emerald-400/20 to-blue-400/20',
@@ -121,7 +142,7 @@ function AvatarFallback() {
   )
 }
 
-function SelaModel({ state }) {
+function SelaModel({ state, activeViseme = 'visemeSil' }) {
   const groupRef = useRef(null)
   const blinkRef = useRef({
     elapsed: 0,
@@ -141,6 +162,9 @@ function SelaModel({ state }) {
     let actionName = 'Idle'
     if (state === 'listening') actionName = 'Idle'
     if (state === 'thinking') actionName = 'Rest'
+    if (state === 'processing') actionName = 'Rest'
+    if (state === 'confused') actionName = 'Rest'
+    if (state === 'happy') actionName = 'Idle'
     if (state === 'speaking') actionName = 'Talking'
 
     const action = actions[actionName]
@@ -168,8 +192,21 @@ function SelaModel({ state }) {
 
     const t = renderState.clock.getElapsedTime()
 
-    group.rotation.y = Math.sin(t * 0.5) * 0.08
-    group.rotation.x = Math.sin(t * 0.9) * 0.02
+    const stateYaw =
+      state === 'confused' ? 0.1 :
+        state === 'processing' ? -0.04 :
+          state === 'happy' ? 0.02 :
+            0
+    const statePitch =
+      state === 'listening' ? -0.025 :
+        state === 'thinking' ? 0.025 :
+          state === 'processing' ? -0.015 :
+            state === 'confused' ? 0.035 :
+              state === 'happy' ? -0.01 :
+                0
+
+    group.rotation.y = stateYaw + Math.sin(t * 0.5) * 0.08
+    group.rotation.x = statePitch + Math.sin(t * 0.9) * 0.02
     group.position.y = MODEL_BASE_Y + Math.sin(t * 1.6) * 0.03
 
     const blink = blinkRef.current
@@ -191,24 +228,29 @@ function SelaModel({ state }) {
       }
     }
 
-    const visemeCycle = ['visemeAa', 'visemeIh', 'visemeU', 'visemeE', 'visemeO', 'visemeSil']
-    const visemeIndex = Math.floor((t * 7.5) % visemeCycle.length)
-    const activeViseme = state === 'speaking' ? visemeCycle[visemeIndex] : 'visemeSil'
+    const currentViseme = state === 'speaking' ? activeViseme : 'visemeSil'
 
     const eyeWideBase =
       state === 'listening' ? 0.24 :
         state === 'thinking' ? 0.08 + (Math.sin(t * 1.8) + 1) * 0.04 :
+          state === 'processing' ? 0.06 :
+            state === 'confused' ? 0.18 :
+              state === 'happy' ? 0.14 :
           state === 'speaking' ? 0.1 :
             0
 
     const browLift =
       state === 'listening' ? 0.14 :
         state === 'thinking' ? 0.2 :
+          state === 'processing' ? 0.1 :
+            state === 'confused' ? 0.04 :
+              state === 'happy' ? 0.16 :
           state === 'speaking' ? 0.08 :
             0.03
 
     const browDown =
       state === 'thinking' ? 0.06 :
+        state === 'confused' ? 0.12 :
         0
 
     const trackedKeys = [
@@ -233,7 +275,7 @@ function SelaModel({ state }) {
 
     trackedKeys.forEach((key) => {
       const target =
-        key === activeViseme ? 0.95 :
+        key === currentViseme ? 0.95 :
           key === 'visemeSil' ? (state === 'speaking' ? 0.08 : 0.82) :
             key === 'eyeBlinkLeft' || key === 'eyeBlinkRight' ? blinkWeight :
               key === 'eyeWideLeft' || key === 'eyeWideRight' ? Math.max(0, eyeWideBase - blinkWeight * 0.8) :
@@ -252,7 +294,7 @@ function SelaModel({ state }) {
   )
 }
 
-function SelaAvatar3D({ state, theme }) {
+function SelaAvatar3D({ state, theme, activeViseme }) {
   const isDark = theme === 'dark'
 
   return (
@@ -275,14 +317,14 @@ function SelaAvatar3D({ state, theme }) {
       <Suspense fallback={<AvatarFallback />}>
         {/* Environment map memberikan pantulan natural (Global Illumination) */}
         <Environment preset="city" environmentIntensity={isDark ? 0.45 : 0.7} />
-        <SelaModel state={state} />
+        <SelaModel state={state} activeViseme={activeViseme} />
         <ContactShadows position={[0, SHADOW_Y, 0]} opacity={isDark ? 0.25 : 0.16} scale={5.2} blur={2.4} far={4.4} color={isDark ? "#000000" : "#1e293b"} />
       </Suspense>
     </Canvas>
   )
 }
 
-export default function AvatarPlaceholder({ state = 'idle', theme = 'light' }) {
+export default function AvatarPlaceholder({ state = 'idle', theme = 'light', activeViseme = 'visemeSil' }) {
   const cfg = STATE_CONFIG[state] ?? STATE_CONFIG.idle
   const isSpeaking = state === 'speaking'
 
@@ -300,7 +342,11 @@ export default function AvatarPlaceholder({ state = 'idle', theme = 'light' }) {
       </div>
 
       <div className="absolute inset-0 z-10 w-full h-full pointer-events-auto">
-        <SelaAvatar3D state={state} theme={theme} />
+        <SelaAvatar3D
+          state={state}
+          theme={theme}
+          activeViseme={activeViseme}
+        />
       </div>
 
       <div className="absolute bottom-[22%] z-20 flex flex-col items-center pointer-events-none">

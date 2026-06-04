@@ -101,8 +101,10 @@ export default function App() {
 
     // Handle both string (legacy) and object with text + suggestions + media (new)
     const text = typeof data === 'string' ? data : data?.text
+    const spokenText = typeof data === 'object' ? data?.spokenText : undefined
     const suggestions = typeof data === 'object' ? data?.suggestions : undefined
     const media = typeof data === 'object' ? data?.media : undefined
+    const screen = typeof data === 'object' ? data?.screen : undefined
 
     if (!text?.trim() || !targetId) return
 
@@ -110,11 +112,17 @@ export default function App() {
     setChats(prev => prev.map(c => {
       if (c.id !== targetId) return c
       const msgObj = { id: msgId, role: 'assistant', text: text.trim(), ts: new Date() }
+      if (spokenText && spokenText.trim()) {
+        msgObj.spokenText = spokenText.trim()
+      }
       if (suggestions && suggestions.length > 0) {
         msgObj.suggestions = suggestions
       }
       if (media && media.length > 0) {
         msgObj.media = media
+      }
+      if (screen) {
+        msgObj.screen = screen
       }
       return {
         ...c,

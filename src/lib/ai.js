@@ -2,11 +2,19 @@ import Fuse from "fuse.js";
 import dataset from "../data/ucic_dataset.json";
 import ragGoldens from "../data/rag_goldens.json";
 import {
+  buildCounselorPlanPrompt,
+  buildFallbackSuggestions,
   buildResponsePlan,
   buildResponsePlanPrompt,
   buildSpokenText,
   prioritizeResponseMatches,
 } from "./responsePlan";
+import {
+  buildScreenResponse,
+  buildCounselorQualityFallback,
+  needsDetailedFallback,
+  needsCounselorQualityFallback,
+} from "./answerContract";
 
 // ── RAG Setup ────────────────────────────────────────────────────────────────
 
@@ -56,7 +64,15 @@ const DATASET_CATEGORY_ALIASES = {
   ],
   akreditasi: ["akreditasi", "ban pt", "mutu", "kualitas"],
   karir: ["karir", "career", "alumni", "kerja", "bursa kerja"],
-  kegiatan: ["kegiatan", "ukm", "organisasi", "hmp", "ekskul", "pkkmb", "ospek"],
+  kegiatan: [
+    "kegiatan",
+    "ukm",
+    "organisasi",
+    "hmp",
+    "ekskul",
+    "pkkmb",
+    "ospek",
+  ],
   kurikulum: ["kurikulum", "mata kuliah", "semester", "matkul", "curriculum"],
   nilai: ["nilai", "budaya", "karakter", "great", "commitment", "integrity"],
   profil: ["profil", "sejarah", "pimpinan", "rektor", "yayasan"],
@@ -346,6 +362,20 @@ const TOPIC_HINTS = {
     "manajemen",
     "akuntansi",
     "bisnis",
+    "coding",
+    "ngoding",
+    "programming",
+    "programmer",
+    "aplikasi",
+    "bikin aplikasi",
+    "buat aplikasi",
+    "desain",
+    "gambar",
+    "usaha",
+    "bisnis",
+    "mengatur",
+    "manajemen",
+    "olahraga",
   ],
   kontak: ["kontak", "whatsapp", "telepon", "email", "alamat", "hubungi"],
   rektor: [
@@ -407,6 +437,23 @@ const INTENT_PATTERNS = {
     "anak komputer",
     "anak desain",
     "anak bisnis",
+    "minat",
+    "bakat",
+    "bingung jurusan",
+    "pilih jurusan",
+    "jurusan cocok",
+    "suka coding",
+    "suka ngoding",
+    "suka programming",
+    "bikin aplikasi",
+    "buat aplikasi",
+    "suka desain",
+    "suka gambar",
+    "suka bisnis",
+    "suka jualan",
+    "suka mengatur",
+    "suka manajemen",
+    "suka olahraga",
   ],
   kontak: ["kontak", "nomor", "whatsapp", "telepon", "hubungi", "alamat"],
   rektor: [
@@ -468,6 +515,21 @@ const AWAM_TOPIC_ALIASES = {
     "anak bisnis",
     "bagusan jurusan mana",
     "pilih jurusan apa",
+    "bingung ambil jurusan",
+    "bingung mau jurusan apa",
+    "jurusan yang cocok",
+    "cocoknya jurusan apa",
+    "suka coding",
+    "suka ngoding",
+    "suka bikin aplikasi",
+    "suka buat aplikasi",
+    "suka desain",
+    "suka gambar",
+    "suka bisnis",
+    "suka jualan",
+    "suka mengatur",
+    "suka memanajemen",
+    "suka olahraga",
   ],
   kontak: ["nomor admin", "wa kampus", "hubungi kampus", "kontak pmb"],
   rektor: [
@@ -502,6 +564,33 @@ const CANONICAL_REWRITE_MAP = {
   orientasi: "orientasi mahasiswa baru ospek pkkmb ucic",
   beasiswa: "program beasiswa dan bantuan biaya ucic",
   fasilitas: "fasilitas kampus laboratorium perpustakaan ucic",
+};
+
+const DIRECT_INTENT_PATTERNS = [
+  ["fasilitas", /\b(fasilitas|sarana|lab|laboratorium|perpustakaan|wifi|parkir)\b/],
+  ["pendaftaran", /\b(cara daftar|pendaftaran|pmb|registrasi|daftar online|daftar offline|mau daftar)\b/],
+  ["biaya", /\b(biaya|bayar|pembayaran|cicilan|uang daftar|spp|ukt)\b/],
+  ["jurusan", /\b(jurusan|prodi|program studi|fakultas|teknik informatika|sistem informasi|dkv)\b/],
+  ["kontak", /\b(kontak|nomor|whatsapp|wa|telepon|hubungi)\b/],
+  ["lokasi", /\b(lokasi|alamat|dimana|di mana|letak)\b/],
+  ["beasiswa", /\b(beasiswa|kip|bantuan biaya)\b/],
+  ["akademik", /\b(krs|khs|baak|akademik|skripsi|sidang|wisuda|cuti)\b/],
+];
+
+const INTENT_ALLOWED_CATEGORIES = {
+  akademik: new Set(["akademik", "kurikulum"]),
+  akreditasi: new Set(["akreditasi", "profil"]),
+  beasiswa: new Set(["beasiswa", "biaya"]),
+  biaya: new Set(["biaya", "pendaftaran"]),
+  fasilitas: new Set(["fasilitas"]),
+  jurusan: new Set(["jurusan", "kurikulum"]),
+  kelas: new Set(["jadwal", "pendaftaran", "biaya"]),
+  kontak: new Set(["kontak", "pendaftaran"]),
+  lokasi: new Set(["lokasi", "kontak"]),
+  pendaftaran: new Set(["pendaftaran", "biaya", "kontak"]),
+  profil: new Set(["profil", "visi_misi", "nilai", "akreditasi"]),
+  rektor: new Set(["profil"]),
+  syarat: new Set(["pendaftaran"]),
 };
 
 const RAG_FAILURE_LOG_KEY = "sela_rag_failure_log";
@@ -587,7 +676,12 @@ const SHORT_VALID_QUERY_TOKENS = new Set([
 const PROGRAM_REFERENCE_ALIASES = [
   {
     label: "S1 Teknik Informatika",
-    aliases: ["s1 teknik informatika", "teknik informatika", "informatika", "ti"],
+    aliases: [
+      "s1 teknik informatika",
+      "teknik informatika",
+      "informatika",
+      "ti",
+    ],
   },
   {
     label: "S1 Sistem Informasi",
@@ -1104,11 +1198,13 @@ function getBaseSearchTokens(text = "") {
 
 function getExplicitTopics(text = "") {
   return [
-    ...new Set([
-      classifyCampusIntent(text),
-      ...detectTopicHints(text),
-      ...getAliasBoostTopics(text),
-    ].filter(Boolean)),
+    ...new Set(
+      [
+        classifyCampusIntent(text),
+        ...detectTopicHints(text),
+        ...getAliasBoostTopics(text),
+      ].filter(Boolean),
+    ),
   ];
 }
 
@@ -1248,7 +1344,9 @@ function buildConversationContextHint(
     details.push(...getBaseSearchTokens(content).slice(0, 14));
   }
 
-  const topicText = [...new Set(topics.filter((topic) => topic !== latestIntent))]
+  const topicText = [
+    ...new Set(topics.filter((topic) => topic !== latestIntent)),
+  ]
     .slice(0, 3)
     .join(", ");
   const detailText = [...new Set(details)].slice(0, 14).join(", ");
@@ -1262,7 +1360,8 @@ function buildConversationContextHint(
       : "",
     topicText ? `Topik sebelumnya: ${topicText}.` : "",
     detailText ? `Kata kunci sebelumnya: ${detailText}.` : "",
-    referencedPrograms.length > 1 && isComparisonFollowUp(messageHistory.at(-1)?.content)
+    referencedPrograms.length > 1 &&
+    isComparisonFollowUp(messageHistory.at(-1)?.content)
       ? "Jika user menanyakan perbedaan/bedanya, bandingkan rujukan tersebut saja."
       : "",
     "Gunakan ini hanya untuk memahami rujukan user di sesi aktif; fakta jawaban tetap wajib dari KONTEKS KAMPUS. Jangan anggap ini sebagai preferensi permanen.",
@@ -1292,6 +1391,11 @@ function detectTopicHints(text = "") {
 
 function classifyCampusIntent(text = "") {
   const normalized = normalizeText(text);
+  const directIntent = DIRECT_INTENT_PATTERNS.find(([, pattern]) =>
+    pattern.test(normalized),
+  )?.[0];
+  if (directIntent) return directIntent;
+
   const hits = Object.entries(getIntentSynonymBank())
     .map(([intent, patterns]) => ({
       intent,
@@ -1496,14 +1600,33 @@ function getTokenVariants(token) {
     RAG_SYNONYMS[token].forEach((alias) => variants.add(alias));
   }
   for (const [canonical, aliases] of Object.entries(RAG_SYNONYMS)) {
-    if (
-      aliases.includes(token) &&
-      !GENERIC_REVERSE_SYNONYM_TOKENS.has(token)
-    ) {
+    if (aliases.includes(token) && !GENERIC_REVERSE_SYNONYM_TOKENS.has(token)) {
       variants.add(canonical);
     }
   }
   return [...variants];
+}
+
+function getPrimaryIntent(topicHints = []) {
+  return topicHints.find((topic) => INTENT_ALLOWED_CATEGORIES[topic]) || null;
+}
+
+function itemMatchesIntent(item, intent = null) {
+  if (!intent) return true;
+  const allowedCategories = INTENT_ALLOWED_CATEGORIES[intent];
+  if (!allowedCategories) return true;
+
+  const category = normalizeText(item.category);
+  if (allowedCategories.has(category)) return true;
+
+  const fields = [
+    item.id,
+    item.title,
+    ...(item.keywords || []),
+  ]
+    .map(normalizeText)
+    .join(" ");
+  return fields.includes(intent);
 }
 
 function itemContainsTokenVariant(item, token) {
@@ -1523,9 +1646,8 @@ function itemContainsTokenVariant(item, token) {
 }
 
 function getMatchedTokenCount(item, baseTokens) {
-  return baseTokens.filter((token) =>
-    itemContainsTokenVariant(item, token),
-  ).length;
+  return baseTokens.filter((token) => itemContainsTokenVariant(item, token))
+    .length;
 }
 
 function hasStrongFieldMatch(item, baseTokens) {
@@ -1540,7 +1662,8 @@ function hasStrongFieldMatch(item, baseTokens) {
         category === variant ||
         title.split(" ").includes(variant) ||
         keywords.some(
-          (keyword) => keyword === variant || keyword.split(" ").includes(variant),
+          (keyword) =>
+            keyword === variant || keyword.split(" ").includes(variant),
         ),
     );
   });
@@ -1573,7 +1696,14 @@ function scoreDatasetItem(item, tokens, topicHints = [], userQuery = "") {
   const content = normalizeText(item.content);
   const searchableText = [title, category, ...keywords, content].join(" ");
   const normalizedQuery = normalizeText(userQuery);
+  const primaryIntent = getPrimaryIntent(topicHints);
   let score = 0;
+  void searchableText;
+
+  if (primaryIntent) {
+    if (itemMatchesIntent(item, primaryIntent)) score += 12;
+    else score -= 10;
+  }
 
   if (normalizedQuery) {
     if (keywords.some((keyword) => keyword.includes(normalizedQuery)))
@@ -1635,11 +1765,13 @@ function retrieveCampusContext(userQuery, fuseResults = [], topicState = null) {
   const tokens = getSearchTokens(userQuery);
   const baseTokens = getBaseSearchTokens(userQuery);
   const explicitTopics = [
-    ...new Set([
-      classifyCampusIntent(userQuery),
-      ...detectTopicHints(userQuery),
-      ...getAliasBoostTopics(userQuery),
-    ].filter(Boolean)),
+    ...new Set(
+      [
+        classifyCampusIntent(userQuery),
+        ...detectTopicHints(userQuery),
+        ...getAliasBoostTopics(userQuery),
+      ].filter(Boolean),
+    ),
   ];
   const topicHints = [
     ...new Set(
@@ -1661,7 +1793,12 @@ function retrieveCampusContext(userQuery, fuseResults = [], topicState = null) {
 
   const ranked = ragDataset
     .map((item) => {
-      const lexicalScore = scoreDatasetItem(item, tokens, topicHints, userQuery);
+      const lexicalScore = scoreDatasetItem(
+        item,
+        tokens,
+        topicHints,
+        userQuery,
+      );
       const fuseMeta = fuseRank.get(item.id);
       const fuseBoost = fuseMeta ? Math.max(0, 4 - fuseMeta.rank * 0.35) : 0;
       const fuseQualityBoost = fuseMeta ? Math.max(0, 1 - fuseMeta.score) : 0;
@@ -1680,6 +1817,11 @@ function retrieveCampusContext(userQuery, fuseResults = [], topicState = null) {
     )
     .sort((a, b) => b.score - a.score);
 
+  const primaryIntent = getPrimaryIntent(topicHints);
+  const intentLockedRanked = primaryIntent
+    ? ranked.filter((result) => itemMatchesIntent(result.item, primaryIntent))
+    : ranked;
+
   const fuseFallback = fuseResults
     .slice(0, 5)
     .filter((result) => (result.score ?? 1) <= 0.42)
@@ -1690,10 +1832,13 @@ function retrieveCampusContext(userQuery, fuseResults = [], topicState = null) {
     }))
     .filter(
       (result) =>
-        !ranked.some((rankedResult) => rankedResult.item.id === result.item.id),
+        (!primaryIntent || itemMatchesIntent(result.item, primaryIntent)) &&
+        !intentLockedRanked.some(
+          (rankedResult) => rankedResult.item.id === result.item.id,
+        ),
     );
 
-  const combined = [...ranked, ...fuseFallback].sort(
+  const combined = [...intentLockedRanked, ...fuseFallback].sort(
     (a, b) => b.score - a.score,
   );
 
@@ -1714,7 +1859,11 @@ function getTopicFallbackMatches(intent = null, topicHints = []) {
       item,
       score: scoreDatasetItem(item, [...topics], [...topics]),
     }))
-    .filter((result) => result.score >= 6)
+    .filter(
+      (result) =>
+        result.score >= 6 &&
+        (!intent || itemMatchesIntent(result.item, intent)),
+    )
     .sort((a, b) => b.score - a.score);
 
   return fallback.slice(0, 3);
@@ -1860,34 +2009,113 @@ function buildConfidenceRouting(answerability, decomposedQueries, topicState) {
 function buildIntentResponseGuide(intent = null) {
   switch (intent) {
     case "pendaftaran":
-      return "Untuk topik pendaftaran, jawab cara daftar dan langkah inti saja. Jangan jelaskan detail lain kecuali diminta.";
+      return "Untuk topik pendaftaran, jawab cara daftar dan langkah inti saja. Setelah itu arahkan user ke langkah berikutnya, misalnya menyiapkan berkas, memilih jurusan, atau menghubungi PMB jika memang ada di konteks. Jangan jelaskan detail lain kecuali diminta.";
     case "biaya":
-      return "Untuk topik biaya, jawab nominal yang ditanya secara langsung. Tambahkan komponen lain hanya jika user meminta rincian.";
+      return "Untuk topik biaya, jawab nominal yang ditanya secara langsung. Jika relevan, tutup dengan arahan singkat bahwa user bisa menanyakan rincian biaya per jurusan atau alur pembayaran. Tambahkan komponen lain hanya jika user meminta rincian.";
     case "jurusan":
-      return "Untuk topik jurusan, jawab sesuai yang ditanya: daftar prodi jika user minta daftar, rekomendasi jika user minta jurusan yang cocok, atau perbedaan prodi jika user minta bedanya. Jangan melebar ke semua prodi jika user sedang merujuk prodi tertentu dari percakapan sebelumnya.";
+      return "Untuk topik jurusan, bertindak seperti admission counselor: jawab sesuai yang ditanya, arahkan dari minat/skill/cita-cita user, dan bantu user merasa lebih mudah memilih. Jika user masih bingung dan belum memberi minat, ajukan 1 pertanyaan pendek tentang minatnya. Jika user sudah menyebut minat seperti coding, desain, bisnis, manajemen, atau olahraga, rekomendasikan prodi yang paling relevan dari konteks dan beri alasan singkat. Jika user minta daftar prodi, tampilkan daftar. Jika user minta bedanya, bandingkan prodi yang dimaksud saja. Jangan melebar ke semua prodi jika user sedang merujuk prodi tertentu dari percakapan sebelumnya.";
     case "syarat":
-      return "Untuk topik syarat, beri daftar berkas inti saja dengan nomor pendek.";
+      return "Untuk topik syarat, beri daftar berkas inti saja dengan nomor pendek. Setelah itu arahkan singkat ke tahap upload/pendaftaran jika informasinya ada di konteks.";
     case "kelas":
       return "Untuk topik kelas, sebutkan pilihan kelas dan jamnya secara singkat.";
     case "lokasi":
-      return "Untuk topik lokasi, jawab alamat langsung. Jika ada dua kampus, sebutkan keduanya secara singkat.";
+      return "Untuk topik lokasi, jawab alamat langsung. Jika ada dua kampus, sebutkan keduanya secara singkat lalu arahkan user bisa lanjut bertanya jurusan atau cara daftar jika diperlukan.";
     case "akademik":
       return "Untuk topik akademik, jawab sesuai prosedur BAAK atau pedoman akademik di konteks. Sebutkan syarat, alur, atau batasan penting yang memang tertulis.";
     case "kurikulum":
       return "Untuk topik kurikulum, sebutkan program studi yang dimaksud dan ringkas mata kuliah atau semester yang tersedia di konteks.";
     case "fasilitas":
-      return "Untuk topik fasilitas, sebutkan fasilitas yang relevan saja. Jika user menanyakan tempat tertentu seperti perpustakaan, lab, parkir, atau WiFi, fokus ke tempat itu.";
+      return "Untuk topik fasilitas, sebutkan fasilitas yang relevan saja. Jika user menanyakan tempat tertentu seperti perpustakaan, lab, parkir, atau WiFi, fokus ke tempat itu. Hubungkan singkat ke kebutuhan calon mahasiswa jika relevan.";
     case "dosen":
       return "Untuk topik dosen, sebutkan nama dosen dan bidang atau prodi terkait hanya jika ada di konteks.";
     case "kegiatan":
       return "Untuk topik kegiatan mahasiswa, jawab jenis kegiatan, UKM, organisasi, atau agenda mahasiswa yang tersedia di konteks.";
     case "profil":
-      return "Untuk topik profil kampus, jawab fakta identitas, sejarah, pimpinan, kerja sama, atau keunggulan UCIC sesuai konteks.";
+      return "Untuk topik profil kampus, jawab fakta identitas, sejarah, pimpinan, kerja sama, atau keunggulan UCIC sesuai konteks. Setelah itu beri arahan ringan agar user bisa lanjut ke jurusan, biaya, atau pendaftaran.";
     case "rektor":
       return "Untuk topik rektor atau pimpinan, jawab nama rektor secara langsung sesuai konteks. Jangan meminta user menghubungi kampus jika nama rektor ada di konteks.";
     default:
       return "Jawab ringkas, ramah, dan langsung ke inti informasi yang ditanya.";
   }
+}
+
+function hasInterestSignal(userQuery = "") {
+  const normalized = normalizeText(userQuery);
+  return [
+    "suka",
+    "minat",
+    "bakat",
+    "hobi",
+    "cita cita",
+    "ingin jadi",
+    "pengen jadi",
+    "coding",
+    "ngoding",
+    "programming",
+    "aplikasi",
+    "desain",
+    "gambar",
+    "bisnis",
+    "jualan",
+    "mengatur",
+    "manajemen",
+    "olahraga",
+  ].some((phrase) => normalized.includes(phrase));
+}
+
+function isReadyToApplyQuery(userQuery = "") {
+  const normalized = normalizeText(userQuery);
+  return [
+    "mau daftar",
+    "ingin daftar",
+    "pengen daftar",
+    "siap daftar",
+    "daftarin",
+    "lanjut daftar",
+    "mulai daftar",
+    "cara daftar",
+    "bagaimana daftar",
+    "gimana daftar",
+  ].some((phrase) => normalized.includes(phrase));
+}
+
+function buildAdmissionCounselorGuide(intent = null, userQuery = "") {
+  const normalized = normalizeText(userQuery);
+  const userHasInterest = hasInterestSignal(userQuery);
+  const readyToApply = isReadyToApplyQuery(userQuery);
+
+  if (intent === "jurusan") {
+    if (
+      !userHasInterest &&
+      /(bingung|pilih|cocok|rekomendasi|saran)/.test(normalized)
+    ) {
+      return "User sedang butuh dibimbing memilih jurusan. Jangan langsung memberi daftar panjang. Jawab dengan 1 pertanyaan klarifikasi pendek tentang minat, skill, atau cita-cita user.";
+    }
+
+    if (userHasInterest) {
+      return "User sudah memberi sinyal minat. Rekomendasikan prodi UCIC yang paling cocok dari KONTEKS KAMPUS, beri alasan singkat, lalu tutup dengan 1 arahan lembut seperti menanyakan apakah user ingin tahu biaya atau alur daftarnya.";
+    }
+
+    return "Jika user menanyakan jurusan secara umum, jawab daftar prodi dengan nomor. Jika memungkinkan, tutup singkat bahwa SELA bisa bantu pilihkan jurusan sesuai minat user.";
+  }
+
+  if (intent === "pendaftaran" || readyToApply) {
+    return "User sedang mengarah ke pendaftaran. Jawab alur inti secara bernomor singkat, lalu pandu langkah berikutnya secara praktis seperti pilih jurusan, siapkan berkas, bayar registrasi, atau hubungi PMB sesuai KONTEKS KAMPUS.";
+  }
+
+  if (intent === "biaya") {
+    return "User menanyakan biaya. Jawab nominal/komponen biaya yang ditanya dulu. Jangan melebar, tetapi boleh tutup dengan arahan singkat bahwa SELA bisa bantu rincian biaya jurusan atau tahap pembayaran.";
+  }
+
+  if (intent === "syarat") {
+    return "User menanyakan syarat. Jawab dokumen inti dengan nomor singkat, lalu arahkan langkah upload/pendaftaran jika ada di KONTEKS KAMPUS.";
+  }
+
+  if (["profil", "fasilitas", "lokasi", "kontak"].includes(intent)) {
+    return "Jawab fakta inti dulu. Setelah itu beri jembatan singkat sebagai admission counselor, misalnya user bisa lanjut tanya jurusan, biaya, fasilitas, atau cara daftar.";
+  }
+
+  return "Berperan sebagai admission counselor yang membantu calon mahasiswa: jawab inti dulu, lalu beri arahan paling relevan berikutnya. Jika maksud user belum jelas, ajukan maksimal 1 pertanyaan klarifikasi pendek.";
 }
 
 const UNAVAILABLE_RESPONSE_PATTERNS = [
@@ -1912,7 +2140,9 @@ function looksLikeUnavailableAnswer(text = "") {
 }
 
 function truncateForVoice(text = "", maxLength = 650) {
-  const normalized = String(text || "").replace(/\s+/g, " ").trim();
+  const normalized = String(text || "")
+    .replace(/\s+/g, " ")
+    .trim();
   if (normalized.length <= maxLength) return normalized;
 
   const clipped = normalized.slice(0, maxLength);
@@ -1946,6 +2176,58 @@ function buildDatasetAnswerFromMatches(
   const merged = [...new Set(contents)].slice(0, maxSections).join("\n\n");
   if (effectiveLang === "en") return merged;
   return merged;
+}
+
+function countNumberedSteps(text = "") {
+  return String(text || "")
+    .split("\n")
+    .filter((line) => /^\s*\d+[.)]\s+/.test(line)).length;
+}
+
+function needsStepFallback(text = "", responsePlan = null, intent = null) {
+  if (responsePlan?.displayMode !== "step_detail") return false;
+  if (intent !== "pendaftaran") return false;
+
+  const clean = String(text || "").trim();
+  if (!clean) return true;
+  return clean.length < 180 || countNumberedSteps(clean) < 3;
+}
+
+function buildRegistrationStepFallback(matches = [], effectiveLang = "id") {
+  const hasRegistrationContext = matches.some((match) =>
+    [
+      "pendaftaran_pmb",
+      "pmb_alur_kontak",
+      "daftar_ulang_camaba",
+      "pmb_syarat",
+      "pmb_upload_berkas",
+      "kontak_ucic",
+    ].includes(match?.item?.id),
+  );
+
+  if (!hasRegistrationContext) return "";
+
+  if (effectiveLang === "en") {
+    return [
+      "Here are the UCIC registration steps:",
+      "1. Register online at https://pmb.cic.ac.id/register, or come directly to UCIC Campus 2.",
+      "2. Complete the registration form and choose your study program.",
+      "3. Pay the registration, equipment, and initial stage fees according to the bill.",
+      "4. If paying by bank transfer, send the payment proof to PMB.",
+      "5. Wait for verification from the PMB team.",
+      "6. Upload the required documents, such as diploma/SKL, ID card, family card, birth certificate, and formal photo.",
+    ].join("\n");
+  }
+
+  return [
+    "Berikut alur daftar ke UCIC:",
+    "1. Daftar online di https://pmb.cic.ac.id/register, atau datang langsung ke Kampus 2 UCIC.",
+    "2. Isi registrasi lengkap dan pilih program studi.",
+    "3. Lakukan pembayaran biaya registrasi, perlengkapan, dan tahap awal sesuai tagihan.",
+    "4. Jika transfer rekening, kirim bukti pembayaran ke PMB.",
+    "5. Tunggu verifikasi dari tim PMB.",
+    "6. Setelah diverifikasi, upload berkas seperti ijazah/SKL, KTP, KK, akta kelahiran, dan pas foto.",
+  ].join("\n");
 }
 
 function applySessionLearningToArtifacts(artifacts, session) {
@@ -2146,7 +2428,8 @@ async function resolveRetrievalState(messageHistory = [], userQuery = "") {
   );
   const canonicalRewrite = buildCanonicalRewrite(userQuery, topicState);
   const f = await getFuse();
-  const initialIntent = classifyCampusIntent(userQuery) || topicState.activeTopic;
+  const initialIntent =
+    classifyCampusIntent(userQuery) || topicState.activeTopic;
 
   let matches = [];
   let finalMatches = [];
@@ -2175,7 +2458,9 @@ async function resolveRetrievalState(messageHistory = [], userQuery = "") {
     intent = retrieval.intent || initialIntent;
     responsePlan = buildResponsePlan(userQuery, { intent });
     const rawMatches =
-      matches.length > 0 ? matches : getTopicFallbackMatches(intent, topicHints);
+      matches.length > 0
+        ? matches
+        : getTopicFallbackMatches(intent, topicHints);
     finalMatches = prioritizeResponseMatches(rawMatches, {
       responsePlan,
       intent,
@@ -2617,15 +2902,48 @@ function getAmplitudeRange(audioData) {
  */
 export async function transcribeAudio(audioBlob, lang = "id") {
   const formData = new FormData();
-  formData.append("file", audioBlob, "audio.webm");
+  const extension = audioBlob.type.includes("wav")
+    ? "wav"
+    : audioBlob.type.includes("ogg")
+      ? "ogg"
+      : "webm";
+  formData.append("file", audioBlob, `audio.${extension}`);
   formData.append("lang", lang);
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 35000);
 
-  const res = await fetch("/api/transcribe", {
-    method: "POST",
-    body: formData,
-  });
-  if (!res.ok) throw new Error("Gagal mengenali suara. Coba lagi ya!");
-  const { text } = await res.json();
+  let res;
+  try {
+    res = await fetch("/api/transcribe", {
+      method: "POST",
+      body: formData,
+      signal: controller.signal,
+    });
+  } catch (error) {
+    if (error?.name === "AbortError") {
+      throw new Error("Gagal mengenali suara: transkripsi terlalu lama");
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+  }
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => ({}));
+    const detail = errorBody?.detail || errorBody?.error;
+    throw new Error(
+      detail
+        ? `Gagal mengenali suara: ${detail}`
+        : "Gagal mengenali suara. Coba lagi ya!",
+    );
+  }
+  const { text, provider, incomplete } = await res.json();
+  if (incomplete) {
+    console.warn("[SELA AI] Provider answer marked incomplete; applying local repair", {
+      provider,
+      chars: text?.length || 0,
+      preview: String(text || "").slice(0, 160),
+    });
+  }
   return text;
 }
 
@@ -2735,8 +3053,16 @@ export async function getChatCompletion(messageHistory, lang = "id") {
     month: "long",
     day: "numeric",
   });
+  const admissionCounselorGuide = buildAdmissionCounselorGuide(
+    intent,
+    userQuery,
+  );
+  const counselorPlanPrompt = buildCounselorPlanPrompt(
+    responsePlan,
+    effectiveLang,
+  );
 
-  const systemPromptID = `Kamu adalah SELA, wujud Customer Service virtual Universitas Catur Insan Cendekia (UCIC) yang berkarakter lembut, karismatik, berwibawa, dan memancarkan aura cerdas.
+  const systemPromptID = `Kamu adalah SELA, Virtual Admission Counselor dan Customer Service PMB Universitas Catur Insan Cendekia (UCIC) yang berkarakter lembut, karismatik, berwibawa, dan memancarkan aura cerdas.
 Hari ini adalah ${today}.
 Gaya bicaramu tenang, hangat, elegan, dan profesional. Kamu adalah "Wajah Digital" UCIC.
 Kamu boleh menggunakan partikel bahasa lisan seperti 'nih', 'sih', 'dong', atau 'ya', namun penggunaannya HARUS sangat tepat, natural secara tata bahasa, dan tidak berlebihan agar wibawamu tetap terjaga. Penempatannya harus dilihat dari kata sebelumnya apakah cocok atau tidak.
@@ -2744,6 +3070,7 @@ Jawabanmu HARUS singkat, ramah, dan langsung ke inti seperti customer service. H
 
 [TUGAS UTAMAMU]:
 Kamu HANYA bertugas dan DIIZINKAN menjawab pertanyaan seputar kampus UCIC (seperti Pendaftaran, Akademik, Fasilitas, dan Informasi Kampus lainnya).
+Selain menjawab, kamu juga memandu calon mahasiswa seperti admission counselor: membantu mengenali minat, mengarahkan jurusan yang sesuai, menjelaskan langkah daftar, dan membuat user lebih yakin untuk melanjutkan proses PMB.
 
 [ATURAN MENJAWAB]:
 1. Jika pertanyaan BERHUBUNGAN dengan UCIC:
@@ -2759,6 +3086,11 @@ Kamu HANYA bertugas dan DIIZINKAN menjawab pertanyaan seputar kampus UCIC (seper
    - Jika konteks yang ada hanya menjawab sebagian, berikan jawaban parsial yang membantu. Jangan langsung menolak kalau masih ada bagian yang bisa dijawab dari konteks.
    - Jika transcript user tampak mengulang frasa yang sama, ANGGAP itu artefak suara. Jangan menegur, jangan berkomentar bahwa user mengulang, dan jangan mengatakan akan menjelaskan sekali saja. Cukup jawab inti pertanyaannya dengan normal.
    - Jika [KONTEKS KAMPUS] kosong atau benar-benar tidak memuat informasinya, tolak dengan jujur dan berwibawa: "Mohon maaf, SELA belum punya informasi sedetail itu saat ini. Mungkin Anda bisa menanyakannya langsung ke bagian informasi kampus." Jangan mengarang info.
+   - Untuk pertanyaan faktual, jawab intinya dulu. Setelah itu boleh beri 1 arahan singkat yang relevan sebagai counselor, misalnya pilihan jurusan, rincian biaya, syarat, atau cara daftar.
+   - Jika user bingung memilih jurusan dan belum menyebut minat, ajukan maksimal 1 pertanyaan pendek tentang minat, kebiasaan, atau cita-citanya. Jangan memberi daftar panjang.
+   - Jika user sudah menyebut minat, rekomendasikan jurusan yang paling relevan dari [KONTEKS KAMPUS], beri alasan singkat, lalu arahkan ke langkah berikutnya.
+   - Jika user terlihat siap mendaftar, pandu alur praktis secara singkat dan bernomor.
+   - Jangan terlalu promosi. Interaktif boleh, tetapi tetap singkat dan jelas.
 
 2. Jika pertanyaan TIDAK BERHUBUNGAN dengan UCIC (Topik umum, tokoh dunia, cuaca, hiburan, politik, dll):
    - Kamu DILARANG KERAS menjawab kelanjutan dari pertanyaan tersebut (Bahkan jika kamu tahu faktanya).
@@ -2788,14 +3120,28 @@ ${confidenceRouting.instruction}
 [GAYA JAWABAN BERDASARKAN INTENT]:
 ${buildIntentResponseGuide(intent)}
 
+[ARAH ADMISSION COUNSELOR]:
+${admissionCounselorGuide}
+
+[MODE ADMISSION COUNSELOR]:
+${counselorPlanPrompt}
+
+[KONTRAK KELENGKAPAN OUTPUT]:
+- Jawaban WAJIB selesai utuh sampai kalimat terakhir, jangan berhenti di tengah kalimat.
+- Jangan akhiri jawaban dengan kata penghubung seperti "agar", "untuk", "yang", "dan", "karena", atau potongan nama prodi seperti "S1 Teknik".
+- Jika membuat daftar/langkah, selesaikan semua poin yang kamu mulai.
+- Setelah seluruh jawaban dan pertanyaan lanjutan selesai, WAJIB tulis token penutup persis: <END_SELA>
+- Jangan menulis token <END_SELA> sebelum jawaban benar-benar selesai.
+
 [PERTANYAAN LANJUTAN]:
 Setelah menjawab pertanyaan SEPUTAR UCIC, berikan maksimal 2 saran pertanyaan lanjutan yang pendek dan relevan.
 Saran ini HARUS DITULIS DARI SUDUT PANDANG USER (seolah-olah user yang sedang bertanya), BUKAN AI yang bertanya kepada user.
 Gunakan format di AKHIR jawaban: [Pertanyaan 1?] | [Pertanyaan 2?]
-Contoh: "Pendaftaran dibuka bulan Maret. [Bagaimana cara mendaftar ke UCIC?] | [Apa saja syarat pendaftarannya?]"
+Prioritaskan saran yang membantu calon mahasiswa mengambil langkah berikutnya, misalnya memilih jurusan, melihat biaya, syarat, atau cara daftar.
+Contoh: "Pendaftaran bisa dilakukan online atau datang ke kampus. [Jurusan apa yang cocok untuk saya?] | [Bagaimana cara daftar di UCIC?]"
 JIKA kamu MENOLAK menjawab karena di luar topik kampus, kamu TIDAK PERLU menambahkan pertanyaan lanjutan.`;
 
-  const systemPromptEN = `You are SELA, the virtual receptionist for Universitas Catur Insan Cendekia (UCIC) who embodies a gentle, charismatic, authoritative, and deeply intelligent persona.
+  const systemPromptEN = `You are SELA, the Virtual Admission Counselor and PMB Customer Service for Universitas Catur Insan Cendekia (UCIC), with a gentle, charismatic, authoritative, and deeply intelligent persona.
 Today is ${todayEN}.
 Your speaking style is calm, warm, elegant, and highly professional. You are the "Digital Face" of UCIC.
 Your answers MUST be concise, friendly, and direct like a customer service representative. Avoid long openings, promotion-like wording, and extra details the user did not ask for. For lists, steps, or comparisons, use short numbered lines (1, 2, 3), not bullet points. For a single fact, answer in one sentence.
@@ -2803,6 +3149,7 @@ You MUST ALWAYS answer the user in ENGLISH.
 
 [YOUR MAIN TASK]:
 You ONLY serve and are PERMITTED to answer questions related to the UCIC campus (such as Admissions, Academics, Facilities, and other Campus Information).
+Besides answering, guide prospective students like an admission counselor: understand their interests, recommend suitable majors, explain application steps, and help them feel confident about continuing the admission process.
 
 [ANSWERING RULES]:
 1. If the question is RELATED to UCIC:
@@ -2818,6 +3165,11 @@ You ONLY serve and are PERMITTED to answer questions related to the UCIC campus 
    - If the context only answers part of the request, still provide the helpful partial answer instead of declining immediately.
    - If the transcript appears to repeat the same phrase, treat that as a voice artifact. Do not scold the user, do not comment on repetition, and do not say you will explain it only once. Just answer normally.
    - If the [CAMPUS CONTEXT] is empty or truly does not contain the specific info, answer honestly and elegantly: "I apologize, but SELA does not have detailed information on that just yet. You might want to check with the campus staff." Do not make up answers.
+   - For factual questions, answer the core fact first. Then you may add 1 short relevant counselor-style direction, such as choosing a major, checking fees, requirements, or how to apply.
+   - If the user is confused about choosing a major and has not mentioned interests, ask at most 1 short question about their interest, habit, or career goal. Do not give a long list.
+   - If the user has mentioned an interest, recommend the most relevant UCIC program from [CAMPUS CONTEXT], give a short reason, then guide the next step.
+   - If the user seems ready to apply, guide the practical application flow briefly using numbered steps.
+   - Do not sound overly promotional. Be interactive, but stay concise and clear.
 
 2. If the question is NOT RELATED to UCIC (General topics, world figures, weather, entertainment, politics, etc.):
    - You are STRICTLY FORBIDDEN from answering the question.
@@ -2847,11 +3199,25 @@ ${confidenceRouting.instruction}
 [INTENT RESPONSE STYLE]:
 ${buildIntentResponseGuide(intent)}
 
+[ADMISSION COUNSELOR DIRECTION]:
+${admissionCounselorGuide}
+
+[ADMISSION COUNSELOR MODE]:
+${counselorPlanPrompt}
+
+[OUTPUT COMPLETENESS CONTRACT]:
+- The answer MUST be complete through the final sentence; do not stop mid-sentence.
+- Do not end with connector words such as "so that", "for", "which", "and", "because", or partial program names such as "Bachelor of".
+- If you start a numbered list or steps, finish all items you started.
+- After the full answer and follow-up questions are complete, you MUST write the exact closing token: <END_SELA>
+- Do not write <END_SELA> before the answer is truly complete.
+
 [FOLLOW-UP QUESTIONS]:
 After answering a UCIC-RELATED question, add up to 2 short relevant follow-up questions at the END that the USER CAN ASK NEXT.
 These suggestions MUST BE WRITTEN FROM THE USER'S PERSPECTIVE (as if the user is asking), NOT as the AI asking the user.
 Use the format: [Question 1?] | [Question 2?]
-Example: "Registration opens in March. [How do I apply to UCIC?] | [What are the admission requirements?]"
+Prioritize suggestions that help prospective students take the next step, such as choosing a major, checking fees, requirements, or applying.
+Example: "You can apply online or directly at campus. [Which major fits me best?] | [How do I apply to UCIC?]"
 IF you DECLINE to answer because the topic is unrelated to the campus, DO NOT add follow-up questions.`;
 
   const messages = [
@@ -2907,7 +3273,28 @@ IF you DECLINE to answer because the topic is unrelated to the campus, DO NOT ad
     datasetFallbackAnswer &&
     finalMatches.length > 0 &&
     looksLikeUnavailableAnswer(cleanText);
+  const registrationStepFallback = needsStepFallback(
+    cleanText,
+    responsePlan,
+    intent,
+  )
+    ? buildRegistrationStepFallback(finalMatches, effectiveLang)
+    : "";
+  const counselorQualityFallback = needsCounselorQualityFallback(
+    cleanText,
+    responsePlan,
+  )
+    ? buildCounselorQualityFallback(responsePlan, effectiveLang)
+    : "";
+  const shouldUseDetailFallback =
+    !registrationStepFallback &&
+    !counselorQualityFallback &&
+    datasetFallbackAnswer &&
+    needsDetailedFallback(cleanText, responsePlan, intent);
   const displayText =
+    registrationStepFallback ||
+    counselorQualityFallback ||
+    (shouldUseDetailFallback ? datasetFallbackAnswer : "") ||
     (shouldUseDatasetFallback ? datasetFallbackAnswer : cleanText) ||
     "Maaf, SELA agak bingung. Bisa diulang?";
   const spokenText = buildSpokenText(
@@ -2916,17 +3303,47 @@ IF you DECLINE to answer because the topic is unrelated to the campus, DO NOT ad
     effectiveLang,
     finalMatches,
   );
+  const screen = buildScreenResponse(
+    displayText,
+    responsePlan,
+    intent,
+    effectiveLang,
+  );
+  const fallbackSuggestions = buildFallbackSuggestions(
+    responsePlan,
+    effectiveLang,
+  );
+  const shouldSuppressSuggestions =
+    answerability.level === "none" && finalMatches.length === 0;
+  const finalSuggestions =
+    shouldSuppressSuggestions
+      ? []
+      : suggestions.length > 0
+        ? suggestions.slice(0, 2)
+        : fallbackSuggestions;
 
   return {
     text: displayText,
     spokenText,
-    suggestions: shouldUseDatasetFallback ? [] : suggestions,
+    screen,
+    suggestions: finalSuggestions,
     media: mediaResults,
     detectedLang: effectiveLang,
+    debug: {
+      chatProvider: provider || null,
+      incompleteProviderAnswer: Boolean(incomplete),
+      counselorMode: responsePlan?.counselorMode || null,
+      nextAction: responsePlan?.nextAction || null,
+      displayMode: responsePlan?.displayMode || null,
+      intent,
+    },
   };
 }
 
 // ── Text-to-Speech ───────────────────────────────────────────────────────────
+
+let activeSpeechUtterance = null;
+let activeSpeechRunId = 0;
 
 /**
  * Speak text using browser's native Web Speech API
@@ -2934,38 +3351,73 @@ IF you DECLINE to answer because the topic is unrelated to the campus, DO NOT ad
  * @param {function} onStart
  * @param {function} onEnd
  * @param {string} lang - 'id' | 'en'
+ * @param {function} onBoundary
  */
-export function speakText(text, onStart, onEnd, lang = "id") {
+export function speakText(
+  text,
+  onStart,
+  onEnd,
+  lang = "id",
+  onBoundary = null,
+) {
   if (!("speechSynthesis" in window)) {
     console.warn("SpeechSynthesis API not supported in this browser.");
     if (onEnd) onEnd();
     return;
   }
 
+  const runId = activeSpeechRunId + 1;
+  activeSpeechRunId = runId;
   window.speechSynthesis.cancel();
 
   const doSpeak = () => {
     const utterance = new SpeechSynthesisUtterance(text);
     let settled = false;
+    let startedAt = 0;
     utterance.lang = lang === "en" ? "en-US" : "id-ID";
     utterance.rate = 0.95; // Sedikit lebih lambat agar terdengar wibawa dan tenang
     utterance.pitch = 1.0; // Pitch normal, tidak terlalu melengking
 
     const finalize = () => {
       if (settled) return;
+      if (runId !== activeSpeechRunId) return;
       settled = true;
+      if (activeSpeechUtterance === utterance) {
+        activeSpeechUtterance = null;
+      }
       if (onEnd) onEnd();
     };
 
     utterance.onstart = () => {
+      startedAt = Date.now();
+      console.log("[SELA TTS] start", {
+        lang: utterance.lang,
+        chars: text.length,
+        text: String(text || "").slice(0, 60),
+      });
       if (onStart) onStart();
     };
+    utterance.onboundary = (event) => {
+      if (onBoundary && Number.isFinite(event.charIndex)) {
+        onBoundary(event.charIndex);
+      }
+    };
     utterance.onend = () => {
+      console.log("[SELA TTS] end", {
+        elapsed: startedAt ? Date.now() - startedAt : null,
+        chars: text.length,
+        text: String(text || "").slice(0, 60),
+      });
       finalize();
     };
     utterance.onerror = (e) => {
       // Tetap finalize juga saat interrupted agar state avatar / loop UI sinkron
-      console.warn("SpeechSynthesis error:", e.error);
+      console.warn("SpeechSynthesis error:", {
+        error: e.error,
+        elapsed: startedAt ? Date.now() - startedAt : null,
+        chars: text.length,
+        text: String(text || "").slice(0, 60),
+      });
       finalize();
     };
 
@@ -2980,14 +3432,16 @@ export function speakText(text, onStart, onEnd, lang = "id") {
       }
     }
 
+    // Keep a strong reference so browser GC does not cut speech mid-sentence.
+    activeSpeechUtterance = utterance;
     window.speechSynthesis.speak(utterance);
   };
 
   // Chrome bug: cancel() butuh jeda sebelum speak() baru bisa jalan
   if (window.speechSynthesis.getVoices().length > 0) {
-    setTimeout(doSpeak, 100);
+    setTimeout(doSpeak, 40);
   } else {
-    window.speechSynthesis.onvoiceschanged = () => setTimeout(doSpeak, 100);
+    window.speechSynthesis.onvoiceschanged = () => setTimeout(doSpeak, 40);
   }
 }
 

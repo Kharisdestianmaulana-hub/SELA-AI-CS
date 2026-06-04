@@ -361,12 +361,18 @@ function ChatSuggestionLayout({ children, suggestions = [] }) {
   )
 }
 
-export default function ChatBubble({ role, text, lang = 'id', isLoading = false, isNew = false, qrVisibleMs = null }) {
+export default function ChatBubble({ role, text, speechText = null, lang = 'id', isLoading = false, isNew = false, qrVisibleMs = null, ttsEndSignal = 0, voiceMode = false, speechCharIndex = null }) {
   const isUser = role === 'user'
   const [displayed, setDisplayed] = useState(isNew ? '' : text)
   const intervalRef = useRef(null)
 
   useEffect(() => {
+    if (voiceMode && isNew) {
+      clearInterval(intervalRef.current)
+      setDisplayed('')
+      return
+    }
+
     if (!isNew || !text) {
       setDisplayed(text)
       return
@@ -381,7 +387,25 @@ export default function ChatBubble({ role, text, lang = 'id', isLoading = false,
     }, 18) // ~55 karakter/detik — natural typing speed
 
     return () => clearInterval(intervalRef.current)
-  }, [text, isNew])
+  }, [text, isNew, voiceMode])
+
+  // In voice mode, drive text reveal from the same speech timeline as TTS/caption.
+  useEffect(() => {
+    if (!voiceMode || !isNew || !text) return
+    if (speechCharIndex === null || speechCharIndex === undefined) return
+
+    const spokenLength = Math.max(1, String(speechText || text).length)
+    const progress = Math.max(0, Math.min(1, speechCharIndex / spokenLength))
+    const displayIndex = Math.round(text.length * progress)
+    setDisplayed(text.slice(0, displayIndex))
+  }, [voiceMode, isNew, text, speechText, speechCharIndex])
+
+  // Auto-complete typewriter when TTS ends in voice mode
+  useEffect(() => {
+    if (!ttsEndSignal || !voiceMode || !isNew) return
+    clearInterval(intervalRef.current)
+    setDisplayed(text)
+  }, [ttsEndSignal, voiceMode, isNew, text])
 
   return (
     <div className={`animate-fade-in flex flex-col ${isUser ? 'items-end' : 'items-start'} mb-3`}>
