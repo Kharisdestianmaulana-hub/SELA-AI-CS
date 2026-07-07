@@ -15,6 +15,15 @@ import {
   needsDetailedFallback,
   needsCounselorQualityFallback,
 } from "./answerContract";
+import {
+  buildDatasetAliasIndex,
+  matchDatasetReferences,
+  rewriteQueryWithDatasetReferences,
+} from "./datasetAliasIndex";
+import {
+  buildSessionMemoryPrompt,
+  resolveSessionMemoryQuery,
+} from "./sessionMemory";
 
 // ── RAG Setup ────────────────────────────────────────────────────────────────
 
@@ -38,6 +47,7 @@ const ragDataset = dataset.filter(
     !EXCLUDED_RAG_CATEGORIES.has(item.category) &&
     !EXCLUDED_RAG_IDS.has(item.id),
 );
+const datasetAliasIndex = buildDatasetAliasIndex(ragDataset);
 
 const DATASET_CATEGORY_ALIASES = {
   akademik: [
@@ -1821,7 +1831,12 @@ function scoreDatasetItem(item, tokens, topicHints = [], userQuery = "") {
   return score;
 }
 
-function retrieveCampusContext(userQuery, fuseResults = [], topicState = null) {
+function retrieveCampusContext(
+  userQuery,
+  fuseResults = [],
+  topicState = null,
+  datasetAliasMatches = [],
+) {
   const tokens = getSearchTokens(userQuery);
   const baseTokens = getBaseSearchTokens(userQuery);
   const explicitTopics = [
@@ -1850,6 +1865,16 @@ function retrieveCampusContext(userQuery, fuseResults = [], topicState = null) {
       },
     ]),
   );
+  const aliasRank = new Map(
+    datasetAliasMatches.map((match, index) => [
+      match.id,
+      {
+        score: match.score || 0,
+        rank: index,
+        matchedAliases: match.matchedAliases || [],
+      },
+    ]),
+  );
 
   const ranked = ragDataset
     .map((item) => {
@@ -1860,20 +1885,27 @@ function retrieveCampusContext(userQuery, fuseResults = [], topicState = null) {
         userQuery,
       );
       const fuseMeta = fuseRank.get(item.id);
+      const aliasMeta = aliasRank.get(item.id);
       const fuseBoost = fuseMeta ? Math.max(0, 4 - fuseMeta.rank * 0.35) : 0;
       const fuseQualityBoost = fuseMeta ? Math.max(0, 1 - fuseMeta.score) : 0;
-      const score = lexicalScore + fuseBoost + fuseQualityBoost;
+      const aliasBoost = aliasMeta
+        ? Math.min(22, aliasMeta.score * 0.8 + Math.max(0, 5 - aliasMeta.rank))
+        : 0;
+      const score = lexicalScore + fuseBoost + fuseQualityBoost + aliasBoost;
       return {
         item,
         score,
         matchedTokenCount: getMatchedTokenCount(item, baseTokens),
         fuseScore: fuseMeta?.score,
+        aliasScore: aliasMeta?.score,
+        matchedAliases: aliasMeta?.matchedAliases || [],
       };
     })
     .filter(
       (result) =>
         result.score >= 4 &&
-        hasEnoughTokenCoverage(result.item, baseTokens, result.score),
+        (hasEnoughTokenCoverage(result.item, baseTokens, result.score) ||
+          (result.aliasScore || 0) >= 10),
     )
     .sort((a, b) => b.score - a.score);
 
@@ -2487,6 +2519,15 @@ async function resolveRetrievalState(messageHistory = [], userQuery = "") {
     queryContinuity,
   );
   const canonicalRewrite = buildCanonicalRewrite(userQuery, topicState);
+  const initialDatasetAliasMatches = matchDatasetReferences(
+    `${retrievalQuery} ${canonicalRewrite}`,
+    datasetAliasIndex,
+    { limit: 8 },
+  );
+  const aliasEnhancedRetrievalQuery = rewriteQueryWithDatasetReferences(
+    retrievalQuery,
+    initialDatasetAliasMatches,
+  );
   const f = await getFuse();
   const initialIntent =
     classifyCampusIntent(userQuery) || topicState.activeTopic;
@@ -2507,11 +2548,12 @@ async function resolveRetrievalState(messageHistory = [], userQuery = "") {
   };
 
   if (f && userQuery) {
-    const fuseResults = f.search(retrievalQuery);
+    const fuseResults = f.search(aliasEnhancedRetrievalQuery);
     const retrieval = retrieveCampusContext(
-      retrievalQuery,
+      aliasEnhancedRetrievalQuery,
       fuseResults,
       topicState,
+      initialDatasetAliasMatches,
     );
     matches = retrieval.matches;
     topicHints = retrieval.topicHints;
@@ -2556,7 +2598,9 @@ async function resolveRetrievalState(messageHistory = [], userQuery = "") {
     topicState,
     decomposedQueries,
     retrievalQuery,
+    aliasEnhancedRetrievalQuery,
     canonicalRewrite,
+    datasetAliasMatches: initialDatasetAliasMatches,
     matches,
     finalMatches,
     topicHints,
@@ -2699,81 +2743,6 @@ export function reviewShadowFaqCandidate(topic, action = "approve") {
   learnedTypoCache = null;
 
   return next.shadow_faq_reviews;
-}
-
-// ── Language Auto-Detection ──────────────────────────────────────────────────
-// Deteksi bahasa dari teks user — digunakan untuk override lang prop
-// kalau user jelas bicara dalam bahasa yang berbeda
-
-const EN_INDICATORS = [
-  "the ",
-  " is ",
-  " are ",
-  " was ",
-  " were ",
-  "what ",
-  "how ",
-  "when ",
-  "where ",
-  "why ",
-  " can ",
-  " could ",
-  " would ",
-  "please ",
-  " you ",
-  " your ",
-  " my ",
-  " me ",
-  " i ",
-  "i'm ",
-  "it's ",
-  "don't ",
-  "can't ",
-  "what's ",
-];
-
-const ID_INDICATORS = [
-  "yang ",
-  " di ",
-  " ke ",
-  " dari ",
-  " ini ",
-  " itu ",
-  " ada ",
-  " tidak ",
-  " bisa ",
-  " saya ",
-  " kamu ",
-  " kami ",
-  " apa ",
-  "gimana",
-  "bagaimana",
-  "dimana",
-  "kapan",
-  "kenapa",
-  " nih",
-  " sih",
-  " ya ",
-  " dong",
-  " deh",
-  "apakah",
-  "tolong",
-  "banget",
-  "emang",
-];
-
-/**
- * Deteksi bahasa teks — return 'en' atau 'id'
- * Hanya override jika deteksi Inggris jelas (margin > 1) agar tidak false positive
- */
-function detectLang(text) {
-  if (!text || text.length < 5) return null; // terlalu pendek, tidak bisa deteksi
-  const lower = " " + text.toLowerCase() + " ";
-  const enScore = EN_INDICATORS.filter((w) => lower.includes(w)).length;
-  const idScore = ID_INDICATORS.filter((w) => lower.includes(w)).length;
-  if (enScore > idScore + 1) return "en"; // jelas Inggris
-  if (idScore > enScore) return "id"; // jelas Indonesia
-  return null; // tidak yakin — pakai lang dari prop
 }
 
 // ── Enhanced Audio Quality Detection ──────────────────────────────────────
@@ -2960,7 +2929,7 @@ function getAmplitudeRange(audioData) {
  * @param {string} lang - 'id' | 'en'
  * @returns {Promise<string>}
  */
-export async function transcribeAudio(audioBlob, lang = "id") {
+export async function transcribeAudio(audioBlob, lang = "id", metadata = {}) {
   const formData = new FormData();
   const extension = audioBlob.type.includes("wav")
     ? "wav"
@@ -2969,6 +2938,9 @@ export async function transcribeAudio(audioBlob, lang = "id") {
       : "webm";
   formData.append("file", audioBlob, `audio.${extension}`);
   formData.append("lang", lang);
+  if (metadata && Object.keys(metadata).length > 0) {
+    formData.append("metadata", JSON.stringify(metadata));
+  }
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 35000);
 
@@ -3016,21 +2988,42 @@ export async function transcribeAudio(audioBlob, lang = "id") {
  * @param {string} lang - 'id' | 'en'
  * @returns {Promise<{ text: string, detectedLang: string }>}
  */
-export async function getChatCompletion(messageHistory, lang = "id") {
+export async function getChatCompletion(
+  messageHistory,
+  lang = "id",
+  sessionMemory = null,
+) {
   const rawUserQuery =
     messageHistory.length > 0
       ? messageHistory[messageHistory.length - 1].content
       : "";
   const preparedQuery = prepareTranscriptForRag(rawUserQuery);
   const userQuery = preparedQuery.cleanedText || rawUserQuery;
-  const retrievalState = await resolveRetrievalState(messageHistory, userQuery);
+  const memoryQueryResolution = resolveSessionMemoryQuery(
+    userQuery,
+    sessionMemory,
+  );
+  const retrievalUserQuery = memoryQueryResolution.query || userQuery;
+  const retrievalHistory =
+    retrievalUserQuery === userQuery
+      ? messageHistory
+      : [
+          ...messageHistory.slice(0, -1),
+          { role: "user", content: retrievalUserQuery },
+        ];
+  const retrievalState = await resolveRetrievalState(
+    retrievalHistory,
+    retrievalUserQuery,
+  );
   const {
     topicState,
     decomposedQueries,
     queryContinuity,
     conversationContextHint,
     retrievalQuery,
+    aliasEnhancedRetrievalQuery,
     canonicalRewrite,
+    datasetAliasMatches,
     matches,
     finalMatches,
     topicHints,
@@ -3044,16 +3037,20 @@ export async function getChatCompletion(messageHistory, lang = "id") {
     clarificationHint,
   } = retrievalState;
 
-  // Auto-detect bahasa dari query user — override lang kalau deteksi yakin
-  const autoLang = detectLang(userQuery);
-  const effectiveLang = autoLang || lang;
-  if (autoLang && autoLang !== lang) {
-    console.log(`[SELA Lang] Auto-detect: "${autoLang}" (prop: "${lang}")`);
-  }
+  // Bahasa Inggris sedang dinonaktifkan untuk kiosk; SELA selalu menjawab Indonesia.
+  const effectiveLang = "id";
   console.log("RAG Retrieval State:", {
     query: userQuery,
+    retrievalUserQuery,
+    memoryQueryResolution: memoryQueryResolution.resolution,
     retrievalQuery,
+    aliasEnhancedRetrievalQuery,
     canonicalRewrite,
+    datasetAliasMatches: datasetAliasMatches.map((match) => ({
+      id: match.id,
+      score: Number(match.score.toFixed(2)),
+      aliases: match.matchedAliases.slice(0, 3),
+    })),
     responsePlan,
     queryContinuity,
     answerability: answerability.level,
@@ -3067,6 +3064,8 @@ export async function getChatCompletion(messageHistory, lang = "id") {
       id: r.item.id,
       score: Number(r.score.toFixed(2)),
       fuseScore: r.fuseScore,
+      aliasScore: r.aliasScore,
+      matchedAliases: r.matchedAliases?.slice(0, 3),
     })),
   });
 
@@ -3121,6 +3120,10 @@ export async function getChatCompletion(messageHistory, lang = "id") {
     responsePlan,
     effectiveLang,
   );
+  const sessionMemoryPrompt = buildSessionMemoryPrompt(
+    sessionMemory,
+    userQuery,
+  );
 
   const systemPromptID = `Kamu adalah SELA, Virtual Admission Counselor dan Customer Service PMB Universitas Catur Insan Cendekia (UCIC) yang berkarakter lembut, karismatik, berwibawa, dan memancarkan aura cerdas.
 Hari ini adalah ${today}.
@@ -3167,6 +3170,16 @@ ${contextStr || "Kosong"}
 
 [KONTEKS PERCAKAPAN UNTUK RUJUKAN]:
 ${conversationContextHint || "Tidak ada. Pertanyaan terbaru berdiri sendiri."}
+
+[MEMORI SESI AKTIF]:
+${sessionMemoryPrompt}
+
+[ATURAN MEMORI SESI]:
+- Memori ini hanya berlaku untuk pengunjung/sesi aktif sekarang.
+- Gunakan memori untuk memahami rujukan seperti "tadi", "sebelumnya", "yang itu", "yang saya bilang", "ulangin", atau "saya nggak dengar".
+- Jika user minta mengulang, ulangi jawaban SELA terakhir dengan singkat dan jelas.
+- Jika user bertanya "yang itu" atau "sebelumnya", hubungkan ke topik, minat, prodi, link, atau jawaban terakhir di memori.
+- Tetap gunakan [KONTEKS KAMPUS] sebagai sumber fakta utama. Memori hanya membantu memahami maksud user.
 
 [ATURAN KEDALAMAN JAWABAN]:
 ${buildResponsePlanPrompt(responsePlan, "id")}
@@ -3246,6 +3259,16 @@ ${contextStr || "Empty"}
 
 [CONVERSATION CONTEXT FOR REFERENCE]:
 ${conversationContextHint || "None. The latest question is standalone."}
+
+[ACTIVE SESSION MEMORY]:
+${sessionMemoryPrompt}
+
+[SESSION MEMORY RULES]:
+- This memory only applies to the current visitor/session.
+- Use it to resolve references such as "earlier", "that one", "what I said", "repeat that", or "I did not hear".
+- If the user asks to repeat, repeat SELA's last answer briefly and clearly.
+- If the user asks "that one" or "previously", connect it to the last topic, interest, program, link, or SELA answer in memory.
+- Campus context remains the fact source. Memory only resolves what the user means.
 
 [RESPONSE DEPTH RULE]:
 ${buildResponsePlanPrompt(responsePlan, "en")}
@@ -3528,13 +3551,13 @@ export function getTimeBasedGreeting(lang = "id") {
   const greetings = {
     id: {
       morning:
-        "Selamat pagi. SELA siap membantu melayani Anda hari ini. Ada informasi kampus yang bisa dibantu?",
+        "Halo, saya SELA. Selamat pagi, ada yang bisa dibantu?",
       afternoon:
-        "Selamat siang. Mari, ada informasi seputar UCIC yang bisa SELA pandu untuk Anda?",
+        "Halo, saya SELA. Selamat siang, ada yang bisa dibantu?",
       evening:
-        "Selamat sore. SELA siap membantu menjawab pertanyaan Anda terkait kampus tercinta ini.",
+        "Halo, saya SELA. Selamat sore, ada yang bisa dibantu?",
       night:
-        "Selamat malam. Ada informasi pendaftaran atau akademik yang ingin Anda ketahui dari SELA?",
+        "Halo, saya SELA. Selamat malam, ada yang bisa dibantu?",
     },
     en: {
       morning:
@@ -3548,7 +3571,7 @@ export function getTimeBasedGreeting(lang = "id") {
     },
   };
 
-  return greetings[lang]?.[period] || greetings[lang].afternoon;
+  return greetings[lang]?.[period] || greetings.id.afternoon;
 }
 
 // ── Follow-up Suggestion Parser ──────────────────────────────────────────────

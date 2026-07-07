@@ -11,11 +11,7 @@ const IconMoon = () => (
   </svg>
 )
 
-export default function Navbar({ onMenuClick, lang, setLang, theme, setTheme }) {
-  const toggleLang = () => {
-    if (setLang) setLang(lang === 'id' ? 'en' : 'id');
-  }
-
+export default function Navbar({ onMenuClick, theme, setTheme }) {
   const toggleTheme = () => {
     if (setTheme) setTheme(theme === 'light' ? 'dark' : 'light');
   }
@@ -47,14 +43,10 @@ export default function Navbar({ onMenuClick, lang, setLang, theme, setTheme }) 
           {theme === 'light' ? <IconMoon /> : <IconSun />}
         </button>
 
-        {/* Lang Toggle Sidebar Shortcut */}
-        <button
-          onClick={toggleLang}
-          className="px-2 py-1.5 text-xs font-bold rounded-lg border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-300 bg-white dark:bg-slate-900 shadow-sm hover:bg-gray-50 dark:hover:bg-slate-800 transition-all"
-          aria-label="Toggle language"
-        >
-          {lang === 'id' ? 'ID' : 'EN'}
-        </button>
+        {/* Language is locked to Indonesian for kiosk/demo flow */}
+        <span className="px-2 py-1.5 text-xs font-bold rounded-lg border border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-300 bg-white dark:bg-slate-900 shadow-sm">
+          ID
+        </span>
       </div>
     </header>
   )

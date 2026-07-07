@@ -7,7 +7,7 @@
     "dev": "vite",
     "server": "node server/index.js",
     "build": "vite build",
-    "test": "node --test src/lib/responsePlan.test.js src/lib/speechSync.test.js src/lib/aiQuality.test.js server/transcribe.test.js server/chatFallback.test.js",
+    "test": "node --test src/lib/responsePlan.test.js src/lib/speechSync.test.js src/lib/sessionMemory.test.js src/lib/datasetAliasIndex.test.js src/lib/aiQuality.test.js server/transcribe.test.js server/chatFallback.test.js",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },

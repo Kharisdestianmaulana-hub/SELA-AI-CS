@@ -72,6 +72,269 @@ const GEMINI_TRANSCRIBE_MODEL_COOLDOWN_MS = Number(
 );
 const geminiTranscribeModelCooldowns = new Map();
 
+function parseJsonField(value, fallback = {}) {
+  if (!value) return fallback;
+  if (typeof value === "object") return value;
+  try {
+    return JSON.parse(value);
+  } catch {
+    return fallback;
+  }
+}
+
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+export function analyzeWavAudioQuality(buffer, mimeType = "audio/wav") {
+  const result = {
+    supported: false,
+    durationMs: 0,
+    sampleRate: 0,
+    channels: 0,
+    normalizedRms: 0,
+    maxAmplitude: 0,
+    speechRatio: 0,
+    silenceRatio: 1,
+    clippingRatio: 0,
+    avgZcr: 0,
+    reason: null,
+  };
+
+  if (!buffer?.length) {
+    return { ...result, reason: "empty_audio" };
+  }
+  if (!String(mimeType || "").includes("wav")) {
+    return { ...result, reason: "unsupported_audio_quality_check" };
+  }
+  if (buffer.length < 48 || buffer.toString("ascii", 0, 4) !== "RIFF") {
+    return { ...result, reason: "invalid_wav" };
+  }
+
+  let offset = 12;
+  let fmt = null;
+  let dataStart = -1;
+  let dataSize = 0;
+
+  while (offset + 8 <= buffer.length) {
+    const chunkId = buffer.toString("ascii", offset, offset + 4);
+    const chunkSize = buffer.readUInt32LE(offset + 4);
+    const chunkStart = offset + 8;
+
+    if (chunkId === "fmt ") {
+      fmt = {
+        audioFormat: buffer.readUInt16LE(chunkStart),
+        channels: buffer.readUInt16LE(chunkStart + 2),
+        sampleRate: buffer.readUInt32LE(chunkStart + 4),
+        bitsPerSample: buffer.readUInt16LE(chunkStart + 14),
+      };
+    } else if (chunkId === "data") {
+      dataStart = chunkStart;
+      dataSize = Math.min(chunkSize, buffer.length - chunkStart);
+      break;
+    }
+
+    offset = chunkStart + chunkSize + (chunkSize % 2);
+  }
+
+  if (!fmt || dataStart < 0 || dataSize <= 0) {
+    return { ...result, reason: "wav_missing_data" };
+  }
+  if (fmt.audioFormat !== 1 || fmt.bitsPerSample !== 16) {
+    return { ...result, reason: "unsupported_wav_format" };
+  }
+
+  const bytesPerSample = fmt.bitsPerSample / 8;
+  const frameCount = Math.floor(dataSize / bytesPerSample);
+  const sampleCount = Math.max(1, frameCount);
+  let squareSum = 0;
+  let maxAmplitude = 0;
+  let clipped = 0;
+  let crossings = 0;
+  let previous = 0;
+  const frameSamples = Math.max(160, Math.floor(fmt.sampleRate * 0.02));
+  const frameEnergies = [];
+  let currentFrameSquare = 0;
+  let currentFrameCount = 0;
+
+  for (let index = 0; index < sampleCount; index++) {
+    const sample = buffer.readInt16LE(dataStart + index * bytesPerSample);
+    const normalized = sample / 32768;
+    const abs = Math.abs(normalized);
+    squareSum += normalized * normalized;
+    currentFrameSquare += normalized * normalized;
+    currentFrameCount += 1;
+    maxAmplitude = Math.max(maxAmplitude, abs);
+    if (abs > 0.97) clipped += 1;
+    if (index > 0 && normalized * previous < 0) crossings += 1;
+    previous = normalized;
+
+    if (currentFrameCount >= frameSamples) {
+      frameEnergies.push(Math.sqrt(currentFrameSquare / currentFrameCount));
+      currentFrameSquare = 0;
+      currentFrameCount = 0;
+    }
+  }
+
+  if (currentFrameCount > 0) {
+    frameEnergies.push(Math.sqrt(currentFrameSquare / currentFrameCount));
+  }
+
+  const normalizedRms = Math.sqrt(squareSum / sampleCount);
+  const sortedEnergies = [...frameEnergies].sort((a, b) => a - b);
+  const noiseFloor =
+    sortedEnergies[Math.floor(sortedEnergies.length * 0.2)] || normalizedRms;
+  const speechThreshold = Math.max(0.01, noiseFloor * 2.4);
+  const speechFrames = frameEnergies.filter(
+    (energy) => energy >= speechThreshold,
+  ).length;
+  const speechRatio =
+    frameEnergies.length > 0 ? speechFrames / frameEnergies.length : 0;
+  const durationMs =
+    fmt.sampleRate > 0
+      ? Math.round((sampleCount / fmt.channels / fmt.sampleRate) * 1000)
+      : 0;
+
+  return {
+    supported: true,
+    durationMs,
+    sampleRate: fmt.sampleRate,
+    channels: fmt.channels,
+    normalizedRms: Number(normalizedRms.toFixed(5)),
+    maxAmplitude: Number(maxAmplitude.toFixed(4)),
+    speechRatio: Number(clamp(speechRatio, 0, 1).toFixed(3)),
+    silenceRatio: Number(clamp(1 - speechRatio, 0, 1).toFixed(3)),
+    clippingRatio: Number((clipped / sampleCount).toFixed(5)),
+    avgZcr: Number((crossings / Math.max(1, sampleCount - 1)).toFixed(4)),
+    reason: null,
+  };
+}
+
+/**
+ * Downsample WAV buffer dari sample rate tinggi (44100/48000 Hz) ke target rate (16000 Hz).
+ * STT models (Whisper, Gemini) optimal di 16 kHz. Audio 44.1 kHz sering menyebabkan
+ * halusinasi pada Whisper karena ada frekuensi tinggi yang tidak relevan untuk speech.
+ * Return buffer asli jika bukan WAV atau sudah di target rate.
+ */
+function downsampleWavBuffer(buffer, targetRate = 16000) {
+  if (!Buffer.isBuffer(buffer) || buffer.length < 44) return buffer;
+
+  // Validasi header WAV
+  const riff = buffer.toString("ascii", 0, 4);
+  const wave = buffer.toString("ascii", 8, 12);
+  if (riff !== "RIFF" || wave !== "WAVE") return buffer; // bukan WAV
+
+  const audioFormat = buffer.readUInt16LE(20);
+  const channels = buffer.readUInt16LE(22);
+  const sampleRate = buffer.readUInt32LE(24);
+  const bitsPerSample = buffer.readUInt16LE(34);
+
+  // Hanya proses PCM 16-bit
+  if (audioFormat !== 1 || bitsPerSample !== 16) return buffer;
+  // Sudah di target rate atau lebih rendah
+  if (sampleRate <= targetRate) return buffer;
+
+  console.log(`[transcribe] Downsampling WAV: ${sampleRate} Hz → ${targetRate} Hz`);
+
+  // Cari data chunk
+  let dataOffset = 12;
+  let dataSize = 0;
+  while (dataOffset + 8 < buffer.length) {
+    const chunkId = buffer.toString("ascii", dataOffset, dataOffset + 4);
+    const chunkSize = buffer.readUInt32LE(dataOffset + 4);
+    if (chunkId === "data") {
+      dataOffset += 8;
+      dataSize = Math.min(chunkSize, buffer.length - dataOffset);
+      break;
+    }
+    dataOffset += 8 + chunkSize + (chunkSize % 2);
+  }
+  if (dataSize <= 0) return buffer;
+
+  const bytesPerSample = bitsPerSample / 8;
+  const totalSamples = Math.floor(dataSize / (bytesPerSample * channels));
+  const ratio = sampleRate / targetRate;
+  const newTotalSamples = Math.floor(totalSamples / ratio);
+
+  // Buat buffer baru dengan header WAV yang benar
+  const newDataSize = newTotalSamples * bytesPerSample; // mono output
+  const newBuffer = Buffer.alloc(44 + newDataSize);
+
+  // Write WAV header
+  newBuffer.write("RIFF", 0, "ascii");
+  newBuffer.writeUInt32LE(36 + newDataSize, 4);
+  newBuffer.write("WAVE", 8, "ascii");
+  newBuffer.write("fmt ", 12, "ascii");
+  newBuffer.writeUInt32LE(16, 16); // fmt chunk size
+  newBuffer.writeUInt16LE(1, 20);  // PCM
+  newBuffer.writeUInt16LE(1, 22);  // mono
+  newBuffer.writeUInt32LE(targetRate, 24);
+  newBuffer.writeUInt32LE(targetRate * bytesPerSample, 28); // byte rate
+  newBuffer.writeUInt16LE(bytesPerSample, 32); // block align
+  newBuffer.writeUInt16LE(bitsPerSample, 34);
+  newBuffer.write("data", 36, "ascii");
+  newBuffer.writeUInt32LE(newDataSize, 40);
+
+  // Resample dengan linear interpolation
+  for (let i = 0; i < newTotalSamples; i++) {
+    const srcPos = i * ratio;
+    const srcIdx = Math.floor(srcPos);
+    const frac = srcPos - srcIdx;
+    const bytePos1 = dataOffset + srcIdx * bytesPerSample * channels;
+    const bytePos2 = dataOffset + Math.min(srcIdx + 1, totalSamples - 1) * bytesPerSample * channels;
+
+    if (bytePos1 + 1 >= buffer.length || bytePos2 + 1 >= buffer.length) break;
+
+    const sample1 = buffer.readInt16LE(bytePos1);
+    const sample2 = buffer.readInt16LE(bytePos2);
+    const interpolated = Math.round(sample1 + (sample2 - sample1) * frac);
+    const clamped = Math.max(-32768, Math.min(32767, interpolated));
+
+    newBuffer.writeInt16LE(clamped, 44 + i * bytesPerSample);
+  }
+
+  console.log(`[transcribe] Downsampled: ${buffer.length} bytes → ${newBuffer.length} bytes`);
+  return newBuffer;
+}
+
+export function shouldRejectAudioBeforeStt(quality = {}, clientMeta = {}) {
+  const vad = clientMeta?.vad || {};
+  const isManualStop = !!clientMeta?.manualStop;
+  if (quality.supported) {
+    if (quality.durationMs > 0 && quality.durationMs < 450) {
+      return { reject: true, reason: "audio_too_short" };
+    }
+    if (quality.normalizedRms > 0 && quality.normalizedRms < 0.0045) {
+      return { reject: true, reason: "audio_too_quiet" };
+    }
+    if (quality.speechRatio < 0.025 && quality.durationMs > 700) {
+      return { reject: true, reason: "low_speech_ratio" };
+    }
+    if (quality.clippingRatio > 0.12) {
+      return { reject: true, reason: "audio_clipping_noise" };
+    }
+  }
+
+  // Bypass client VAD checks jika user sengaja menekan tombol mic untuk stop
+  if (isManualStop) {
+    return { reject: false, reason: null };
+  }
+
+  if (vad.frames > 0) {
+    if (Number(vad.speechLikeRatio || 0) < 0.05) {
+      return { reject: true, reason: "client_low_speechlike_ratio" };
+    }
+    if (Number(vad.gatedSpeechFrames || 0) < 2) {
+      return { reject: true, reason: "client_no_gated_speech" };
+    }
+    if (vad.mouthTrackingAvailable && !vad.mouthActiveDuringSpeech) {
+      return { reject: true, reason: "client_no_mouth_activity" };
+    }
+  }
+
+  return { reject: false, reason: null };
+}
+
 function buildGeminiPayload(messages = [], userQuery = "") {
   const systemText = messages
     .filter((message) => message?.role === "system" && message?.content)
@@ -555,6 +818,7 @@ export async function createGroqTranscription({
   formData.append("file", new Blob([buffer], { type: mimeType }), `audio.${extension}`);
   formData.append("model", model);
   formData.append("temperature", "0");
+  formData.append("response_format", "verbose_json");
   formData.append("language", lang === "en" ? "en" : "id");
   formData.append(
     "prompt",
@@ -585,7 +849,67 @@ export async function createGroqTranscription({
     throw error;
   }
 
-  return String(data?.text || "").trim();
+  const text = String(data?.text || "").trim();
+  const detectedLang = data?.language || null;
+  const segments = Array.isArray(data?.segments) ? data.segments : [];
+  if (segments.length > 0) {
+    const avgNoSpeech =
+      segments.reduce(
+        (sum, segment) => sum + Number(segment.no_speech_prob || 0),
+        0,
+      ) / segments.length;
+    const avgLogProb =
+      segments.reduce(
+        (sum, segment) => sum + Number(segment.avg_logprob || 0),
+        0,
+      ) / segments.length;
+
+    console.log("[transcribe] Groq verbose_json details", {
+      detectedLang,
+      requestedLang: lang,
+      avgNoSpeech: Number(avgNoSpeech.toFixed(3)),
+      avgLogProb: Number(avgLogProb.toFixed(3)),
+      segmentCount: segments.length,
+      text: text.slice(0, 120),
+    });
+
+    if (avgNoSpeech >= 0.72 && text.length < 80) {
+      console.log("[transcribe] Groq filtered high no_speech_prob", {
+        avgNoSpeech: Number(avgNoSpeech.toFixed(3)),
+        text,
+      });
+      return "";
+    }
+    if (avgLogProb < -1.25 && text.length < 60) {
+      console.log("[transcribe] Groq filtered low avg_logprob", {
+        avgLogProb: Number(avgLogProb.toFixed(3)),
+        text,
+      });
+      return "";
+    }
+  }
+
+  // Deteksi halusinasi bahasa — Whisper kadang output teks Islandia/Nordik
+  // meskipun language param sudah benar. Cek karakter non-Indonesian di teks hasil.
+  // Bahasa Indonesia hanya pakai huruf Latin dasar (a-z), tanpa aksen/diacritics.
+  if (lang === "id" && text.length > 0) {
+    const nonLatinBasic = text.replace(/[a-zA-Z0-9\s.,!?;:'"()\-\/\\@#%&*+=\[\]{}|~`^_<>]/g, "");
+    const nonLatinRatio = nonLatinBasic.length / text.length;
+    if (nonLatinRatio > 0.08) {
+      console.log("[transcribe] Groq hallucination detected — non-Indonesian characters", {
+        text: text.slice(0, 120),
+        nonLatinChars: nonLatinBasic.slice(0, 40),
+        nonLatinRatio: Number(nonLatinRatio.toFixed(3)),
+        detectedLang,
+      });
+      const error = new Error(`Groq hallucinated non-Indonesian text (${(nonLatinRatio * 100).toFixed(0)}% non-Latin)`);
+      error.status = 422;
+      error.provider = "groq";
+      throw error;
+    }
+  }
+
+  return text;
 }
 
 function shouldTryNextGeminiModel(error) {
@@ -668,6 +992,7 @@ function shouldTryNextTranscriptionProvider(error) {
     error?.status === 403 ||
     error?.status === 408 ||
     error?.status === 409 ||
+    error?.status === 422 ||
     error?.status === 429 ||
     error?.status === 500 ||
     error?.status === 502 ||
@@ -812,8 +1137,18 @@ app.post("/api/transcribe", upload.single("file"), async (req, res) => {
     );
     if (!req.file) return res.status(400).json({ error: "No file uploaded" });
     const lang = req.body.lang || "id";
-    const buffer = req.file.buffer;
+    const rawBuffer = req.file.buffer;
     const mimeType = req.file.mimetype || "audio/webm";
+    const metadata = parseJsonField(req.body.metadata, {});
+
+    // Downsample WAV dari 44100/48000 Hz ke 16000 Hz untuk STT yang lebih akurat
+    const buffer = downsampleWavBuffer(rawBuffer, 16000);
+
+    const audioQuality = analyzeWavAudioQuality(buffer, mimeType);
+    const preSttValidation = shouldRejectAudioBeforeStt(
+      audioQuality,
+      metadata,
+    );
 
     console.log("[transcribe] Calling audio transcription...", {
       providers: TRANSCRIBE_PROVIDERS,
@@ -823,7 +1158,23 @@ app.post("/api/transcribe", upload.single("file"), async (req, res) => {
       geminiMimeType: normalizeGeminiMediaMimeType(mimeType),
       size: buffer.length,
       lang,
+      audioQuality,
+      clientVad: metadata?.vad || null,
     });
+
+    if (preSttValidation.reject) {
+      console.log("[transcribe] ⚠ FILTERED before STT", {
+        reason: preSttValidation.reason,
+        audioQuality,
+        clientVad: metadata?.vad || null,
+      });
+      return res.json({
+        text: "",
+        reason: preSttValidation.reason,
+        audioQuality,
+      });
+    }
+
     const transcribeStartedAt = Date.now();
     const transcription = await createTranscriptionWithProviderFallback({
       buffer,
@@ -850,6 +1201,23 @@ app.post("/api/transcribe", upload.single("file"), async (req, res) => {
       return res.json({
         text: "",
         reason: "Background audio detected - likely not a real question",
+        originalTranscript: transcribedText,
+      });
+    }
+
+    const transcriptValidation = validateTranscriptCandidate(
+      transcribedText,
+      metadata,
+    );
+    if (!transcriptValidation.valid) {
+      console.log("[transcribe] ⚠ FILTERED transcript validation", {
+        reason: transcriptValidation.reason,
+        transcript: transcribedText.slice(0, 80),
+        validation: transcriptValidation,
+      });
+      return res.json({
+        text: "",
+        reason: transcriptValidation.reason,
         originalTranscript: transcribedText,
       });
     }
@@ -949,6 +1317,80 @@ export function detectBackgroundAudio(text, lang) {
   }
 
   return false;
+}
+
+function normalizeTranscriptForValidation(text = "") {
+  return String(text || "")
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[^\p{L}\p{N}]+/gu, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function transcriptSimilarity(a = "", b = "") {
+  const tokensA = normalizeTranscriptForValidation(a)
+    .split(" ")
+    .filter((token) => token.length > 2);
+  const tokensB = normalizeTranscriptForValidation(b)
+    .split(" ")
+    .filter((token) => token.length > 2);
+  if (!tokensA.length || !tokensB.length) return 0;
+  const setA = new Set(tokensA);
+  const setB = new Set(tokensB);
+  const overlap = [...setA].filter((token) => setB.has(token)).length;
+  return overlap / Math.max(1, Math.min(setA.size, setB.size));
+}
+
+export function validateTranscriptCandidate(text = "", metadata = {}) {
+  const normalized = normalizeTranscriptForValidation(text);
+  if (!normalized) return { valid: false, reason: "empty_transcript" };
+
+  const words = normalized.split(" ").filter(Boolean);
+  const lastSelaSpeech = metadata?.lastSelaSpeech || "";
+  const echoSimilarity = transcriptSimilarity(normalized, lastSelaSpeech);
+  if (
+    lastSelaSpeech &&
+    echoSimilarity >= 0.78 &&
+    normalized.length >= 12
+  ) {
+    return {
+      valid: false,
+      reason: "likely_sela_echo",
+      echoSimilarity: Number(echoSimilarity.toFixed(3)),
+    };
+  }
+
+  const shortButValidPatterns = [
+    /^(apa|berapa|siapa|kapan|dimana|di mana|gimana|bagaimana|kenapa)\b/,
+    /\b(ucic|pmb|daftar|pendaftaran|biaya|jurusan|prodi|fasilitas|beasiswa|krs|khs|dosen|kampus|kuliah|kelas|akreditasi|alamat|kontak|perpustakaan|skripsi|wisuda)\b/,
+    /^(saya|aku|mau|ingin|bingung|butuh|tolong)\b/,
+    /^(ya|iya|tidak|nggak|enggak|teknologi|coding|desain|bisnis|olahraga)\b/,
+  ];
+  const looksValidShort = shortButValidPatterns.some((pattern) =>
+    pattern.test(normalized),
+  );
+
+  if (words.length <= 3 && normalized.length < 22 && !looksValidShort) {
+    return { valid: false, reason: "ambiguous_short_transcript" };
+  }
+
+  const hasCampusOrQuestionSignal = shortButValidPatterns.some((pattern) =>
+    pattern.test(normalized),
+  );
+  if (
+    words.length <= 4 &&
+    !hasCampusOrQuestionSignal &&
+    Number(metadata?.vad?.gatedSpeechFrames || 0) < 4
+  ) {
+    return { valid: false, reason: "weak_context_random_transcript" };
+  }
+
+  return {
+    valid: true,
+    reason: null,
+    echoSimilarity: Number(echoSimilarity.toFixed(3)),
+  };
 }
 
 // ── POST /api/chat ────────────────────────────────────────────────────────────

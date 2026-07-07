@@ -1,0 +1,376 @@
+PANDUAN SETUP PROJECT SELA DI PERANGKAT BARU
+============================================
+
+Dokumen ini dipakai untuk menyiapkan project SELA AI CS dari awal di laptop/PC baru.
+Ikuti urutannya dari clone repo, install dependency, isi API key, sampai menjalankan project.
+
+
+1. KEBUTUHAN AWAL
+-----------------
+
+Pastikan perangkat baru sudah punya:
+
+1. Git
+   Cek:
+   git --version
+
+2. Node.js minimal versi 18
+   Cek:
+   node -v
+
+3. npm
+   Cek:
+   npm -v
+
+4. Google Chrome
+   Disarankan karena project SELA memakai kamera, mic, Web Speech API, dan mode kiosk.
+
+5. Koneksi internet
+   Dibutuhkan untuk install dependency dan memanggil API AI.
+
+
+2. CLONE PROJECT DARI GITHUB
+----------------------------
+
+Pilih folder tempat menyimpan project, contoh:
+
+cd Documents
+
+Clone repo:
+
+git clone git@github.com:Kharisdestianmaulana-hub/SELA-AI-CS.git
+
+Masuk ke folder project:
+
+cd SELA-AI-CS
+
+Kalau perangkat belum diset SSH key GitHub, bisa pakai URL HTTPS:
+
+git clone https://github.com/Kharisdestianmaulana-hub/SELA-AI-CS.git
+cd SELA-AI-CS
+
+
+3. PILIH BRANCH YANG DIPAKAI
+----------------------------
+
+Branch terbaru yang berisi update SELA voice counselor:
+
+git checkout gemini-chat-provider
+
+Ambil update terbaru:
+
+git pull origin gemini-chat-provider
+
+Cek posisi branch:
+
+git branch --show-current
+
+Harus muncul:
+
+gemini-chat-provider
+
+
+4. INSTALL DEPENDENCY
+---------------------
+
+Jalankan:
+
+npm install
+
+Tunggu sampai selesai. Setelah selesai biasanya akan muncul folder:
+
+node_modules
+
+Catatan:
+Jangan upload/push folder node_modules ke GitHub.
+
+
+5. BUAT FILE ENV
+----------------
+
+Buat file baru di root project dengan nama:
+
+.env.local
+
+Isi file .env.local dengan template berikut.
+Ganti bagian yang masih "isi_api_key..." dengan API key asli.
+
+GEMINI_API_KEY=isi_api_key_gemini
+GEMINI_MODEL=gemini-2.5-flash
+
+# Chat AI provider.
+# Gemini tetap provider utama. Groq dan OpenRouter dipakai sebagai fallback kalau Gemini error.
+CHAT_FALLBACK_PROVIDERS=groq,openrouter
+CHAT_TIMEOUT_MS=20000
+CHAT_PROVIDER_COOLDOWN_MS=60000
+
+GROQ_API_KEY=isi_api_key_groq
+GROQ_MODEL=llama-3.3-70b-versatile
+
+OPENROUTER_API_KEY=isi_api_key_openrouter
+OPENROUTER_MODEL=openai/gpt-oss-120b:free
+OPENROUTER_SITE_URL=http://localhost:5173
+OPENROUTER_APP_NAME=SELA AI CS
+
+# Voice transcription.
+# Groq dipakai lebih dulu untuk speech-to-text karena lebih stabil.
+# Gemini dipakai sebagai fallback.
+TRANSCRIBE_PROVIDERS=groq,gemini
+GROQ_TRANSCRIBE_MODEL=whisper-large-v3-turbo
+GEMINI_TRANSCRIBE_MODEL=gemini-flash-latest
+GEMINI_TRANSCRIBE_FALLBACK_MODELS=gemini-2.5-flash-lite,gemini-2.5-flash,gemini-flash-lite-latest
+GEMINI_TRANSCRIBE_TIMEOUT_MS=8000
+GEMINI_TRANSCRIBE_MODEL_COOLDOWN_MS=60000
+
+
+Penting:
+1. Jangan commit/push .env.local ke GitHub.
+2. Jangan bagikan API key di chat umum.
+3. Kalau hanya punya Gemini, project masih bisa jalan, tapi fitur fallback Groq/OpenRouter tidak aktif.
+4. Untuk mode suara yang stabil, disarankan tetap isi GROQ_API_KEY karena STT Groq lebih cepat dan konsisten.
+
+
+6. JALANKAN PROJECT MODE KIOSK
+------------------------------
+
+Cara paling mudah:
+
+bash launch.sh
+
+Script ini akan:
+1. Mematikan proses lama di port 3001 dan 5173.
+2. Menjalankan backend di http://localhost:3001
+3. Menjalankan frontend Vite di http://localhost:5173
+4. Membuka browser ke:
+   http://localhost:5173?kiosk=1
+
+Biarkan terminal tetap terbuka selama aplikasi dipakai.
+
+Untuk menghentikan aplikasi:
+
+Tekan Ctrl + C di terminal.
+
+
+7. JALANKAN MANUAL JIKA LAUNCH.SH BERMASALAH
+--------------------------------------------
+
+Buka 2 terminal di folder project.
+
+Terminal 1 untuk backend:
+
+npm run server
+
+Terminal 2 untuk frontend:
+
+npm run dev
+
+Lalu buka browser:
+
+http://localhost:5173?kiosk=1
+
+
+8. MODE DEBUG
+-------------
+
+Kalau ingin melihat panel debug turn di UI, buka:
+
+http://localhost:5173?kiosk=1&debug=1
+
+Panel debug berguna untuk cek:
+1. Transcript user.
+2. Provider chat yang dipakai.
+3. Mode counselor.
+4. Durasi STT dan AI.
+5. Jumlah chunk TTS.
+6. Error terakhir jika ada.
+
+
+9. TEST PROJECT
+---------------
+
+Untuk memastikan kode aman:
+
+npm test
+
+Jika sukses, harus muncul semua test pass.
+
+Untuk cek build produksi:
+
+npm run build
+
+Catatan:
+Kalau muncul warning "Some chunks are larger than 500 kBs", itu bukan error. Project tetap berhasil build.
+
+
+10. MASALAH YANG SERING TERJADI
+-------------------------------
+
+A. Error API key belum diatur
+
+Penyebab:
+.env.local belum ada atau API key kosong.
+
+Solusi:
+Pastikan file .env.local ada di root project dan isi key:
+
+GEMINI_API_KEY=...
+GROQ_API_KEY=...
+OPENROUTER_API_KEY=...
+
+
+B. Port 3001 atau 5173 sudah dipakai
+
+Biasanya launch.sh otomatis mematikan proses lama.
+Kalau masih bermasalah, stop manual:
+
+pkill -f "node.*server"
+pkill -f "vite"
+
+Lalu jalankan lagi:
+
+bash launch.sh
+
+
+C. Kamera atau mikrofon tidak aktif
+
+Solusi:
+1. Pakai Google Chrome.
+2. Pastikan browser memberi izin kamera dan mikrofon.
+3. Cek System Settings perangkat, pastikan Chrome boleh akses camera/microphone.
+4. Refresh halaman setelah izin diberikan.
+
+
+D. Voice tidak menjawab atau transkripsi lambat
+
+Kemungkinan:
+1. API provider sedang error/high demand.
+2. API key salah.
+3. Internet lambat.
+4. Mic menangkap noise/background audio.
+
+Solusi:
+1. Pastikan GROQ_API_KEY aktif untuk STT.
+2. Coba ulang pertanyaan dengan suara lebih jelas.
+3. Cek terminal backend, lihat provider mana yang gagal.
+
+
+E. Jawaban AI tiba-tiba error
+
+Project punya fallback:
+Gemini -> Groq -> OpenRouter
+
+Kalau semuanya gagal, cek:
+1. GEMINI_API_KEY
+2. GROQ_API_KEY
+3. OPENROUTER_API_KEY
+4. Kuota/rate limit masing-masing provider.
+
+
+F. Browser membuka halaman biasa, bukan kiosk
+
+Pastikan URL mengandung:
+
+?kiosk=1
+
+Contoh:
+
+http://localhost:5173?kiosk=1
+
+
+11. STRUKTUR PENTING PROJECT
+----------------------------
+
+server/index.js
+Backend Express, endpoint chat dan transcribe.
+
+src/lib/ai.js
+Pipeline RAG, prompt SELA, TTS, screen card, spoken text.
+
+src/lib/responsePlan.js
+Planner intent, admission counselor mode, rekomendasi jurusan, next action.
+
+src/lib/speechSync.js
+Timeline sinkron text, caption, TTS, dan viseme mulut.
+
+src/components/VoiceUI.jsx
+UI utama mode suara/kiosk, recorder, VAD, caption, avatar state, debug panel.
+
+src/components/LiveCaption.jsx
+Caption bawah dan QR link.
+
+src/components/AnswerCard.jsx
+Card ringkasan di atas live caption.
+
+src/components/AvatarPlaceholder.jsx
+Avatar 3D SELA, state idle/listening/thinking/processing/speaking/confused/happy.
+
+public/models/SELA_BARU.glb
+File model 3D SELA.
+
+
+12. ALUR SINGKAT CARA KERJA SELA
+--------------------------------
+
+1. User bicara.
+2. VoiceUI merekam suara.
+3. Audio dikirim ke /api/transcribe.
+4. Server transcribe memakai Groq, lalu Gemini jika fallback diperlukan.
+5. Transcript dikirim ke pipeline RAG/chat.
+6. Gemini menjawab sebagai provider utama.
+7. Jika Gemini error atau jawaban tidak lengkap, fallback ke Groq/OpenRouter.
+8. Jawaban diproses menjadi:
+   - displayText untuk layar/chat
+   - spokenText untuk suara
+   - screen card untuk ringkasan visual
+   - suggestions untuk follow-up
+9. TTS membaca spokenText.
+10. Caption, bubble, dan mulut avatar mengikuti timeline speech sync.
+
+
+13. CATATAN UNTUK DEPLOY/DEMO
+-----------------------------
+
+Sebelum demo:
+1. Jalankan npm test.
+2. Jalankan npm run build.
+3. Jalankan bash launch.sh.
+4. Tes pertanyaan:
+   - "Saya bingung pilih jurusan, rekomendasiin dong."
+   - "Saya suka coding, cocoknya jurusan apa?"
+   - "Cara daftar ke UCIC gimana?"
+   - "Berapa biaya pendaftaran?"
+   - "Fasilitas di UCIC apa aja?"
+   - "Siapa rektor UCIC?"
+5. Pastikan mic restart setelah SELA selesai bicara.
+6. Pastikan QR muncul jika jawaban punya link.
+7. Pastikan card tidak menampilkan basa-basi, hanya inti/list/langkah.
+
+
+14. COMMAND RINGKAS
+-------------------
+
+Clone:
+git clone git@github.com:Kharisdestianmaulana-hub/SELA-AI-CS.git
+cd SELA-AI-CS
+git checkout gemini-chat-provider
+
+Install:
+npm install
+
+Run:
+bash launch.sh
+
+Test:
+npm test
+
+Build:
+npm run build
+
+Stop:
+Ctrl + C
+
+
+SELESAI
+-------
+
+Kalau semua langkah di atas berhasil, SELA sudah siap dijalankan di perangkat baru.

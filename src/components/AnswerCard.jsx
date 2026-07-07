@@ -43,7 +43,7 @@ function QrCard({ item }) {
   if (!url) return null;
 
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-white/15 bg-white/95 p-2 text-slate-900 shadow-lg">
+    <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-2 text-slate-900 shadow-md">
       {qrSrc ? (
         <img
           src={qrSrc}
@@ -77,19 +77,19 @@ export default function AnswerCard({ screen }) {
   const label = MODE_LABELS[screen.mode] || "Ringkasan";
 
   return (
-    <div className="w-full max-w-md rounded-2xl border border-white/20 bg-slate-950/68 px-4 py-3 text-white shadow-2xl backdrop-blur-md animate-fade-in">
+    <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 shadow-2xl animate-fade-in">
       <div className="mb-2 flex items-center justify-between gap-3">
-        <p className="text-[10px] font-semibold uppercase tracking-widest text-blue-200">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-blue-600">
           {label}
         </p>
         {links.length > 0 && (
-          <p className="text-[10px] font-medium text-white/60">
+          <p className="text-[10px] font-semibold text-slate-500">
             QR aktif
           </p>
         )}
       </div>
       {screen.title && (
-        <h3 className="mb-2 text-sm font-semibold leading-snug text-white">
+        <h3 className="mb-2 text-sm font-bold leading-snug text-slate-950">
           {screen.title}
         </h3>
       )}
@@ -102,10 +102,10 @@ export default function AnswerCard({ screen }) {
         </div>
       )}
       {items.length > 0 && (
-        <ol className="space-y-1.5 text-left text-xs leading-snug text-white/88">
-          {items.slice(0, 6).map((item, index) => (
+        <ol className="space-y-1.5 text-left text-xs font-medium leading-snug text-slate-800">
+          {items.slice(0, 8).map((item, index) => (
             <li key={`${item}-${index}`} className="flex gap-2">
-              <span className="mt-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-blue-400/90 text-[9px] font-bold text-slate-950">
+              <span className="mt-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-blue-600 text-[9px] font-bold text-white">
                 {index + 1}
               </span>
               <span>{item}</span>

@@ -150,7 +150,7 @@ function SelaModel({ state, activeViseme = 'visemeSil' }) {
     start: 0,
     nextAt: 1.2 + Math.random() * 2.8,
   })
-  const { scene, animations } = useGLTF('/models/SELA_BARU.glb')
+  const { scene, animations } = useGLTF('/models/Draft 11 (Animation) AI Sela.glb')
   const { actions } = useAnimations(animations, groupRef)
 
   useEffect(() => {
@@ -364,4 +364,4 @@ export default function AvatarPlaceholder({ state = 'idle', theme = 'light', act
   )
 }
 
-useGLTF.preload('/models/SELA_BARU.glb')
+useGLTF.preload('/models/Draft 11 (Animation) AI Sela.glb')

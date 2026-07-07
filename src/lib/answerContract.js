@@ -243,9 +243,9 @@ function filterItemsForMode(items = [], mode = "brief") {
 
 function getMaxItemsForMode(mode = "brief") {
   if (mode === "interest") return 5;
-  if (mode === "steps" || mode === "handoff") return 4;
-  if (mode === "recommend" || mode === "compare") return 3;
-  return 4;
+  if (mode === "steps" || mode === "handoff") return 6;
+  if (mode === "recommend" || mode === "compare") return 5;
+  return 6;
 }
 
 function extractScreenItems(text = "", mode = "brief", effectiveLang = "id") {

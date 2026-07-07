@@ -2,7 +2,6 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import ChatBubble from "./ChatBubble";
 import LiveCaption from "./LiveCaption";
 import AvatarPlaceholder from "./AvatarPlaceholder";
-import SuggestionButtons from "./SuggestionButtons";
 import MediaCarousel from "./MediaCarousel";
 import AnswerCard from "./AnswerCard";
 import {
@@ -19,56 +18,20 @@ import {
   getDefaultViseme,
   getSpeechFrame,
 } from "../lib/speechSync";
+import {
+  appendSessionTurn,
+  buildDirectRecallResponse,
+  clearSessionMemory,
+  createSessionMemory,
+  finalizeSessionMemory,
+  loadSessionMemory,
+  saveSessionMemory,
+} from "../lib/sessionMemory";
 
 // ── SVG Icons ────────────────────────────────────────────────────
-const IconMic = ({ size = "md" }) => {
-  const cls = size === "lg" ? "w-12 h-12" : "w-5 h-5";
-  return (
-    <svg
-      className={`${cls} text-white`}
-      fill="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path d="M12 1a4 4 0 014 4v6a4 4 0 01-8 0V5a4 4 0 014-4zm-1 18v3h2v-3a8.03 8.03 0 005.65-2.35l-1.41-1.41A6 6 0 0112 19a6 6 0 01-4.24-1.76L6.35 18.65A8.03 8.03 0 0011 21z" />
-    </svg>
-  );
-};
-
-const IconKeyboard = () => (
-  <svg
-    className="w-5 h-5"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth={1.8}
-    viewBox="0 0 24 24"
-  >
-    <rect x="2" y="6" width="20" height="12" rx="2" />
-    <path
-      strokeLinecap="round"
-      d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M6 14h12"
-    />
-  </svg>
-);
-
 const IconMicToggle = () => (
   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
     <path d="M12 1a4 4 0 014 4v6a4 4 0 01-8 0V5a4 4 0 014-4zm-1 18v3h2v-3a8.03 8.03 0 005.65-2.35l-1.41-1.41A6 6 0 0112 19a6 6 0 01-4.24-1.76L6.35 18.65A8.03 8.03 0 0011 21z" />
-  </svg>
-);
-
-const IconSend = () => (
-  <svg
-    className="w-4 h-4 text-white"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth={2.2}
-    viewBox="0 0 24 24"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M22 2L11 13M22 2L15 22l-4-9-9-4 19-7z"
-    />
   </svg>
 );
 
@@ -196,40 +159,75 @@ function encodeWavBlob(channelChunks = [], sampleRate = 48000) {
   return new Blob([buffer], { type: "audio/wav" });
 }
 
-// Quick reply button definitions
-const quickReplies = {
-  id: [
-    {
-      label: "📝 Cara Daftar?",
-      text: "Bagaimana cara mendaftar sebagai mahasiswa baru di UCIC?",
-    },
-    // { label: '🎓 Info Beasiswa', text: 'Apa saja program beasiswa yang tersedia di UCIC?' }, // DISABLED - Awaiting complete scholarship data
-    // { label: '📞 Kontak BAA', text: 'Bagaimana cara menghubungi Biro Administrasi Akademik?' }, // DISABLED - Awaiting complete contact data
-  ],
-  en: [
-    {
-      label: "📝 How to Register?",
-      text: "How do I register as a new student at UCIC?",
-    },
-    // { label: '🎓 Scholarship Info', text: 'What scholarship programs are available at UCIC?' }, // DISABLED - Awaiting complete scholarship data
-    // { label: '📞 Contact BAA', text: 'How can I contact the Academic Administration Bureau?' }, // DISABLED - Awaiting complete contact data
-  ],
-};
+function trimPcmChunksForSpeech(
+  channelChunks = [],
+  sampleRate = 48000,
+  {
+    recordingStartedAt = 0,
+    speechStartedAt = 0,
+    recordingEndedAt = 0,
+    prePaddingMs = 450,
+    postPaddingMs = 350,
+  } = {},
+) {
+  if (!channelChunks.length || !recordingStartedAt || !speechStartedAt) {
+    return channelChunks;
+  }
+
+  const totalLength = channelChunks.reduce((sum, chunk) => sum + chunk.length, 0);
+  const startMs = Math.max(0, speechStartedAt - recordingStartedAt - prePaddingMs);
+  const endMs = Math.max(
+    startMs + 600,
+    recordingEndedAt - recordingStartedAt + postPaddingMs,
+  );
+  const startSample = Math.max(0, Math.floor((startMs / 1000) * sampleRate));
+  const endSample = Math.min(
+    totalLength,
+    Math.ceil((endMs / 1000) * sampleRate),
+  );
+
+  if (endSample <= startSample || endSample - startSample < sampleRate * 0.4) {
+    return channelChunks;
+  }
+
+  const samples = new Float32Array(endSample - startSample);
+  let sourceOffset = 0;
+  let targetOffset = 0;
+
+  for (const chunk of channelChunks) {
+    const chunkStart = sourceOffset;
+    const chunkEnd = sourceOffset + chunk.length;
+    sourceOffset = chunkEnd;
+
+    if (chunkEnd <= startSample || chunkStart >= endSample) continue;
+
+    const copyStart = Math.max(0, startSample - chunkStart);
+    const copyEnd = Math.min(chunk.length, endSample - chunkStart);
+    samples.set(chunk.subarray(copyStart, copyEnd), targetOffset);
+    targetOffset += copyEnd - copyStart;
+  }
+
+  return [samples.subarray(0, targetOffset)];
+}
 
 // ─────────────────────────────────────────────────────────────────
-const SILENCE_DURATION = 850; // ms diam setelah ada suara → auto-stop lebih cepat
-const MIN_SPEECH_MS = 500; // ms minimum bicara — tetap tahan noise tapi lebih ramah pertanyaan pendek
+const SILENCE_DURATION = 1150; // ms diam setelah ada suara → tahan supaya kalimat tidak kepotong
+const MIN_SPEECH_MS = 750; // ms minimum bicara — lebih aman untuk STT menangkap konteks
 const MIN_BLOB_SIZE = 30000; // bytes minimum audio — audio terlalu kecil = pasti noise
 const MAX_RECORD_MS = 20000; // 20 detik maksimal recording sebagai failsafe
 const THRESHOLD_MULTIPLIER = 2.8; // Increased from 2.0 → lebih strict untuk noise filtering
 const BASELINE_SAMPLE_MS = 500; // ms untuk sample baseline noise
 const EARLY_SPEECH_THRESHOLD_MULTIPLIER = 1.6; // Increased from 1.35 → lebih strict saat baseline
 const MIN_TRANSCRIPT_CHARS = 6;
-const QUICK_COMMIT_SILENCE_MS = 550; // commit cepat setelah speech valid
-const QUICK_COMMIT_MIN_SPEECH_MS = 500;
+const QUICK_COMMIT_SILENCE_MS = 850; // commit cepat tapi tidak terlalu agresif memotong akhir kata
+const QUICK_COMMIT_MIN_SPEECH_MS = 900;
 const MIN_RMS_FOR_VALID_SPEECH = 8; // Minimum RMS level untuk dianggap speech, bukan noise
+const MIN_SPEECHLIKE_RATIO = 0.08; // minimal frame yang mirip speech sebelum dikirim STT
+const MIN_GATED_SPEECH_FRAMES = 3; // harus ada beberapa frame audio yang lolos face/mouth gate
+const MOUTH_ACTIVITY_WINDOW_MS = 900; // toleransi mulut bergerak dekat dengan audio naik
+const FACE_GATE_WINDOW_MS = 1200; // toleransi wajah valid dekat dengan audio naik
 const IDLE_SESSION_MS = 90 * 1000; // 90 detik tanpa interaksi -> reset sesi
-const FACE_LOST_END_MS = 12 * 1000; // 12 detik wajah hilang saat sesi aktif -> reset
+const FACE_LOST_END_MS = 60 * 1000; // lebih longgar untuk PC landscape; reset utama tetap dari idle/farewell
 const LIVE_CAPTION_BOUNDARY_DELAY_MS = 150; // tahan subtitle sedikit supaya sinkron dengan suara
 const SCREEN_CARD_HOLD_MS = 9000;
 
@@ -249,27 +247,83 @@ const FAREWELL_KEYWORDS = [
 const isFarewell = (text) =>
   FAREWELL_KEYWORDS.some((kw) => text.toLowerCase().includes(kw));
 
+function getFrameAudioFeatures(data) {
+  if (!data?.length) return { rms: 0, zcr: 0, clippedRatio: 0 };
+  let squareSum = 0;
+  let crossings = 0;
+  let clipped = 0;
+  let previous = data[0] - 128;
+
+  for (let index = 0; index < data.length; index++) {
+    const centered = data[index] - 128;
+    squareSum += centered * centered;
+    if (index > 0 && centered * previous < 0) crossings++;
+    if (Math.abs(centered) > 120) clipped++;
+    previous = centered;
+  }
+
+  return {
+    rms: Math.sqrt(squareSum / data.length),
+    zcr: crossings / Math.max(1, data.length - 1),
+    clippedRatio: clipped / data.length,
+  };
+}
+
+function isSpeechLikeFrame({ rms, zcr, clippedRatio }, threshold) {
+  return (
+    rms > threshold &&
+    zcr >= 0.012 &&
+    zcr <= 0.32 &&
+    clippedRatio < 0.08
+  );
+}
+
+function createVadStats() {
+  return {
+    frames: 0,
+    loudFrames: 0,
+    speechLikeFrames: 0,
+    gatedSpeechFrames: 0,
+    blockedByFaceGateFrames: 0,
+    blockedByMouthGateFrames: 0,
+    rmsSum: 0,
+    maxRms: 0,
+    zcrSum: 0,
+  };
+}
+
+function summarizeVadStats(stats) {
+  const frames = Math.max(1, stats?.frames || 0);
+  return {
+    frames: stats?.frames || 0,
+    loudFrames: stats?.loudFrames || 0,
+    speechLikeFrames: stats?.speechLikeFrames || 0,
+    gatedSpeechFrames: stats?.gatedSpeechFrames || 0,
+    blockedByFaceGateFrames: stats?.blockedByFaceGateFrames || 0,
+    blockedByMouthGateFrames: stats?.blockedByMouthGateFrames || 0,
+    speechLikeRatio: Number(((stats?.speechLikeFrames || 0) / frames).toFixed(3)),
+    gatedSpeechRatio: Number(((stats?.gatedSpeechFrames || 0) / frames).toFixed(3)),
+    avgRms: Number(((stats?.rmsSum || 0) / frames).toFixed(2)),
+    maxRms: Number((stats?.maxRms || 0).toFixed(2)),
+    avgZcr: Number(((stats?.zcrSum || 0) / frames).toFixed(4)),
+  };
+}
+
 export default function VoiceUI({
   currentChat,
   onSend,
   onReceive,
-  onNewChat,
   onReset,
   lang = "id",
   setLang,
   theme = "light",
 }) {
-  const [mode, setMode] = useState("speak");
-  const [value, setValue] = useState("");
-  const [focused, setFocused] = useState(false);
   const [avatarState, setAvatarState] = useState("idle");
   const [micDenied, setMicDenied] = useState(false);
   const [activated, setActivated] = useState(false); // user harus tap dulu untuk unlock audio
-  const [faceDetected, setFaceDetected] = useState(false);
+  const [, setFaceDetected] = useState(false);
   const [isWaitingAI, setIsWaitingAI] = useState(false); // loading bubble saat menunggu AI
   const [latestSelaId, setLatestSelaId] = useState(null); // id pesan SELA terbaru → typewriter
-  const [langSelected, setLangSelected] = useState(false);
-  const [awaitingLangSelect, setAwaitingLangSelect] = useState(false);
   const [isAtBottom, setIsAtBottom] = useState(true);
   const [isPortraitChatOpen, setIsPortraitChatOpen] = useState(false);
   const [liveCaptionCharIndex, setLiveCaptionCharIndex] = useState(null);
@@ -280,10 +334,6 @@ export default function VoiceUI({
   const [activeViseme, setActiveViseme] = useState(getDefaultViseme());
   const [activeScreen, setActiveScreen] = useState(null);
   const [ttsEndSignal, setTtsEndSignal] = useState(0);
-  const [isDebugOpen, setIsDebugOpen] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return new URLSearchParams(window.location.search).has("debug");
-  });
   const [lastTurnDebug, setLastTurnDebug] = useState(null);
 
   const ttsEndSignalRef = useRef(0);
@@ -307,16 +357,21 @@ export default function VoiceUI({
   const vadFrameRef = useRef(null);
   const silenceStartRef = useRef(null);
   const hasSpeechRef = useRef(false);
+  const manualStopRef = useRef(false);
+  const recordingStartedAtRef = useRef(null);
   const speechStartRef = useRef(null);
   const firstSpeechDetectedAtRef = useRef(null);
   const baselineStartedAtRef = useRef(null);
-  const modeRef = useRef(mode);
+  const vadStatsRef = useRef(createVadStats());
+  const latestVadSummaryRef = useRef(null);
   const dynamicThresholdRef = useRef(10); // fallback fallback jika baseline gagal
   const suppressRecorderOnStopRef = useRef(false);
   const lastInteractionTimeRef = useRef(Date.now());
   const sessionEndingRef = useRef(false);
   const currentChatRef = useRef(currentChat);
   const langRef = useRef(lang);
+  const sessionMemoryRef = useRef(loadSessionMemory());
+  const lastSelaSpokenTextRef = useRef("");
 
   // Face detection refs
   const audioUnlockedRef = useRef(false); // true setelah tap pertama, tidak pernah reset
@@ -324,20 +379,72 @@ export default function VoiceUI({
   const videoRef = useRef(null);
   const videoStreamRef = useRef(null);
   const faceDetectorRef = useRef(null);
+  const faceLandmarkerRef = useRef(null);
   const faceFrameRef = useRef(null);
   const lastFaceTimeRef = useRef(0);
   const lastDetectRef = useRef(0); // throttle detection ke ~500ms
   const properFaceTimeRef = useRef(null); // timestamp ketika wajah mulai menghadap dengan benar
+  const mouthTrackingAvailableRef = useRef(false);
+  const lastMouthOpenRatioRef = useRef(null);
+  const lastMouthActivityTimeRef = useRef(0);
+  const mouthActiveDuringSpeechRef = useRef(false);
   const PROPER_FACE_CONFIRMATION_MS = 1000; // 1 detik sebelum auto-activate
   const MIN_FACE_SIZE_RATIO = 0.2; // minimum 20% dari video width (~1m distance untuk kiosk)
 
+  const persistMemory = (memory) => {
+    sessionMemoryRef.current = memory;
+    if (memory) saveSessionMemory(memory);
+  };
+
+  const startMemorySession = (greetingText) => {
+    const memory = createSessionMemory({
+      lang: "id",
+      greetingText,
+    });
+    persistMemory(memory);
+    updateLastTurnDebug({
+      memorySessionId: memory.sessionId,
+      memoryTurns: memory.turns.length,
+    });
+    return memory;
+  };
+
+  const rememberTurn = (turn) => {
+    const existing =
+      sessionMemoryRef.current ||
+      createSessionMemory({
+        lang: "id",
+      });
+    const nextMemory = appendSessionTurn(existing, turn);
+    persistMemory(nextMemory);
+    updateLastTurnDebug({
+      memorySessionId: nextMemory.sessionId,
+      memoryTurns: nextMemory.turns.length,
+    });
+    return nextMemory;
+  };
+
+  const clearMemorySession = (endReason = "session_end") => {
+    if (sessionMemoryRef.current) {
+      sessionMemoryRef.current = finalizeSessionMemory(sessionMemoryRef.current, {
+        endReason,
+      });
+    }
+    sessionMemoryRef.current = null;
+    clearSessionMemory();
+    updateLastTurnDebug({
+      memorySessionId: null,
+      memoryTurns: 0,
+    });
+  };
+
   // Sinkronkan refs dengan state
-  useEffect(() => {
-    modeRef.current = mode;
-  }, [mode]);
   useEffect(() => {
     activatedRef.current = activated;
   }, [activated]);
+  useEffect(() => {
+    if (lang !== "id" && setLang) setLang("id");
+  }, [lang, setLang]);
   useEffect(() => {
     currentChatRef.current = currentChat;
   }, [currentChat]);
@@ -346,10 +453,8 @@ export default function VoiceUI({
   }, [lang]);
 
   useEffect(() => {
-    if (mode !== "speak" || !activated) {
-      setIsPortraitChatOpen(false);
-    }
-  }, [mode, activated]);
+    if (!activated) setIsPortraitChatOpen(false);
+  }, [activated]);
 
   // Kiosk mode — jika URL mengandung ?kiosk=1, langsung unlock audio tanpa tap
   useEffect(() => {
@@ -362,10 +467,36 @@ export default function VoiceUI({
     }
   }, []);
 
-  // Re-attach camera stream ke video element setiap kali overlay muncul
-  // (video element di-unmount saat activated=true, jadi stream hilang)
+  // Unlock audio global saat user tap/klik pertama kali
   useEffect(() => {
-    if (!activated && videoRef.current && videoStreamRef.current) {
+    const unlockAudio = () => {
+      if (!audioUnlockedRef.current) {
+        audioUnlockedRef.current = true;
+        // Pancing speechSynthesis agar browser memberikan izin di sesi ini
+        if ("speechSynthesis" in window) {
+          const u = new SpeechSynthesisUtterance("");
+          u.volume = 0;
+          window.speechSynthesis.speak(u);
+        }
+        console.log("[SELA] Audio unlocked via user interaction");
+      }
+      // Hapus listener setelah unlock sukses
+      window.removeEventListener("click", unlockAudio);
+      window.removeEventListener("touchstart", unlockAudio);
+    };
+
+    window.addEventListener("click", unlockAudio);
+    window.addEventListener("touchstart", unlockAudio);
+
+    return () => {
+      window.removeEventListener("click", unlockAudio);
+      window.removeEventListener("touchstart", unlockAudio);
+    };
+  }, []);
+
+  // Re-attach camera stream ke hidden video setiap kali elemennya remount.
+  useEffect(() => {
+    if (videoRef.current && videoStreamRef.current) {
       videoRef.current.srcObject = videoStreamRef.current;
       videoRef.current.play().catch(() => {});
     }
@@ -426,6 +557,9 @@ export default function VoiceUI({
 
   const speakWithAvatar = (text, speechLang = lang, onDone = null) => {
     const speechSessionId = ++speechSessionIdRef.current;
+    if (String(text || "").trim()) {
+      lastSelaSpokenTextRef.current = String(text || "").trim();
+    }
     clearLiveCaptionBoundaryTimers();
     stopSpeechTimeline();
     const timeline = buildSpeechTimeline(text, speechLang);
@@ -663,15 +797,14 @@ export default function VoiceUI({
     isProcessingRef.current = false;
     activatedRef.current = false;
     setActivated(false);
-      setAvatarState("idle");
-      setSpeechTimeline(null);
-      setSpeechCharIndex(null);
-      setActiveScreen(null);
-      setLangSelected(false);
-    setAwaitingLangSelect(false);
+    setAvatarState("idle");
+    setSpeechTimeline(null);
+    setSpeechCharIndex(null);
+    setActiveScreen(null);
     setFaceDetected(false);
     properFaceTimeRef.current = null;
     lastFaceTimeRef.current = 0;
+    clearMemorySession(endReason);
     if (onReset) onReset();
 
     setTimeout(() => {
@@ -699,28 +832,52 @@ export default function VoiceUI({
     isProcessingRef.current = true;
     markSessionInteraction();
     setActivated(true);
-    setLangSelected(false);
-    setAwaitingLangSelect(false);
+    if (setLang) setLang("id");
+    const greetingText = getTimeBasedGreeting("id");
+    startMemorySession(greetingText);
 
-    // Sapa dalam Bahasa Indonesia dulu
-    const greetID = "Halo! Selamat datang di UCIC. Saya SELA.";
-    const askID = "Mau bicara dalam Bahasa Indonesia atau Bahasa Inggris?";
-    const greetEN = "Hello! Welcome to UCIC. I'm SELA.";
-    const askEN = "Would you like to speak in Indonesian or English?";
+    speakWithAvatar(greetingText, "id", () => {
+      isProcessingRef.current = false;
+      setAvatarState("idle");
+    });
+  };
 
-    speakSequenceWithAvatar(
-      [
-        { text: greetID, lang: "id" },
-        { text: greetEN, lang: "en" },
-        { text: askID, lang: "id" },
-        { text: askEN, lang: "en" },
-      ],
-      () => {
-        isProcessingRef.current = false;
-        setAvatarState("idle");
-        setAwaitingLangSelect(true);
-      },
-    );
+  const updateMouthActivityFromLandmarks = (landmarks, now) => {
+    if (!landmarks?.length) return;
+    const upperLip = landmarks[13];
+    const lowerLip = landmarks[14];
+    const leftMouth = landmarks[61];
+    const rightMouth = landmarks[291];
+    if (!upperLip || !lowerLip || !leftMouth || !rightMouth) return;
+
+    const mouthHeight = Math.abs(lowerLip.y - upperLip.y);
+    const mouthWidth = Math.max(0.001, Math.abs(rightMouth.x - leftMouth.x));
+    const openRatio = mouthHeight / mouthWidth;
+    const previousRatio = lastMouthOpenRatioRef.current;
+    const ratioDelta =
+      previousRatio == null ? 0 : Math.abs(openRatio - previousRatio);
+
+    if (openRatio > 0.08 || ratioDelta > 0.018) {
+      lastMouthActivityTimeRef.current = now;
+      if (isListeningRef.current) mouthActiveDuringSpeechRef.current = true;
+    }
+
+    lastMouthOpenRatioRef.current = openRatio;
+  };
+
+  const hasActiveUserSpeechGate = (now = Date.now()) => {
+    const hasRecentFace = now - lastFaceTimeRef.current <= FACE_GATE_WINDOW_MS;
+    const hasRecentMouth =
+      !mouthTrackingAvailableRef.current ||
+      now - lastMouthActivityTimeRef.current <= MOUTH_ACTIVITY_WINDOW_MS;
+
+    return {
+      allowed: hasRecentFace && hasRecentMouth,
+      hasRecentFace,
+      hasRecentMouth,
+      mouthTrackingAvailable: mouthTrackingAvailableRef.current,
+      mouthOpenRatio: lastMouthOpenRatioRef.current,
+    };
   };
 
   // ── Face detection (kamera) ───────────────────────────────────
@@ -765,21 +922,46 @@ export default function VoiceUI({
 
     const initDetector = async () => {
       try {
-        const { FaceDetector, FilesetResolver } =
+        const { FaceDetector, FaceLandmarker, FilesetResolver } =
           await import("@mediapipe/tasks-vision");
         const vision = await FilesetResolver.forVisionTasks(
           "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm",
         );
         if (destroyed) return;
-        faceDetectorRef.current = await FaceDetector.createFromOptions(vision, {
-          baseOptions: {
-            modelAssetPath:
-              "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite",
-            delegate: "GPU",
-          },
-          runningMode: "VIDEO",
-          minDetectionConfidence: 0.5,
-        });
+        try {
+          faceLandmarkerRef.current = await FaceLandmarker.createFromOptions(
+            vision,
+            {
+              baseOptions: {
+                modelAssetPath:
+                  "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/latest/face_landmarker.task",
+                delegate: "GPU",
+              },
+              runningMode: "VIDEO",
+              numFaces: 1,
+              minFaceDetectionConfidence: 0.5,
+              minFacePresenceConfidence: 0.5,
+              minTrackingConfidence: 0.5,
+            },
+          );
+          mouthTrackingAvailableRef.current = true;
+          console.log("[SELA Cam] FaceLandmarker aktif — mouth gate enabled");
+        } catch (landmarkerError) {
+          mouthTrackingAvailableRef.current = false;
+          console.warn(
+            "[SELA Cam] FaceLandmarker gagal, fallback ke FaceDetector:",
+            landmarkerError?.message,
+          );
+          faceDetectorRef.current = await FaceDetector.createFromOptions(vision, {
+            baseOptions: {
+              modelAssetPath:
+                "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite",
+              delegate: "GPU",
+            },
+            runningMode: "VIDEO",
+            minDetectionConfidence: 0.5,
+          });
+        }
         startDetectionLoop();
       } catch (e) {
         console.warn("[SELA Cam] Face detector gagal load:", e.message);
@@ -790,30 +972,68 @@ export default function VoiceUI({
       const loop = () => {
         faceFrameRef.current = requestAnimationFrame(loop);
         if (
-          !faceDetectorRef.current ||
+          (!faceDetectorRef.current && !faceLandmarkerRef.current) ||
           !videoRef.current ||
           videoRef.current.readyState < 2
         )
           return;
 
-        // Throttle: jalankan detection setiap ~500ms
+        // Throttle lebih cepat saat listening agar mouth gate tidak telat.
         const now = Date.now();
-        if (now - lastDetectRef.current < 500) return;
+        const detectInterval = isListeningRef.current ? 120 : 500;
+        if (now - lastDetectRef.current < detectInterval) return;
         lastDetectRef.current = now;
 
         try {
-          const result = faceDetectorRef.current.detectForVideo(
-            videoRef.current,
-            now,
-          );
-          const hasFace = result.detections.length > 0;
+          const vidW = videoRef.current.videoWidth || 640;
+          let detections = [];
+          let hasFace = false;
+          let facingCamera = false;
+
+          if (faceLandmarkerRef.current) {
+            const result = faceLandmarkerRef.current.detectForVideo(
+              videoRef.current,
+              now,
+            );
+            const faceLandmarks = result.faceLandmarks?.[0] || null;
+            hasFace = Boolean(faceLandmarks?.length);
+
+            if (faceLandmarks) {
+              const xs = faceLandmarks.map((point) => point.x);
+              const minX = Math.min(...xs);
+              const maxX = Math.max(...xs);
+              const faceWidthRatio = maxX - minX;
+              const eyeLeft = faceLandmarks[33];
+              const eyeRight = faceLandmarks[263];
+              const nose = faceLandmarks[1];
+              const eyeDist = Math.abs((eyeRight?.x || 0) - (eyeLeft?.x || 0));
+              const midEyeX = ((eyeLeft?.x || 0) + (eyeRight?.x || 0)) / 2;
+              const eyeHeightDiff = Math.abs(
+                (eyeLeft?.y || 0) - (eyeRight?.y || 0),
+              );
+              const centeredNose =
+                eyeDist > 0 &&
+                Math.abs((nose?.x || 0) - midEyeX) / eyeDist <= 0.35;
+              facingCamera =
+                faceWidthRatio >= MIN_FACE_SIZE_RATIO &&
+                centeredNose &&
+                eyeHeightDiff <= eyeDist * 0.22;
+              updateMouthActivityFromLandmarks(faceLandmarks, now);
+            }
+          } else {
+            const result = faceDetectorRef.current.detectForVideo(
+              videoRef.current,
+              now,
+            );
+            detections = result.detections || [];
+            hasFace = detections.length > 0;
+          }
 
           // Cek apakah wajah menghadap kamera (bukan miring/membelakangi)
           // PENTING: keypoints pakai koordinat normalized (0-1),
           //          box.width/height pakai piksel → harus dinormalisasi dulu
-          const vidW = videoRef.current.videoWidth || 640;
-          const vidH = videoRef.current.videoHeight || 480;
-          const facingCamera = result.detections.some((det) => {
+          if (!faceLandmarkerRef.current) {
+            facingCamera = detections.some((det) => {
             const kps = det.keypoints;
             const box = det.boundingBox;
             if (!kps || kps.length < 3 || !box) return false;
@@ -847,6 +1067,7 @@ export default function VoiceUI({
 
             return true;
           });
+          }
 
           if (hasFace && facingCamera) {
             lastFaceTimeRef.current = now;
@@ -885,6 +1106,8 @@ export default function VoiceUI({
             if (
               activatedRef.current &&
               !sessionEndingRef.current &&
+              !isProcessingRef.current &&
+              !isListeningRef.current &&
               lastFaceTimeRef.current > 0 &&
               !hasFace &&
               now - lastFaceTimeRef.current > FACE_LOST_END_MS
@@ -923,7 +1146,7 @@ export default function VoiceUI({
       videoStreamRef.current?.getTracks().forEach((t) => t.stop());
       videoStreamRef.current = null;
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   // ── Stop & cleanup ────────────────────────────────────────────
   const stopListening = () => {
@@ -939,9 +1162,13 @@ export default function VoiceUI({
     analyserRef.current = null;
     silenceStartRef.current = null;
     hasSpeechRef.current = false;
+    manualStopRef.current = false;
+    recordingStartedAtRef.current = null;
     speechStartRef.current = null;
     firstSpeechDetectedAtRef.current = null;
     baselineStartedAtRef.current = null;
+    vadStatsRef.current = createVadStats();
+    mouthActiveDuringSpeechRef.current = false;
   };
 
   // ── Start auto-listen ─────────────────────────────────────────
@@ -951,7 +1178,6 @@ export default function VoiceUI({
   startListeningRef.current = async () => {
     // Cek via ref — tidak pernah stale
     if (isListeningRef.current || isProcessingRef.current) return;
-    if (modeRef.current !== "speak") return;
 
     try {
       // ── Aggressive audio constraints untuk noisy environments ──
@@ -959,16 +1185,20 @@ export default function VoiceUI({
         audio: {
           echoCancellation: { ideal: true },
           noiseSuppression: { ideal: true },
-          autoGainControl: { ideal: true },
+          autoGainControl: { ideal: false },
           channelCount: { ideal: 1 }, // Mono untuk lebih fokus
           sampleRate: { ideal: 16000 }, // Optimal untuk speech recognition
           sampleSize: { ideal: 16 },
-          latency: { ideal: 0.01 },
+          latency: { ideal: 0.05 },
         },
       });
       streamRef.current = stream;
       setMicDenied(false);
       isListeningRef.current = true;
+      recordingStartedAtRef.current = Date.now();
+      vadStatsRef.current = createVadStats();
+      latestVadSummaryRef.current = null;
+      mouthActiveDuringSpeechRef.current = false;
 
       // AudioContext + Analyser untuk VAD
       const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1003,6 +1233,9 @@ export default function VoiceUI({
       };
 
       recorder.onstop = () => {
+        const recordingEndedAt = Date.now();
+        const recordingStartedAt = recordingStartedAtRef.current;
+        const detectedSpeechStartedAt = speechStartRef.current;
         processor.disconnect();
         silentGain.disconnect();
         if (suppressRecorderOnStopRef.current) {
@@ -1014,9 +1247,32 @@ export default function VoiceUI({
         const speechDuration = speechStartRef.current
           ? Date.now() - speechStartRef.current
           : 0;
+        const mouthActiveDuringSpeech = mouthActiveDuringSpeechRef.current;
+        const vadSummary = {
+          ...summarizeVadStats(vadStatsRef.current),
+          mouthTrackingAvailable: mouthTrackingAvailableRef.current,
+          mouthActiveDuringSpeech,
+        };
+        latestVadSummaryRef.current = vadSummary;
+        const trimmedPcmChunks =
+          pcmChunks.length > 0
+            ? trimPcmChunksForSpeech(pcmChunks, audioCtx.sampleRate, {
+                recordingStartedAt,
+                speechStartedAt: detectedSpeechStartedAt,
+                recordingEndedAt,
+              })
+            : [];
+        const originalPcmSamples = pcmChunks.reduce(
+          (sum, chunk) => sum + chunk.length,
+          0,
+        );
+        const encodedPcmSamples = trimmedPcmChunks.reduce(
+          (sum, chunk) => sum + chunk.length,
+          0,
+        );
         const audioBlob =
           pcmChunks.length > 0
-            ? encodeWavBlob(pcmChunks, audioCtx.sampleRate)
+            ? encodeWavBlob(trimmedPcmChunks, audioCtx.sampleRate)
             : new Blob(chunks, {
                 type: recorder.mimeType || recorderMimeType || "audio/webm",
               });
@@ -1032,27 +1288,49 @@ export default function VoiceUI({
             : null,
           "ms | blobSize:",
           audioBlob.size,
+          "| audio:",
+          {
+            sampleRate: audioCtx.sampleRate,
+            originalSamples: originalPcmSamples,
+            encodedSamples: encodedPcmSamples,
+            trimmed:
+              encodedPcmSamples > 0 && encodedPcmSamples < originalPcmSamples,
+            recordingMs:
+              recordingStartedAt && recordingEndedAt
+                ? recordingEndedAt - recordingStartedAt
+                : null,
+          },
+          "| vad:",
+          vadSummary,
         );
+        const isManualStop = manualStopRef.current;
         stopListening();
 
+        // Apakah VAD audio sudah mengonfirmasi ada ucapan nyata?
+        const vadConfirmedSpeech = hadSpeech && speechDuration >= MIN_SPEECH_MS;
+
         if (
-          !hadSpeech ||
-          speechDuration < MIN_SPEECH_MS ||
-          audioBlob.size < MIN_BLOB_SIZE
+          (!isManualStop && !hadSpeech) ||
+          (!isManualStop && speechDuration < MIN_SPEECH_MS) ||
+          audioBlob.size < MIN_BLOB_SIZE || // Ukuran file tetap dicek agar tidak memproses data kosong
+          (!isManualStop && !vadConfirmedSpeech && vadSummary.speechLikeRatio < MIN_SPEECHLIKE_RATIO) ||
+          (!isManualStop && !vadConfirmedSpeech && vadSummary.gatedSpeechFrames < MIN_GATED_SPEECH_FRAMES) ||
+          (!isManualStop && !vadConfirmedSpeech && vadSummary.mouthTrackingAvailable && !mouthActiveDuringSpeech)
         ) {
           console.log("[SELA] Skip — noise/pendek/kecil:", {
             hadSpeech,
             speechDuration,
             blobSize: audioBlob.size,
+            vadSummary,
+            mouthActiveDuringSpeech,
           });
           setAvatarState("idle");
-          setTimeout(() => startListeningRef.current?.(), 300);
           return;
         }
 
         // Ada suara valid → proses
-        console.log("[SELA] Ada suara valid, mulai processing...");
-        processAudioRef.current(audioBlob);
+        console.log("[SELA] Ada suara valid, mulai processing...", { isManualStop });
+        processAudioRef.current(audioBlob, isManualStop);
       };
 
       recorder.start(100);
@@ -1073,9 +1351,8 @@ export default function VoiceUI({
         if (!isListeningRef.current) return;
 
         analyser.getByteTimeDomainData(data);
-        const rms = Math.sqrt(
-          data.reduce((s, v) => s + (v - 128) * (v - 128), 0) / data.length,
-        );
+        const features = getFrameAudioFeatures(data);
+        const rms = features.rms;
         baselineRmsValues.push(rms);
         const avgSoFar =
           baselineRmsValues.reduce((a, b) => a + b, 0) /
@@ -1085,7 +1362,10 @@ export default function VoiceUI({
           avgSoFar * EARLY_SPEECH_THRESHOLD_MULTIPLIER,
         );
 
-        if (rms > provisionalThreshold && !hasSpeechRef.current) {
+        const gate = hasActiveUserSpeechGate();
+        const speechLike = isSpeechLikeFrame(features, provisionalThreshold);
+
+        if (speechLike && gate.allowed && !hasSpeechRef.current) {
           hasSpeechRef.current = true;
           speechStartRef.current = Date.now();
           firstSpeechDetectedAtRef.current = speechStartRef.current;
@@ -1095,8 +1375,10 @@ export default function VoiceUI({
           );
           console.log("[SELA VAD] Early speech detected during baseline", {
             rms: Number(rms.toFixed(2)),
+            zcr: Number(features.zcr.toFixed(4)),
             provisionalThreshold: Number(provisionalThreshold.toFixed(2)),
             threshold: Number(dynamicThresholdRef.current.toFixed(2)),
+            gate,
           });
           startActualVAD();
           return;
@@ -1144,10 +1426,25 @@ export default function VoiceUI({
             return;
           }
           analyser.getByteTimeDomainData(data);
-          // Nilai time-domain: 128 = silence, deviation dari 128 = ada suara
-          const rms = Math.sqrt(
-            data.reduce((s, v) => s + (v - 128) * (v - 128), 0) / data.length,
+          const features = getFrameAudioFeatures(data);
+          const rms = features.rms;
+          const gate = hasActiveUserSpeechGate();
+          const speechLike = isSpeechLikeFrame(
+            features,
+            dynamicThresholdRef.current,
           );
+          const stats = vadStatsRef.current;
+          stats.frames += 1;
+          stats.rmsSum += rms;
+          stats.zcrSum += features.zcr;
+          stats.maxRms = Math.max(stats.maxRms, rms);
+          if (rms > dynamicThresholdRef.current) stats.loudFrames += 1;
+          if (speechLike) stats.speechLikeFrames += 1;
+          if (speechLike && gate.allowed) stats.gatedSpeechFrames += 1;
+          if (speechLike && !gate.hasRecentFace)
+            stats.blockedByFaceGateFrames += 1;
+          if (speechLike && gate.hasRecentFace && !gate.hasRecentMouth)
+            stats.blockedByMouthGateFrames += 1;
 
           // Log RMS setiap ~500ms supaya bisa debug threshold
           logThrottle++;
@@ -1155,18 +1452,26 @@ export default function VoiceUI({
             console.log(
               "[SELA VAD] RMS:",
               rms.toFixed(2),
+              "| zcr:",
+              features.zcr.toFixed(4),
               "| threshold:",
               dynamicThresholdRef.current.toFixed(2),
+              "| gate:",
+              gate.allowed ? "ok" : "blocked",
               "| hasSpeech:",
               hasSpeechRef.current,
             );
 
-          if (rms > dynamicThresholdRef.current) {
+          if (speechLike && gate.allowed) {
             if (!hasSpeechRef.current) {
               hasSpeechRef.current = true;
               speechStartRef.current = Date.now();
               firstSpeechDetectedAtRef.current = speechStartRef.current;
-              console.log("[SELA VAD] Speech detected! RMS:", rms.toFixed(2));
+              console.log("[SELA VAD] Speech detected!", {
+                rms: Number(rms.toFixed(2)),
+                zcr: Number(features.zcr.toFixed(4)),
+                gate,
+              });
             }
             silenceStartRef.current = null;
           } else if (hasSpeechRef.current) {
@@ -1209,7 +1514,7 @@ export default function VoiceUI({
   // ── Process audio → transcribe → AI → TTS ────────────────────
   // Juga disimpan di ref supaya startListening bisa memanggilnya
   const processAudioRef = useRef(null);
-  processAudioRef.current = async (audioBlob) => {
+  processAudioRef.current = async (audioBlob, isManualStop = false) => {
     const turnStartedAt = Date.now();
     const turnId = `turn_${turnStartedAt.toString(36)}`;
     const turnMetrics = {
@@ -1230,12 +1535,28 @@ export default function VoiceUI({
     setAvatarState("thinking");
     try {
       const sttStartedAt = Date.now();
-      const rawText = await transcribeAudio(audioBlob, lang);
+      const vadSummary = latestVadSummaryRef.current || {};
+      const rawText = await transcribeAudio(audioBlob, lang, {
+        vad: vadSummary,
+        manualStop: isManualStop,
+        lastSelaSpeech: lastSelaSpokenTextRef.current,
+        faceGate: {
+          lastFaceMsAgo: lastFaceTimeRef.current
+            ? Date.now() - lastFaceTimeRef.current
+            : null,
+          mouthTrackingAvailable: mouthTrackingAvailableRef.current,
+          lastMouthActivityMsAgo: lastMouthActivityTimeRef.current
+            ? Date.now() - lastMouthActivityTimeRef.current
+            : null,
+          mouthOpenRatio: lastMouthOpenRatioRef.current,
+        },
+      });
       turnMetrics.sttMs = Date.now() - sttStartedAt;
       updateLastTurnDebug({
         ...turnMetrics,
         stage: "transcribed",
         rawTranscript: rawText,
+        vad: vadSummary,
       });
 
       // Check if server filtered out background audio
@@ -1253,7 +1574,6 @@ export default function VoiceUI({
         });
         isProcessingRef.current = false;
         setAvatarState("idle");
-        setTimeout(() => startListeningRef.current?.(), 300);
         return;
       }
 
@@ -1291,7 +1611,6 @@ export default function VoiceUI({
         });
         isProcessingRef.current = false;
         setAvatarState("idle");
-        setTimeout(() => startListeningRef.current?.(), 300);
         return;
       }
 
@@ -1301,7 +1620,46 @@ export default function VoiceUI({
         return;
       }
 
+      const memoryAfterUser = rememberTurn({
+        role: "user",
+        type: "voice_question",
+        text,
+      });
+      const directRecallResponse = buildDirectRecallResponse(
+        memoryAfterUser,
+        text,
+      );
       onSend(text);
+      if (directRecallResponse) {
+        if (onReceive) onReceive(directRecallResponse);
+        const memoryAfterRecall = rememberTurn({
+          role: "sela",
+          type: "memory_recall",
+          text: directRecallResponse.text,
+          spokenText:
+            directRecallResponse.spokenText || directRecallResponse.text,
+          screen: directRecallResponse.screen,
+          intent: directRecallResponse.debug?.intent,
+          counselorMode: directRecallResponse.debug?.counselorMode,
+        });
+        setActiveScreen(directRecallResponse.screen || null);
+        updateLastTurnDebug({
+          ...turnMetrics,
+          stage: "memory_recall",
+          finalTranscript: text,
+          chatProvider: "session_memory",
+          memorySessionId: memoryAfterRecall.sessionId,
+          memoryTurns: memoryAfterRecall.turns.length,
+        });
+        const recallSpokenText =
+          directRecallResponse.spokenText || directRecallResponse.text;
+        speakResponseWithAvatar(recallSpokenText, "id", () => {
+          isProcessingRef.current = false;
+          setAvatarState("idle");
+        });
+        return;
+      }
+
       setIsWaitingAI(true);
       const requestId = ++aiRequestSeqRef.current;
 
@@ -1312,7 +1670,11 @@ export default function VoiceUI({
       history.push({ role: "user", content: text });
       const aiStartedAt = Date.now();
       setAvatarState("processing");
-      const response = await getChatCompletion(history, lang);
+      const response = await getChatCompletion(
+        history,
+        lang,
+        sessionMemoryRef.current,
+      );
       turnMetrics.aiMs = Date.now() - aiStartedAt;
       if (requestId !== aiRequestSeqRef.current) return;
       setIsWaitingAI(false);
@@ -1352,12 +1714,20 @@ export default function VoiceUI({
         isProcessingRef.current = false;
         setTimeout(() => {
           setAvatarState("idle");
-          startListeningRef.current?.();
         }, 500);
         return;
       }
 
       if (onReceive) onReceive(response);
+      rememberTurn({
+        role: "sela",
+        type: "answer",
+        text: response.text,
+        spokenText: response.spokenText || response.text,
+        screen: response.screen,
+        intent: response.debug?.intent,
+        counselorMode: response.debug?.counselorMode,
+      });
       setActiveScreen(response.screen || null);
       clearScreenHoldTimer();
       markSessionInteraction();
@@ -1407,7 +1777,6 @@ export default function VoiceUI({
           stopSpeechTimeline();
           setAvatarState("idle");
           isProcessingRef.current = false;
-          setTimeout(() => startListeningRef.current?.(), 350);
         }
       }, Math.max(estDuration + 9000, 45000));
 
@@ -1436,8 +1805,7 @@ export default function VoiceUI({
               screenHoldTimerRef.current = null;
             }, SCREEN_CARD_HOLD_MS);
           }
-          // Delay 350ms — beri waktu speaker selesai bergema sebelum mic aktif lagi
-          setTimeout(() => startListeningRef.current?.(), 350);
+          setAvatarState("idle");
         },
       );
     } catch (error) {
@@ -1457,32 +1825,26 @@ export default function VoiceUI({
       if (onReceive) onReceive(t[lang].error_stt);
       setAvatarState("idle");
       isProcessingRef.current = false;
-      setTimeout(() => startListeningRef.current?.(), 1500);
     }
   };
 
-  // ── Auto-start saat mode speak DAN sudah diaktivasi ──────────
+  // ── Voice-only: mic hanya menyala saat user menekan tombol bicara ──────────
   useEffect(() => {
-    if (mode !== "speak" || !activated) {
+    if (!activated) {
       stopListening();
       setAvatarState("idle");
       isProcessingRef.current = false;
-      return;
     }
-    const timer = setTimeout(() => startListeningRef.current?.(), 200);
-    return () => {
-      clearTimeout(timer);
-      stopListening();
-    };
-  }, [mode, activated]);
+    return () => stopListening();
+  }, [activated]);
 
   useEffect(() => {
-    if (mode === "speak" && activated) return;
+    if (activated) return;
     cancelActiveSpeech();
     window.speechSynthesis?.cancel();
     setSpeechTimeline(null);
     setSpeechCharIndex(null);
-  }, [mode, activated, cancelActiveSpeech]);
+  }, [activated, cancelActiveSpeech]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -1502,6 +1864,11 @@ export default function VoiceUI({
     aiRequestSeqRef.current++;
     setIsWaitingAI(false);
     markSessionInteraction();
+    rememberTurn({
+      role: "user",
+      type: "farewell",
+      text: userText,
+    });
     onSend(userText);
     stopListening();
     window.speechSynthesis?.cancel();
@@ -1523,6 +1890,12 @@ export default function VoiceUI({
         : "You're welcome! Happy to help. Feel free to come back anytime!";
 
     if (onReceive) onReceive(msg);
+    rememberTurn({
+      role: "sela",
+      type: "farewell_response",
+      text: msg,
+      spokenText: msg,
+    });
 
     // Fallback jika TTS onEnd tidak terpanggil (Chrome bug)
     const farewellFallback = setTimeout(() => {
@@ -1537,6 +1910,7 @@ export default function VoiceUI({
       setIsPortraitChatOpen(false);
       setAvatarState("idle");
       setActivated(false);
+      clearMemorySession("farewell");
       if (onReset) onReset();
     }, 6000);
 
@@ -1553,191 +1927,55 @@ export default function VoiceUI({
       setIsPortraitChatOpen(false);
       setAvatarState("idle");
       setActivated(false);
-      setLangSelected(false);
-      setAwaitingLangSelect(false);
+      clearMemorySession("farewell");
       if (onReset) onReset();
     });
   };
 
-  // ── Type mode ─────────────────────────────────────────────────
-  const handleSubmit = async (e) => {
-    let textToSubmit = value;
-
-    // Handle both form event and direct string call (from quick replies/suggestions)
-    if (typeof e === "string") {
-      // Direct call with text
-      textToSubmit = e;
-      setValue("");
-      e = { preventDefault: () => {} };
-    } else {
-      e.preventDefault();
-    }
-
-    if (!textToSubmit.trim()) return;
-    const userText = textToSubmit.trim();
-    markSessionInteraction();
-    setValue("");
-    setIsAtBottom(true);
-    if (isFarewell(userText)) {
-      handleFarewell(userText);
+  const handleVoiceButtonClick = () => {
+    if (!activatedRef.current || isProcessingRef.current) return;
+    if (isListeningRef.current) {
+      if (recorderRef.current?.state !== "inactive") {
+        manualStopRef.current = true;
+        recorderRef.current.stop();
+      }
       return;
     }
-    onSend(userText);
-
-    // Pesan pertama & bahasa belum dipilih → tampilkan bilingual greeting
-    if (!langSelected && (currentChat?.messages ?? []).length === 0) {
-      const greetID = "Hai, apa yang bisa SELA bantu hari ini, nih?";
-      const greetEN = "Hello! How can I help you today?";
-      const askID = "Mau bicara dalam Bahasa Indonesia atau Bahasa Inggris?";
-      const askEN = "Would you like to speak in Indonesian or English?";
-      const combined = `${greetID}\n\n${greetEN}\n\n${askID}\n\n${askEN}`;
-      if (onReceive) onReceive(combined);
-      setAwaitingLangSelect(false);
-      speakSequenceWithAvatar(
-        [
-          { text: greetID, lang: "id" },
-          { text: greetEN, lang: "en" },
-          { text: askID, lang: "id" },
-          { text: askEN, lang: "en" },
-        ],
-        () => {
-          setAvatarState("idle");
-          setAwaitingLangSelect(true);
-        },
-      );
-      return;
-    }
-
-    setAvatarState("thinking");
-    setIsWaitingAI(true);
-    const requestId = ++aiRequestSeqRef.current;
-    try {
-      const history = (currentChat?.messages || []).map((m) => ({
-        role: m.role,
-        content: m.text,
-      }));
-      history.push({ role: "user", content: userText });
-      const response = await getChatCompletion(history, lang);
-      if (requestId !== aiRequestSeqRef.current) return;
-      setIsWaitingAI(false);
-      if (onReceive) onReceive(response);
-      markSessionInteraction();
-      speakResponseWithAvatar(
-        response.spokenText || response.text,
-        response.detectedLang || lang,
-        () => setAvatarState("idle"),
-      );
-    } catch {
-      if (requestId !== aiRequestSeqRef.current) return;
-      setIsWaitingAI(false);
-      if (onReceive) onReceive(t[lang].error_network);
-      setAvatarState("idle");
-    }
+    startListeningRef.current?.();
   };
 
-  // ── Pilih bahasa saat greeting ────────────────────────────────
-  const handleLangSelect = (chosen) => {
-    markSessionInteraction();
-    if (setLang) setLang(chosen);
-    setLangSelected(true);
-    setAwaitingLangSelect(false);
-    window.speechSynthesis?.cancel();
-    isProcessingRef.current = true;
-    const langLabel = chosen === "id" ? "🇮🇩 Bahasa Indonesia" : "🇬🇧 English";
-
-    // Use time-based greeting instead of static message
-    const timeBasedGreeting = getTimeBasedGreeting(chosen);
-    const confirm = timeBasedGreeting;
-
-    if (mode === "type") {
-      onSend(langLabel);
-      if (onReceive) onReceive(confirm);
-    }
-    speakWithAvatar(confirm, chosen, () => {
-      isProcessingRef.current = false;
-      startListeningRef.current?.();
-    });
-  };
-
-  // ── Mode Toggle ───────────────────────────────────────────────
-  const ModeToggle = () => (
-    <div className="flex justify-center">
-      <div className="inline-flex items-center bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm border border-gray-100/80 dark:border-white/10 rounded-2xl shadow-sm overflow-hidden transition-colors">
-        <button
-          id="mode-type-btn"
-          onClick={() => setMode("type")}
-          className={`flex flex-col items-center gap-1 px-8 py-2.5 transition-all duration-200
-            ${mode === "type" ? "text-blue-600 dark:text-blue-400" : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"}`}
-        >
-          <IconKeyboard />
-          <span className="text-[10px] font-bold uppercase tracking-widest">
-            {t[lang].type_mode}
-          </span>
-        </button>
-        <div className="w-px h-8 bg-gray-200 dark:bg-white/10" />
-        <button
-          id="mode-speak-btn"
-          onClick={() => setMode("speak")}
-          className={`flex flex-col items-center gap-1 px-8 py-2.5 transition-all duration-200
-            ${mode === "speak" ? "text-blue-600 dark:text-blue-400" : "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"}`}
-        >
-          <IconMicToggle />
-          <span className="text-[10px] font-bold uppercase tracking-widest">
-            {t[lang].speak_mode}
-          </span>
-        </button>
-      </div>
-    </div>
-  );
-
-  const DebugPanel = () => {
-    if (!lastTurnDebug) return null;
-
-    const rows = [
-      ["stage", lastTurnDebug.stage],
-      ["provider", lastTurnDebug.chatProvider || "-"],
-      ["mode", lastTurnDebug.counselorMode || "-"],
-      ["STT", lastTurnDebug.sttMs ? `${lastTurnDebug.sttMs}ms` : "-"],
-      ["AI", lastTurnDebug.aiMs ? `${lastTurnDebug.aiMs}ms` : "-"],
-      ["chunks", lastTurnDebug.ttsChunks || "-"],
-      ["chars", lastTurnDebug.spokenChars || "-"],
-      ["screen", lastTurnDebug.screenMode || "-"],
-    ];
+  const VoiceActionButton = () => {
+    const disabled = isProcessingRef.current || avatarState === "speaking";
+    const isListening = avatarState === "listening";
+    const label = isListening
+      ? "Selesai bicara"
+      : lang === "id"
+        ? "Tekan untuk bicara"
+        : "Press to speak";
 
     return (
-      <div className="absolute left-4 top-20 z-30 w-64 rounded-2xl border border-slate-200/70 bg-white/90 p-3 text-[11px] text-slate-600 shadow-xl backdrop-blur-md dark:border-white/10 dark:bg-slate-950/85 dark:text-slate-300">
-        <div className="mb-2 flex items-center justify-between gap-2">
-          <span className="font-bold uppercase tracking-widest text-slate-400">
-            Debug Turn
+      <div className="flex flex-col items-center gap-2">
+        <p className="text-xs font-bold uppercase tracking-widest text-blue-700 dark:text-blue-300">
+          {label}
+        </p>
+        <button
+          id="voice-action-btn"
+          type="button"
+          onClick={handleVoiceButtonClick}
+          disabled={disabled}
+          className={`flex h-20 w-20 items-center justify-center rounded-full text-white shadow-2xl transition-all duration-200 active:scale-95
+            ${
+              isListening
+                ? "bg-red-500 shadow-red-300/40 hover:bg-red-600"
+                : "bg-blue-600 shadow-blue-400/35 hover:bg-blue-700"
+            }
+            ${disabled ? "cursor-not-allowed opacity-60" : ""}`}
+          aria-label={label}
+        >
+          <span className="scale-125">
+            <IconMicToggle />
           </span>
-          <button
-            type="button"
-            onClick={() => setIsDebugOpen(false)}
-            className="rounded-full px-2 py-0.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-white/10"
-          >
-            tutup
-          </button>
-        </div>
-        <div className="grid grid-cols-2 gap-x-3 gap-y-1">
-          {rows.map(([label, value]) => (
-            <div key={label} className="contents">
-              <span className="uppercase tracking-wider text-slate-400">
-                {label}
-              </span>
-              <span className="truncate font-medium">{String(value)}</span>
-            </div>
-          ))}
-        </div>
-        {lastTurnDebug.finalTranscript && (
-          <p className="mt-2 line-clamp-2 border-t border-slate-200/70 pt-2 dark:border-white/10">
-            {lastTurnDebug.finalTranscript}
-          </p>
-        )}
-        {lastTurnDebug.error && (
-          <p className="mt-2 line-clamp-2 text-red-500">
-            {lastTurnDebug.error}
-          </p>
-        )}
+        </button>
       </div>
     );
   };
@@ -1761,45 +1999,47 @@ export default function VoiceUI({
       case "speaking":
         return lang === "id" ? "SELA sedang bicara..." : "SELA is speaking...";
       default:
-        return lang === "id" ? "Siap mendengarkan" : "Ready to listen";
+        return lang === "id" ? "Tekan mic untuk bertanya" : "Press mic to ask";
     }
   };
 
   const messages = currentChat?.messages ?? [];
 
-  // ── SPEAK MODE ────────────────────────────────────────────────
-  if (mode === "speak") {
-    const latestMsg = messages[messages.length - 1];
+  // ── VOICE-ONLY KIOSK MODE ─────────────────────────────────────
+  const latestMsg = messages[messages.length - 1];
+  const screenForDisplay = activeScreen || latestMsg?.screen || null;
 
-    // Overlay sebelum aktivasi — kamera preview + face detection status
-    if (!activated) {
-      return (
-        <main className="flex-1 relative flex flex-col items-center justify-center overflow-hidden">
-          {/* Avatar 3D Background - FULL SCREEN */}
-          <div className="absolute inset-0 pointer-events-none z-0">
-            <div className="pointer-events-auto w-full h-full">
-              <AvatarPlaceholder
-                state="idle"
-                theme={theme}
-                activeViseme={activeViseme}
-              />
-            </div>
-          </div>
-
-          {/* Hidden Camera for Face Detection */}
-          <div className="absolute opacity-0 pointer-events-none overflow-hidden w-1 h-1">
-            <video ref={videoRef} muted playsInline autoPlay />
-          </div>
-
-          <div className="absolute bottom-8 z-20">
-            <ModeToggle />
-          </div>
-        </main>
-      );
-    }
-
+  // Overlay sebelum aktivasi — kamera preview + face detection status
+  if (!activated) {
     return (
-      <main className="flex-1 relative flex flex-col overflow-hidden">
+      <main className="flex-1 relative flex flex-col items-center justify-center overflow-hidden">
+        {/* Avatar 3D Background - FULL SCREEN */}
+        <div className="absolute inset-0 pointer-events-none z-0">
+          <div className="pointer-events-auto w-full h-full">
+            <AvatarPlaceholder
+              state="idle"
+              theme={theme}
+              activeViseme={activeViseme}
+            />
+          </div>
+        </div>
+
+        {/* Hidden Camera for Face Detection */}
+        <div className="absolute opacity-0 pointer-events-none overflow-hidden w-1 h-1">
+          <video ref={videoRef} muted playsInline autoPlay />
+        </div>
+
+        <div className="absolute bottom-8 z-20">
+          <p className="rounded-full border border-white/70 bg-white/85 px-5 py-3 text-center text-xs font-bold uppercase tracking-widest text-slate-500 shadow-lg backdrop-blur-md dark:border-white/10 dark:bg-slate-900/85 dark:text-slate-300">
+            Menunggu wajah pengunjung
+          </p>
+        </div>
+      </main>
+    );
+  }
+
+  return (
+    <main className="flex-1 relative flex flex-col overflow-hidden">
         {/* Avatar full screen */}
         <div className="absolute inset-0 pointer-events-none z-0">
           <div className="pointer-events-auto w-full h-full">
@@ -1810,66 +2050,97 @@ export default function VoiceUI({
             />
           </div>
         </div>
-        {isDebugOpen && <DebugPanel />}
-
-        {/* Chat bubbles — landscape/wide mode only */}
-        <div className="absolute top-0 right-0 bottom-28 w-[340px] hidden md:flex [@media(orientation:portrait)]:hidden flex-col justify-end pr-8 pb-6 pt-4 pointer-events-auto z-10 transition-colors overflow-hidden">
-          {messages.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-center gap-2 pb-4 opacity-50">
-              <IconSparkle />
-              <p className="text-xs text-gray-400 dark:text-gray-500 mt-2 italic tracking-widest">
-                SELA AI
-              </p>
-            </div>
-          ) : (
-            <div
-              ref={chatScrollRef}
-              onScroll={handleChatScroll}
-              className="flex flex-col gap-1 overflow-y-auto hide-scrollbar"
-            >
-              {messages.map((msg) => (
-                <div key={msg.id}>
-                  <ChatBubble
-                    role={msg.role}
-                    text={msg.text}
-                    speechText={msg.spokenText || msg.text}
-                    lang={lang}
-                    isNew={msg.role === "assistant" && msg.id === latestSelaId}
-                    ttsEndSignal={ttsEndSignal}
-                    voiceMode={mode === "speak"}
-                    speechCharIndex={
-                      msg.role === "assistant" && msg.id === latestSelaId
-                        ? speechCharIndex
-                        : null
-                    }
-                  />
-                  {msg.role === "assistant" &&
-                    msg.media &&
-                    msg.media.length > 0 && <MediaCarousel media={msg.media} />}
-                </div>
-              ))}
-              {isWaitingAI && (
-                <ChatBubble
-                  role="assistant"
-                  text=""
-                  lang={lang}
-                  isLoading
-                  ttsEndSignal={ttsEndSignal}
-                  voiceMode={mode === "speak"}
-                />
-              )}
-              <div ref={messagesEndRef} />
-            </div>
-          )}
+        <div className="absolute opacity-0 pointer-events-none overflow-hidden w-1 h-1">
+          <video ref={videoRef} muted playsInline autoPlay />
         </div>
-        {/* Tombol scroll ke bawah — voice mode, di atas panel chat */}
+
+        {/* Landscape info panel — AnswerCard/QR first, chat history secondary */}
+        <aside className="absolute top-20 right-0 bottom-28 w-[390px] hidden md:flex [@media(orientation:portrait)]:hidden flex-col gap-3 pr-8 pb-6 pt-2 pointer-events-auto z-10 transition-colors overflow-hidden">
+          <div className="shrink-0">
+            {screenForDisplay ? (
+              <AnswerCard screen={screenForDisplay} />
+            ) : (
+              <div className="rounded-2xl border border-slate-200 bg-white px-4 py-4 text-slate-800 shadow-xl">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-blue-600">
+                  Informasi
+                </p>
+                <h3 className="mt-1 text-sm font-bold text-slate-950">
+                  Siap membantu
+                </h3>
+                <p className="mt-1 text-xs font-medium leading-snug text-slate-600">
+                  Ringkasan jawaban, langkah, dan QR akan muncul di sini.
+                </p>
+              </div>
+            )}
+          </div>
+
+          <div className="min-h-0 flex-1 overflow-hidden rounded-2xl border border-slate-200 bg-white/95 px-3 py-3 shadow-xl">
+            <div className="mb-2 flex items-center justify-between">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                Riwayat Singkat
+              </p>
+              {messages.length > 0 && (
+                <p className="text-[10px] font-semibold text-slate-400">
+                  {messages.length} pesan
+                </p>
+              )}
+            </div>
+            {messages.length === 0 && !isWaitingAI ? (
+              <div className="flex h-full flex-col items-center justify-center gap-2 text-center text-slate-400">
+                <IconSparkle />
+                <p className="text-xs font-semibold uppercase tracking-widest">
+                  Belum ada chat
+                </p>
+              </div>
+            ) : (
+              <div
+                ref={chatScrollRef}
+                onScroll={handleChatScroll}
+                className="flex h-full flex-col gap-1 overflow-y-auto hide-scrollbar"
+              >
+                {messages.map((msg) => (
+                  <div key={msg.id}>
+                    <ChatBubble
+                      role={msg.role}
+                      text={msg.text}
+                      speechText={msg.spokenText || msg.text}
+                      lang={lang}
+                      isNew={false}
+                      ttsEndSignal={ttsEndSignal}
+                      voiceMode={false}
+                      speechCharIndex={null}
+                    />
+                    {msg.role === "assistant" &&
+                      msg.media &&
+                      msg.media.length > 0 && (
+                        <MediaCarousel media={msg.media} />
+                      )}
+                  </div>
+                ))}
+                {isWaitingAI && (
+                  <ChatBubble
+                    role="assistant"
+                    text=""
+                    lang={lang}
+                    isLoading
+                    ttsEndSignal={ttsEndSignal}
+                    voiceMode
+                  />
+                )}
+                <div ref={messagesEndRef} />
+              </div>
+            )}
+          </div>
+        </aside>
+
+        {/* Tombol scroll ke bawah — landscape panel */}
         {!isAtBottom && messages.length > 0 && (
           <button
             onClick={scrollToBottom}
-            className="absolute bottom-40 right-[155px] z-30 w-8 h-8 rounded-full hidden md:flex [@media(orientation:portrait)]:hidden
-              bg-white/90 dark:bg-slate-800/90 border border-gray-200/70 dark:border-white/10
-              shadow-lg items-center justify-center text-gray-500 dark:text-gray-300
-              hover:bg-white dark:hover:bg-slate-700 active:scale-95 transition-all duration-150 animate-fade-in"
+            className="absolute bottom-40 right-[190px] z-30 w-8 h-8 rounded-full hidden md:flex [@media(orientation:portrait)]:hidden
+              bg-white/95 border border-slate-200
+              shadow-lg items-center justify-center text-slate-500
+              hover:bg-white active:scale-95 transition-all duration-150 animate-fade-in"
           >
             <IconChevronDown />
           </button>
@@ -1923,7 +2194,7 @@ export default function VoiceUI({
                             msg.role === "assistant" && msg.id === latestSelaId
                           }
                           ttsEndSignal={ttsEndSignal}
-                          voiceMode={mode === "speak"}
+                          voiceMode
                           speechCharIndex={
                             msg.role === "assistant" && msg.id === latestSelaId
                               ? speechCharIndex
@@ -1944,7 +2215,7 @@ export default function VoiceUI({
                         lang={lang}
                         isLoading
                         ttsEndSignal={ttsEndSignal}
-                        voiceMode={mode === "speak"}
+                        voiceMode
                       />
                     )}
                   </>
@@ -1977,9 +2248,11 @@ export default function VoiceUI({
             </div>
           </div>
 
-          <p className="text-xs text-gray-400 dark:text-gray-500 font-bold uppercase tracking-tighter text-center">
-            {statusLabel()}
-          </p>
+          {(avatarState !== "idle" || micDenied) && (
+            <p className="text-xs text-gray-500 dark:text-gray-300 font-bold uppercase tracking-tighter text-center">
+              {statusLabel()}
+            </p>
+          )}
 
           {micDenied && (
             <button
@@ -1993,28 +2266,7 @@ export default function VoiceUI({
             </button>
           )}
 
-          {/* Tombol pilihan bahasa — muncul setelah greeting bilingual selesai */}
-          {activated &&
-            awaitingLangSelect &&
-            !langSelected &&
-            avatarState === "idle" && (
-              <div className="flex gap-3 animate-fade-in">
-                <button
-                  onClick={() => handleLangSelect("id")}
-                  className="px-5 py-2 rounded-2xl text-sm font-semibold bg-blue-500 hover:bg-blue-600 active:scale-95 text-white shadow-md transition-all duration-150"
-                >
-                  🇮🇩 Indonesia
-                </button>
-                <button
-                  onClick={() => handleLangSelect("en")}
-                  className="px-5 py-2 rounded-2xl text-sm font-semibold bg-white hover:bg-gray-50 active:scale-95 text-gray-700 border border-gray-200 shadow-md dark:bg-slate-700 dark:text-gray-100 dark:border-slate-600 transition-all duration-150"
-                >
-                  🇬🇧 English
-                </button>
-              </div>
-            )}
-
-          <ModeToggle />
+          <VoiceActionButton />
         </div>
 
         {(messages.length > 0 || isWaitingAI) && !isPortraitChatOpen && (
@@ -2027,161 +2279,6 @@ export default function VoiceUI({
             <IconChat />
           </button>
         )}
-
-        {lastTurnDebug && !isDebugOpen && (
-          <button
-            type="button"
-            onClick={() => setIsDebugOpen(true)}
-            className="absolute bottom-24 left-5 z-30 rounded-full border border-white/60 bg-white/85 px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-500 shadow-lg backdrop-blur-md transition-all duration-150 hover:bg-white active:scale-95 dark:border-white/10 dark:bg-slate-900/85 dark:text-slate-300"
-            aria-label="Buka debug turn"
-          >
-            Debug
-          </button>
-        )}
       </main>
-    );
-  }
-
-  // ── TYPE MODE ─────────────────────────────────────────────────
-  return (
-    <main className="flex-1 relative flex flex-col overflow-hidden px-4 pt-4 pb-8 transition-colors">
-      <div className="flex-1 flex flex-col max-w-2xl w-full mx-auto overflow-hidden">
-        {messages.length === 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center text-center gap-6 pb-8">
-            <IconSparkle />
-            <div>
-              <h2 className="text-4xl font-light text-gray-600 dark:text-gray-200 tracking-tighter italic">
-                SELA
-              </h2>
-              <p className="text-sm text-gray-400 dark:text-gray-500 mt-2 font-medium">
-                {t[lang].type_message}
-              </p>
-            </div>
-
-            {/* Quick reply buttons */}
-            <div className="w-full px-2">
-              <p className="text-xs text-gray-400 dark:text-gray-500 mb-3 font-semibold uppercase tracking-widest">
-                {lang === "id" ? "Pertanyaan Populer" : "Popular Questions"}
-              </p>
-              <div className="flex flex-wrap gap-2 justify-center">
-                {quickReplies[lang]?.map((qr, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => handleSubmit(qr.text)}
-                    className="px-4 py-2.5 rounded-full bg-gradient-to-r from-blue-500 to-blue-600
-                               hover:from-blue-600 hover:to-blue-700
-                               dark:from-blue-600 dark:to-blue-700
-                               dark:hover:from-blue-700 dark:hover:to-blue-800
-                               text-white text-xs font-semibold
-                               active:scale-95 shadow-md
-                               transition-all duration-150"
-                  >
-                    {qr.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div
-            ref={chatScrollRef}
-            onScroll={handleChatScroll}
-            className="flex-1 overflow-y-auto py-4 flex flex-col gap-1 hide-scrollbar"
-          >
-            {messages.map((msg, idx) => (
-              <div key={msg.id}>
-                <ChatBubble
-                  role={msg.role}
-                  text={msg.text}
-                  lang={lang}
-                  isNew={msg.role === "assistant" && msg.id === latestSelaId}
-                />
-                {msg.role === "assistant" &&
-                  msg.suggestions &&
-                  msg.suggestions.length > 0 && (
-                    <SuggestionButtons
-                      suggestions={msg.suggestions}
-                      onClick={(suggestion) => handleSubmit(suggestion)}
-                      isVisible
-                    />
-                  )}
-                {msg.role === "assistant" &&
-                  msg.media &&
-                  msg.media.length > 0 && <MediaCarousel media={msg.media} />}
-              </div>
-            ))}
-            {isWaitingAI && (
-              <ChatBubble role="assistant" text="" lang={lang} isLoading />
-            )}
-            <div ref={messagesEndRef} />
-          </div>
-        )}
-      </div>
-
-      <div className="w-full max-w-xl mx-auto mt-4">
-        {/* Tombol scroll ke bawah — di atas input bar */}
-        {!isAtBottom && messages.length > 0 && (
-          <div className="flex justify-center mb-3 animate-fade-in">
-            <button
-              onClick={scrollToBottom}
-              className="w-9 h-9 rounded-full bg-white/90 dark:bg-slate-800/90 border border-gray-200/70 dark:border-white/10
-                shadow-lg flex items-center justify-center text-gray-500 dark:text-gray-300
-                hover:bg-white dark:hover:bg-slate-700 active:scale-95 transition-all duration-150"
-            >
-              <IconChevronDown />
-            </button>
-          </div>
-        )}
-        {/* Tombol pilihan bahasa — muncul setelah greeting bilingual di type mode */}
-        {awaitingLangSelect && !langSelected && (
-          <div className="flex gap-3 justify-center mb-4 animate-fade-in">
-            <button
-              onClick={() => handleLangSelect("id")}
-              className="px-5 py-2 rounded-2xl text-sm font-semibold bg-blue-500 hover:bg-blue-600 active:scale-95 text-white shadow-md transition-all duration-150"
-            >
-              🇮🇩 Indonesia
-            </button>
-            <button
-              onClick={() => handleLangSelect("en")}
-              className="px-5 py-2 rounded-2xl text-sm font-semibold bg-white hover:bg-gray-50 active:scale-95 text-gray-700 border border-gray-200 shadow-md dark:bg-slate-700 dark:text-gray-100 dark:border-slate-600 transition-all duration-150"
-            >
-              🇬🇧 English
-            </button>
-          </div>
-        )}
-        <form onSubmit={handleSubmit} className="relative mb-3">
-          <input
-            id="main-input"
-            type="text"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
-            placeholder={t[lang].type_message}
-            className={`w-full bg-white/85 dark:bg-slate-900/90 backdrop-blur-sm border rounded-full pl-5 pr-14 py-4
-                        text-gray-700 dark:text-gray-100 text-sm placeholder-gray-400 outline-none shadow-md
-                        transition-all duration-300
-                        ${
-                          focused
-                            ? "border-blue-300 dark:border-blue-500 ring-4 ring-blue-100/60 dark:ring-blue-900/40 shadow-blue-100/60"
-                            : "border-gray-200/70 dark:border-white/10"
-                        }`}
-          />
-          <button
-            id="send-btn"
-            type="submit"
-            aria-label="Send"
-            className="absolute right-2 top-1/2 -translate-y-1/2
-                       w-10 h-10 rounded-full flex items-center justify-center
-                       bg-gradient-to-br from-blue-500 to-blue-600
-                       shadow-lg shadow-blue-400/40 hover:from-blue-600 hover:to-blue-700
-                       active:scale-95 transition-all duration-150"
-          >
-            {value.trim() ? <IconSend /> : <IconMic />}
-          </button>
-        </form>
-        <ModeToggle />
-      </div>
-    </main>
   );
 }

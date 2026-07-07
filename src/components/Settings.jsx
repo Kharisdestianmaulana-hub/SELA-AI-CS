@@ -30,14 +30,12 @@ function SectionHeader({ icon, label }) {
 
 import { t } from '../lib/translations'
 
-export default function Settings({ onBack, scrolled, lang, setLang, theme, setTheme }) {
+export default function Settings({ onBack, scrolled, lang, theme, setTheme }) {
   const [notifications, setNotifications] = useState(true)
   const [incognito, setIncognito] = useState(false)
-  const [langOpen, setLangOpen] = useState(false)
 
   const languages = [
-    { value: 'id', label: t[lang].lang_id },
-    { value: 'en', label: t[lang].lang_en }
+    { value: 'id', label: t[lang].lang_id }
   ]
 
   return (
@@ -86,34 +84,9 @@ export default function Settings({ onBack, scrolled, lang, setLang, theme, setTh
               <div>
                 <p className="text-sm font-medium text-gray-700 dark:text-gray-200">{t[lang].language}</p>
               </div>
-              <div className="relative">
-                <button
-                  id="language-dropdown-btn"
-                  onClick={() => setLangOpen(!langOpen)}
-                  className="flex items-center gap-2 px-4 py-2 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-600 dark:text-gray-300 hover:border-blue-300 transition-colors"
-                >
-                  {languages.find(l => l.value === lang)?.label}
-                  <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform ${langOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-
-                {langOpen && (
-                  <div className="absolute right-0 mt-1 w-44 bg-white dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-10 overflow-hidden animate-fade-in">
-                    {languages.map((l) => (
-                      <button
-                        key={l.value}
-                        id={`lang-option-${l.value}`}
-                        onClick={() => { setLang(l.value); setLangOpen(false) }}
-                        className={`w-full text-left px-4 py-2.5 text-sm transition-colors
-                          ${lang === l.value ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700'}`}
-                      >
-                        {l.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
+              <span className="px-4 py-2 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-300">
+                {languages[0].label}
+              </span>
             </div>
 
             {/* Notifications */}

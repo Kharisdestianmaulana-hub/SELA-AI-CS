@@ -19,7 +19,8 @@ export default function App() {
   const [chats, setChats] = useState([])
   const [currentChatId, setCurrentChatId] = useState(null)
   const [scrolled, setScrolled] = useState(false)
-  const [lang, setLang] = useState('id') // Default language is Indonesian
+  const lang = 'id'
+  const setLang = () => {} // English is disabled; keep SELA locked to Indonesian.
   const [theme, setTheme] = useState('light') // Default theme is Light
 
   // Handle dark mode class toggling
